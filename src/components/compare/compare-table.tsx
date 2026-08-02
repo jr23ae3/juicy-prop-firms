@@ -6,8 +6,11 @@ import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
   formatAccountSize,
   formatCurrency,
+  formatMinimumDays,
+  formatOptionalCurrency,
   formatReturnMultiple,
 } from "@/lib/format";
+import { getDrawdownTypeLabel } from "@/lib/plans/labels";
 
 type CompareTableProps = {
   plans: PlanSummary[];
@@ -17,7 +20,7 @@ export function CompareTable({ plans }: CompareTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm lg:block">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[960px] border-collapse text-sm">
+        <table className="w-full min-w-[1440px] border-collapse text-sm">
           <caption className="sr-only">
             Prop firm plan comparison with all-in costs and discount codes
           </caption>
@@ -34,6 +37,21 @@ export function CompareTable({ plans }: CompareTableProps) {
               </th>
               <th scope="col" className="px-4 py-3 font-medium">
                 Type
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium">
+                Draw Down Type
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium text-right">
+                Target Goal
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium text-right">
+                Daily Draw Down
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium text-right">
+                Max Draw Down
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium text-right">
+                Minimum Day
               </th>
               <th scope="col" className="px-4 py-3 font-medium text-right">
                 Eval
@@ -83,6 +101,23 @@ function CompareTableRow({ plan }: { plan: PlanSummary }) {
       </td>
       <td className="px-4 py-3">
         <EvalTypeBadge evalType={plan.evalType} />
+      </td>
+      <td className="px-4 py-3">
+        {getDrawdownTypeLabel(plan.drawdownType) ?? (
+          <span className="text-muted-foreground">—</span>
+        )}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.profitTarget)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.dailyDrawdown)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.maxDrawdown)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatMinimumDays(plan.minimumDays)}
       </td>
       <td className="px-4 py-3 text-right tabular-nums">
         {hasDiscount ? (

@@ -12,6 +12,12 @@ export const DRAWDOWN_TYPE_LABELS: Record<DrawdownType, string> = {
   STATIC: "Static",
 };
 
+export const DRAWDOWN_TYPE_FULL_LABELS: Record<DrawdownType, string> = {
+  END_OF_DAY: "End of Day",
+  TRAILING: "Trailing",
+  STATIC: "Static",
+};
+
 export function getEvalTypeLabel(evalType: EvalType) {
   return EVAL_TYPE_LABELS[evalType];
 }
@@ -19,4 +25,9 @@ export function getEvalTypeLabel(evalType: EvalType) {
 export function getDrawdownLabel(drawdownType: DrawdownType | null) {
   if (!drawdownType) return null;
   return DRAWDOWN_TYPE_LABELS[drawdownType];
+}
+
+export function getDrawdownTypeLabel(drawdownType: DrawdownType | null) {
+  if (!drawdownType) return null;
+  return DRAWDOWN_TYPE_FULL_LABELS[drawdownType];
 }

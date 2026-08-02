@@ -44,7 +44,9 @@ export type PlanSummary = {
   evalType: EvalType;
   profitTarget: number | null;
   maxDrawdown: number | null;
+  dailyDrawdown: number | null;
   drawdownType: DrawdownType | null;
+  minimumDays: number | null;
   profitSplit: number | null;
   maxPayout: number | null;
   payoutFrequency: string | null;

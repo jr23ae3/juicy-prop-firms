@@ -25,6 +25,16 @@ export function formatReturnMultiple(value: number | null) {
   return `${value.toFixed(1)}x`;
 }
 
+export function formatOptionalCurrency(value: number | null | undefined) {
+  if (value == null || value <= 0) return "—";
+  return formatCurrency(value);
+}
+
+export function formatMinimumDays(days: number | null | undefined) {
+  if (days == null || days <= 0) return "—";
+  return days === 1 ? "1 day" : `${days} days`;
+}
+
 export function formatProfitSplit(split: number | null) {
   if (split == null) return "—";
   return formatPercent(split);

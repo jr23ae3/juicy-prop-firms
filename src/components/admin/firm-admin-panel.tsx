@@ -263,6 +263,21 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
               </div>
               <Field name="evalPrice" label="Eval price ($)" type="number" required />
               <Field name="activationFee" label="Activation fee ($)" type="number" defaultValue="0" />
+              <Field name="profitTarget" label="Target goal ($)" type="number" />
+              <Field name="dailyDrawdown" label="Daily draw down ($)" type="number" />
+              <Field name="maxDrawdown" label="Max draw down ($)" type="number" />
+              <Field name="minimumDays" label="Minimum days" type="number" />
+              <div className="space-y-2">
+                <label htmlFor="drawdownType" className="text-sm font-medium">
+                  Draw down type
+                </label>
+                <select id="drawdownType" name="drawdownType" className={adminSelectClassName}>
+                  <option value="">—</option>
+                  <option value="END_OF_DAY">End of Day</option>
+                  <option value="TRAILING">Trailing</option>
+                  <option value="STATIC">Static</option>
+                </select>
+              </div>
               <Field name="profitSplit" label="Profit split (0.9 = 90%)" type="number" step="0.01" />
               <Field name="payoutFrequency" label="Payout frequency" />
             </div>

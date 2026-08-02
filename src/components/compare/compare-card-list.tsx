@@ -6,8 +6,11 @@ import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
   formatAccountSize,
   formatCurrency,
+  formatMinimumDays,
+  formatOptionalCurrency,
   formatReturnMultiple,
 } from "@/lib/format";
+import { getDrawdownTypeLabel } from "@/lib/plans/labels";
 
 type CompareCardListProps = {
   plans: PlanSummary[];
@@ -43,6 +46,36 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <dt className="text-xs text-muted-foreground">Draw down type</dt>
+          <dd className="mt-0.5">
+            {getDrawdownTypeLabel(plan.drawdownType) ?? "—"}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Target goal</dt>
+          <dd className="mt-0.5 tabular-nums">
+            {formatOptionalCurrency(plan.profitTarget)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Daily draw down</dt>
+          <dd className="mt-0.5 tabular-nums">
+            {formatOptionalCurrency(plan.dailyDrawdown)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Max draw down</dt>
+          <dd className="mt-0.5 tabular-nums">
+            {formatOptionalCurrency(plan.maxDrawdown)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Minimum day</dt>
+          <dd className="mt-0.5 tabular-nums">
+            {formatMinimumDays(plan.minimumDays)}
+          </dd>
+        </div>
         <div>
           <dt className="text-xs text-muted-foreground">Eval price</dt>
           <dd className="mt-0.5 tabular-nums">
