@@ -12,6 +12,12 @@ export type {
 } from "@/types/advisor";
 
 export type {
+  DealAlertSummary,
+  SavedPlansResponse,
+  UserPreferencesData,
+} from "@/types/user";
+
+export type {
   DiscountSummary,
   FirmRecord,
   FirmSummary,

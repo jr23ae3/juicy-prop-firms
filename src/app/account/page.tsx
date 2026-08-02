@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { DealAlertsSection } from "@/components/account/deal-alerts-section";
+import { PreferencesForm } from "@/components/account/preferences-form";
+import { SavedPlansList } from "@/components/account/saved-plans-list";
 import { Container } from "@/components/layout/container";
 import {
   Card,
@@ -11,6 +14,7 @@ import {
 import { isDatabaseConfigured, isSupabaseConfigured } from "@/lib/env";
 import { requireAuthUser } from "@/server/auth";
 import { getUserBySupabaseId } from "@/server/users";
+import { getUserPreferencesData } from "@/services/user/preferences-service";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +26,10 @@ export const metadata: Metadata = {
 export default async function AccountPage() {
   const authUser = await requireAuthUser();
   const dbUser = authUser ? await getUserBySupabaseId(authUser.id) : null;
+  const preferences =
+    dbUser && isDatabaseConfigured()
+      ? await getUserPreferencesData(dbUser.id)
+      : null;
 
   return (
     <Container className="py-12">
@@ -29,7 +37,7 @@ export default async function AccountPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Your account</h1>
           <p className="mt-2 text-muted-foreground">
-            Manage your profile, saved plans, and preferences.
+            Manage your profile, saved plans, preferences, and deal alerts.
           </p>
         </div>
 
@@ -60,20 +68,32 @@ export default async function AccountPage() {
           </CardContent>
         </Card>
 
+        {dbUser ? (
+          <>
+            <SavedPlansList />
+            <PreferencesForm initialPreferences={preferences} />
+            <DealAlertsSection />
+          </>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Saved plans & preferences</CardTitle>
+              <CardDescription>
+                Connect PostgreSQL to enable saved plans, preferences, and deal
+                alerts.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle>System status</CardTitle>
-            <CardDescription>Milestone 2 integration checks</CardDescription>
+            <CardDescription>Integration checks</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
-            <StatusRow
-              label="Supabase Auth"
-              ok={isSupabaseConfigured()}
-            />
-            <StatusRow
-              label="PostgreSQL / Prisma"
-              ok={isDatabaseConfigured()}
-            />
+            <StatusRow label="Supabase Auth" ok={isSupabaseConfigured()} />
+            <StatusRow label="PostgreSQL / Prisma" ok={isDatabaseConfigured()} />
           </CardContent>
         </Card>
       </div>

@@ -2,6 +2,8 @@
 
 import { advisorInputSchema } from "@/lib/validations/advisor";
 import { getAdvisorRecommendations } from "@/services/advisor/advisor-service";
+import { saveAdvisorPreferences } from "@/services/user/preferences-service";
+import { getDbUserOptional } from "@/server/user/require-db-user";
 import type { AdvisorActionState } from "@/types/advisor";
 
 export async function getAdvisorRecommendationsAction(
@@ -26,6 +28,11 @@ export async function getAdvisorRecommendationsAction(
 
   try {
     const data = await getAdvisorRecommendations(parsed.data);
+
+    const session = await getDbUserOptional();
+    if (session) {
+      await saveAdvisorPreferences(session.user.id, parsed.data);
+    }
 
     return { data };
   } catch {

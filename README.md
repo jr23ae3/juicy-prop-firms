@@ -83,6 +83,15 @@ Visit [/advisor](/advisor) for personalized plan recommendations:
 
 Add `OPENAI_API_KEY` to `.env.local` for full AI reasoning.
 
+### User features (Milestone 7)
+
+Signed-in users get a full account dashboard at [/account](/account):
+- **Saved plans** — bookmark plans from the compare table
+- **Preferences** — trading style, budget, and priorities (pre-fill AI Advisor)
+- **Deal alerts** — store price-drop targets (email delivery in Milestone 9)
+
+User APIs: `GET/POST/DELETE /api/user/saved-plans`, `GET/PUT /api/user/preferences`, `GET/POST/DELETE /api/user/alerts`
+
 ## Project Structure
 
 ```
@@ -111,7 +120,7 @@ src/
 | 4 | **Comparison Table** — Filterable plan comparison with live pricing | ✅ Complete |
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | ✅ Complete |
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | ✅ Complete |
-| 7 | **User Features** — Saved firms, alerts, preferences (TanStack Query) | Pending |
+| 7 | **User Features** — Saved plans, alerts, preferences (TanStack Query) | ✅ Complete |
 | 8 | **Stripe & Premium** — Subscriptions, premium features | Pending |
 | 9 | **Email & Notifications** — Resend integration, deal alerts | Pending |
 | 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | Pending |

@@ -31,21 +31,43 @@ model User {
 
   savedPlans  SavedPlan[]
   preferences UserPreferences?
+  dealAlerts  DealAlert[]
 
   @@map("users")
 }
 
 model UserPreferences {
-  id            String   @id @default(cuid())
-  userId        String   @unique @map("user_id")
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tradingStyle  String?  @map("trading_style")
-  preferredSize Int?     @map("preferred_size")
-  maxBudget     Decimal? @map("max_budget") @db.Decimal(10, 2)
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id                 String   @id @default(cuid())
+  userId             String   @unique @map("user_id")
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradingStyle       String?  @map("trading_style")
+  experienceLevel    String?  @map("experience_level")
+  preferredSize      Int?     @map("preferred_size")
+  maxBudget          Decimal? @map("max_budget") @db.Decimal(10, 2)
+  evalTypePreference String?  @map("eval_type_preference")
+  priority           String?
+  alertsEnabled      Boolean  @default(true) @map("alerts_enabled")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
   @@map("user_preferences")
+}
+
+model DealAlert {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId    String?  @map("plan_id")
+  plan      Plan?    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  firmSlug  String?  @map("firm_slug")
+  maxAllIn  Decimal? @map("max_all_in") @db.Decimal(10, 2)
+  label     String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, isActive])
+  @@map("deal_alerts")
 }
 
 // ---------------------------------------------------------------------------
@@ -106,6 +128,7 @@ model Plan {
 
   discounts Discount[]
   savedBy   SavedPlan[]
+  dealAlerts DealAlert[]
 
   @@unique([propFirmId, slug])
   @@index([isActive, accountSize])

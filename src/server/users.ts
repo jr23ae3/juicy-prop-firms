@@ -42,6 +42,5 @@ export async function getUserBySupabaseId(supabaseId: string) {
 
   return db.user.findUnique({
     where: { supabaseId },
-    include: { preferences: true },
   });
 }

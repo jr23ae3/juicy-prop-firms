@@ -2,6 +2,7 @@ import type { PlanSummary } from "@/types/plan";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
+import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
   formatAccountSize,
   formatCurrency,
@@ -38,6 +39,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
           </p>
         </div>
         <EvalTypeBadge evalType={plan.evalType} />
+        <SavePlanButton planId={plan.id} />
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">

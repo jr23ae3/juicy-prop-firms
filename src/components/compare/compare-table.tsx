@@ -2,6 +2,7 @@ import type { PlanSummary } from "@/types/plan";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
+import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
   formatAccountSize,
   formatCurrency,
@@ -48,6 +49,9 @@ export function CompareTable({ plans }: CompareTableProps) {
               </th>
               <th scope="col" className="px-4 py-3 font-medium text-right">
                 Return
+              </th>
+              <th scope="col" className="px-4 py-3 font-medium text-center">
+                <span className="sr-only">Save</span>
               </th>
             </tr>
           </thead>
@@ -109,6 +113,9 @@ function CompareTableRow({ plan }: { plan: PlanSummary }) {
       </td>
       <td className="px-4 py-3 text-right tabular-nums">
         {formatReturnMultiple(plan.pricing.returnMultiple)}
+      </td>
+      <td className="px-4 py-3 text-center">
+        <SavePlanButton planId={plan.id} />
       </td>
     </tr>
   );

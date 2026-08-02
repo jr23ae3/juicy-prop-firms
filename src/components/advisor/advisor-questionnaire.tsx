@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUserPreferences } from "@/hooks/use-user-preferences";
+import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 import type { AdvisorActionState } from "@/types/advisor";
 
@@ -31,9 +33,29 @@ export function AdvisorQuestionnaire() {
     getAdvisorRecommendationsAction,
     initialState,
   );
+  const { data: user } = useUser();
+  const { data: prefs } = useUserPreferences(Boolean(user));
+
+  const tradingStyle = prefs?.tradingStyle ?? "day-trader";
+  const experienceLevel = prefs?.experienceLevel ?? "intermediate";
+  const accountSize = prefs?.preferredSize
+    ? String(prefs.preferredSize)
+    : "50000";
+  const evalTypePreference = prefs?.evalTypePreference ?? "any";
+  const priority = prefs?.priority ?? "affordability";
+  const maxBudget = prefs?.maxBudget ?? 200;
+  const prefsReady = !user || prefs !== undefined;
 
   return (
     <div className="space-y-8">
+      {user && prefs ? (
+        <p className="text-center text-sm text-muted-foreground">
+          Pre-filled from your saved preferences.{" "}
+          <a href="/account" className="text-primary hover:underline">
+            Edit in account
+          </a>
+        </p>
+      ) : null}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -45,7 +67,7 @@ export function AdvisorQuestionnaire() {
             firm plans for your style and budget.
           </CardDescription>
         </CardHeader>
-        <form action={formAction}>
+        <form action={formAction} key={prefsReady ? "ready" : "loading"}>
           <CardContent className="space-y-6">
             {state.error ? (
               <p
@@ -60,7 +82,7 @@ export function AdvisorQuestionnaire() {
               <FormSelect
                 name="tradingStyle"
                 label="Trading style"
-                defaultValue="day-trader"
+                defaultValue={tradingStyle}
                 options={[
                   { value: "scalper", label: "Scalper" },
                   { value: "day-trader", label: "Day trader" },
@@ -71,7 +93,7 @@ export function AdvisorQuestionnaire() {
               <FormSelect
                 name="experienceLevel"
                 label="Experience level"
-                defaultValue="intermediate"
+                defaultValue={experienceLevel}
                 options={[
                   { value: "beginner", label: "Beginner" },
                   { value: "intermediate", label: "Intermediate" },
@@ -82,7 +104,7 @@ export function AdvisorQuestionnaire() {
               <FormSelect
                 name="accountSize"
                 label="Preferred account size"
-                defaultValue="50000"
+                defaultValue={accountSize}
                 options={[
                   { value: "50000", label: "$50K" },
                   { value: "100000", label: "$100K" },
@@ -94,7 +116,7 @@ export function AdvisorQuestionnaire() {
               <FormSelect
                 name="evalTypePreference"
                 label="Eval type preference"
-                defaultValue="any"
+                defaultValue={evalTypePreference}
                 options={[
                   { value: "any", label: "Any" },
                   { value: "CHALLENGE", label: "Challenge" },
@@ -105,7 +127,7 @@ export function AdvisorQuestionnaire() {
               <FormSelect
                 name="priority"
                 label="Top priority"
-                defaultValue="affordability"
+                defaultValue={priority}
                 options={[
                   { value: "affordability", label: "Lowest all-in cost" },
                   { value: "payouts", label: "Best payout potential" },
@@ -122,7 +144,7 @@ export function AdvisorQuestionnaire() {
                   type="number"
                   min={50}
                   max={2000}
-                  defaultValue={200}
+                  defaultValue={maxBudget}
                   required
                 />
                 <p className="text-xs text-muted-foreground">
