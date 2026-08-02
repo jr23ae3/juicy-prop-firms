@@ -13,6 +13,7 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import { cn } from "@/lib/utils";
 
 type CompareTableProps = {
   plans: PlanSummary[];
@@ -20,6 +21,8 @@ type CompareTableProps = {
 
 const FUNDED_GROUP_CLASS =
   "border-l border-border/60 bg-muted/20";
+
+const FUNDED_CELL_BORDER = "border-l border-border/60";
 
 export function CompareTable({ plans }: CompareTableProps) {
   return (
@@ -143,8 +146,8 @@ export function CompareTable({ plans }: CompareTableProps) {
             </tr>
           </thead>
           <tbody>
-            {plans.map((plan) => (
-              <CompareTableRow key={plan.id} plan={plan} />
+            {plans.map((plan, index) => (
+              <CompareTableRow key={plan.id} plan={plan} index={index} />
             ))}
           </tbody>
         </table>
@@ -153,11 +156,23 @@ export function CompareTable({ plans }: CompareTableProps) {
   );
 }
 
-function CompareTableRow({ plan }: { plan: PlanSummary }) {
+function CompareTableRow({
+  plan,
+  index,
+}: {
+  plan: PlanSummary;
+  index: number;
+}) {
   const hasDiscount = plan.pricing.savings > 0;
+  const isStriped = index % 2 === 1;
 
   return (
-    <tr className="border-b border-border/40 transition-colors last:border-0 hover:bg-muted/20">
+    <tr
+      className={cn(
+        "border-b border-border/40 transition-colors last:border-0 hover:bg-muted/40",
+        isStriped && "bg-muted/25",
+      )}
+    >
       <td className="px-4 py-3 text-muted-foreground">
         #{plan.firm.rankPosition ?? "—"}
       </td>
@@ -209,7 +224,11 @@ function CompareTableRow({ plan }: { plan: PlanSummary }) {
         {formatCurrency(plan.pricing.allInCost)}
       </td>
       <td
-        className={`px-4 py-3 text-right tabular-nums ${FUNDED_GROUP_CLASS}`}
+        className={cn(
+          "px-4 py-3 text-right tabular-nums",
+          FUNDED_CELL_BORDER,
+          isStriped && "bg-muted/35",
+        )}
       >
         {formatMinimumDays(plan.minimumDaysToPayout)}
       </td>
