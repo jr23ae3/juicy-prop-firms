@@ -2,7 +2,6 @@
 
 Production-ready SaaS platform for comparing futures prop firms — with AI-powered recommendations, verified pricing, and transparent all-in cost comparisons.
 
-
 ## Tech Stack
 
 | Layer | Technology |
