@@ -15,7 +15,6 @@ export const mainNav: NavItem[] = [
     title: "Rankings",
     href: "/rankings",
     description: "Power rankings based on verified data",
-    disabled: true,
   },
   {
     title: "AI Advisor",
@@ -27,7 +26,6 @@ export const mainNav: NavItem[] = [
     title: "How We Rank",
     href: "/methodology",
     description: "Our verification and ranking methodology",
-    disabled: true,
   },
 ];
 

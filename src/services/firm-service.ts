@@ -43,3 +43,15 @@ export async function getFirmCount() {
 
   return db.propFirm.count({ where: { isActive: true } });
 }
+
+export async function getActiveFirmSlugs() {
+  if (!isDatabaseConfigured()) return [];
+
+  const firms = await db.propFirm.findMany({
+    where: { isActive: true },
+    select: { slug: true },
+    orderBy: { rankPosition: "asc" },
+  });
+
+  return firms.map((f) => f.slug);
+}

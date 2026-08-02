@@ -68,6 +68,12 @@ Visit [/compare](/compare) for the filterable plan comparison table with:
 - Mobile card layout + desktop table
 - TanStack Query for live data fetching
 
+### Rankings & firm pages (Milestone 5)
+
+- [/rankings](/rankings) — Power rankings with factor breakdowns
+- [/firms/{slug}](/firms/lucid-trading) — SEO firm profiles with plans & ranking scores
+- [/methodology](/methodology) — How we verify and rank firms
+
 ## Project Structure
 
 ```
@@ -94,7 +100,7 @@ src/
 | 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | ✅ Complete |
 | 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | ✅ Complete |
 | 4 | **Comparison Table** — Filterable plan comparison with live pricing | ✅ Complete |
-| 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | Pending |
+| 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | ✅ Complete |
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | Pending |
 | 7 | **User Features** — Saved firms, alerts, preferences (TanStack Query) | Pending |
 | 8 | **Stripe & Premium** — Subscriptions, premium features | Pending |
