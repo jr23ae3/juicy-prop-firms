@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { DealAlertsSection } from "@/components/account/deal-alerts-section";
 import { EmailHistorySection } from "@/components/account/email-history-section";
@@ -13,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { isDatabaseConfigured, isSupabaseConfigured } from "@/lib/env";
 import { requireAuthUser } from "@/server/auth";
 import { getUserBySupabaseId } from "@/server/users";
@@ -42,6 +45,22 @@ export default async function AccountPage() {
             Manage your profile, saved plans, preferences, and deal alerts.
           </p>
         </div>
+
+        {dbUser?.role === "ADMIN" ? (
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader>
+              <CardTitle>Admin dashboard</CardTitle>
+              <CardDescription>
+                Manage prop firms, plans, rankings, and discount codes.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/admin" className={cn(buttonVariants())}>
+                Open admin
+              </Link>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <Card>
           <CardHeader>

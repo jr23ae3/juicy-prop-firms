@@ -139,6 +139,25 @@ Transactional email via [Resend](https://resend.com):
 
 APIs: `GET /api/user/emails`, `GET /api/cron/deal-alerts`
 
+### Admin dashboard
+
+Admins can manage the catalog at [/admin](/admin) without editing seed files.
+
+**Make yourself admin** (one-time, in Prisma Studio or SQL):
+
+```sql
+UPDATE users SET role = 'ADMIN' WHERE email = 'your@email.com';
+```
+
+**Features:**
+- Add / edit prop firms with slug, description, website
+- Set power ranking score, position, and factor breakdown
+- Add plans with eval pricing, activation fees, eval type
+- Attach verified discount codes (percent or fixed amount)
+- Deactivate plans or entire firms
+
+Routes: `/admin`, `/admin/firms`, `/admin/firms/new`, `/admin/firms/[id]`
+
 ### Production polish (Milestone 10)
 
 Production-ready optimizations across performance, accessibility, SEO, and monitoring:
