@@ -12,6 +12,7 @@ import {
   formatAccountSize,
   formatCurrency,
   formatMinimumDays,
+  formatOptionalCount,
   formatOptionalCurrency,
   formatProfitSplit,
   formatReturnMultiple,
@@ -29,7 +30,6 @@ type CompareTableProps = {
   onSortChange?: (filters: CompareFilters) => void;
 };
 
-const CELL = "px-2.5 py-2.5";
 const FUNDED_GROUP_CLASS = "border-l border-border/60 bg-muted/20";
 const FUNDED_CELL_BORDER = "border-l border-border/60";
 
@@ -60,22 +60,39 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm lg:block">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1080px] border-collapse text-sm">
+        <table className="w-full min-w-[1880px] border-collapse text-sm">
           <caption className="sr-only">
-            Prop firm plan comparison. Click column headers to sort.
+            Prop firm plan comparison with all-in costs, funded terms, and
+            discount codes. Click column headers to sort.
           </caption>
           <thead>
-            <tr className="border-b border-border/60 bg-muted/40 text-left text-xs">
+            <tr className="border-b border-border/60 bg-muted/40 text-left">
               <SortableTh
-                field="firmName"
-                label="Firm / Plan"
-                title="Firm rank and plan details"
+                field="firmRank"
+                label="Rank"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
                 onSort={handleSort}
                 rowSpan={2}
-                className="min-w-[160px]"
+              />
+              <SortableTh
+                field="firmName"
+                label="Firm"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+              />
+              <SortableTh
+                field="accountSize"
+                label="Plan"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
               />
               <SortableTh
                 field="evalType"
@@ -87,20 +104,67 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 rowSpan={2}
               />
               <SortableTh
-                field="maxDrawdown"
-                label="Drawdown"
-                title="Drawdown type, target, daily/max limits, minimum days"
+                field="drawdownType"
+                label="Draw Down Type"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
                 onSort={handleSort}
                 rowSpan={2}
-                className="min-w-[128px]"
+              />
+              <SortableTh
+                field="profitTarget"
+                label="Target Goal"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="dailyDrawdown"
+                label="Daily Draw Down"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="maxDrawdown"
+                label="Max Draw Down"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="minimumDays"
+                label="Minimum Day"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
               />
               <SortableTh
                 field="evalPrice"
-                label="Fees"
-                title="Eval price and activation fee"
+                label="Eval"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="activationFee"
+                label="Activation"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -120,14 +184,13 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <th
                 scope="colgroup"
-                colSpan={3}
-                className={cn(
-                  CELL,
-                  "py-2 text-center font-semibold uppercase tracking-wide text-muted-foreground",
-                  FUNDED_GROUP_CLASS,
-                )}
+                colSpan={5}
+                className={`px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground ${FUNDED_GROUP_CLASS}`}
               >
                 Funded
+              </th>
+              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
+                Code
               </th>
               <SortableTh
                 field="returnMultiple"
@@ -142,23 +205,15 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               <th
                 scope="col"
                 rowSpan={2}
-                className={cn(CELL, "font-medium")}
-              >
-                Code
-              </th>
-              <th
-                scope="col"
-                rowSpan={2}
-                className={cn(CELL, "w-10 text-center font-medium")}
+                className="px-4 py-3 text-center font-medium"
               >
                 <span className="sr-only">Save</span>
               </th>
             </tr>
-            <tr className="border-b border-border/60 bg-muted/30 text-left text-[11px]">
+            <tr className="border-b border-border/60 bg-muted/30 text-left text-xs">
               <SortableTh
                 field="daysToPayout"
-                label="Pay"
-                title="Minimum days to payout and max payout"
+                label="Min Days to Payout"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -169,8 +224,27 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <SortableTh
                 field="minimumTargetGoalCushion"
-                label="Cushion"
-                title="Minimum target goal cushion"
+                label="Min Target Goal Cushion"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
+              <SortableTh
+                field="maxPayout"
+                label="Max Payout"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
+              <SortableTh
+                field="maxFundedAccounts"
+                label="Max Funded Accounts"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -180,8 +254,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <SortableTh
                 field="profitSplit"
-                label="Split"
-                title="Profit split and max funded accounts"
+                label="Split %"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -205,7 +278,6 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
 function SortableTh({
   field,
   label,
-  title,
   sort,
   direction,
   sortable,
@@ -217,7 +289,6 @@ function SortableTh({
 }: {
   field: CompareSortField;
   label: string;
-  title?: string;
   sort: CompareSortField;
   direction: CompareFilters["direction"];
   sortable: boolean;
@@ -228,14 +299,13 @@ function SortableTh({
   compact?: boolean;
 }) {
   const isActive = sort === field;
-  const padding = compact ? cn(CELL, "py-1.5") : CELL;
+  const padding = compact ? "px-4 py-2" : "px-4 py-3";
 
   if (!sortable) {
     return (
       <th
         scope="col"
         rowSpan={rowSpan}
-        title={title}
         className={cn(
           padding,
           "font-medium",
@@ -252,7 +322,6 @@ function SortableTh({
     <th
       scope="col"
       rowSpan={rowSpan}
-      title={title}
       aria-sort={
         isActive ? (direction === "asc" ? "ascending" : "descending") : "none"
       }
@@ -261,9 +330,8 @@ function SortableTh({
       <button
         type="button"
         onClick={() => onSort(field)}
-        title={title}
         className={cn(
-          "group inline-flex max-w-full items-center gap-0.5 font-medium transition-colors hover:text-foreground",
+          "group inline-flex max-w-full items-center gap-1 font-medium transition-colors hover:text-foreground",
           align === "right" && "ml-auto",
           isActive ? "text-foreground" : "text-muted-foreground",
         )}
@@ -283,16 +351,16 @@ function SortIcon({
   direction?: CompareFilters["direction"];
 }) {
   if (active && direction === "asc") {
-    return <ArrowUp className="size-3 shrink-0 text-primary" aria-hidden />;
+    return <ArrowUp className="size-3.5 shrink-0 text-primary" aria-hidden />;
   }
 
   if (active && direction === "desc") {
-    return <ArrowDown className="size-3 shrink-0 text-primary" aria-hidden />;
+    return <ArrowDown className="size-3.5 shrink-0 text-primary" aria-hidden />;
   }
 
   return (
     <ArrowUpDown
-      className="size-3 shrink-0 opacity-40 group-hover:opacity-70"
+      className="size-3.5 shrink-0 opacity-40 group-hover:opacity-70"
       aria-hidden
     />
   );
@@ -315,132 +383,89 @@ function CompareTableRow({
         isStriped && "bg-muted/25",
       )}
     >
-      <td className={CELL}>
-        <div className="font-medium leading-snug">
-          <span className="text-muted-foreground">
-            #{plan.firm.rankPosition ?? "—"}{" "}
-          </span>
-          {plan.firm.name}
-        </div>
-        <div className="mt-0.5 text-xs leading-snug text-muted-foreground">
-          {plan.name} · {formatAccountSize(plan.accountSize)}
+      <td className="px-4 py-3 text-muted-foreground">
+        #{plan.firm.rankPosition ?? "—"}
+      </td>
+      <td className="px-4 py-3 font-medium">{plan.firm.name}</td>
+      <td className="px-4 py-3">
+        <div>{plan.name}</div>
+        <div className="text-xs text-muted-foreground">
+          {formatAccountSize(plan.accountSize)}
         </div>
       </td>
-      <td className={CELL}>
+      <td className="px-4 py-3">
         <EvalTypeBadge evalType={plan.evalType} />
       </td>
-      <td className={CELL}>
-        <DrawdownCell plan={plan} />
+      <td className="px-4 py-3">
+        {getDrawdownTypeLabel(plan.drawdownType) ?? (
+          <span className="text-muted-foreground">—</span>
+        )}
       </td>
-      <td className={cn(CELL, "text-right tabular-nums")}>
-        <FeesCell plan={plan} hasDiscount={hasDiscount} />
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.profitTarget)}
       </td>
-      <td className={cn(CELL, "text-right font-semibold text-primary tabular-nums")}>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.dailyDrawdown)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.maxDrawdown)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatMinimumDays(plan.minimumDays)}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {hasDiscount ? (
+          <>
+            <span className="mr-1.5 text-muted-foreground line-through">
+              {formatCurrency(plan.pricing.evalPrice)}
+            </span>
+            <span>{formatCurrency(plan.pricing.discountedPrice)}</span>
+          </>
+        ) : (
+          formatCurrency(plan.pricing.evalPrice)
+        )}
+      </td>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {plan.pricing.activationFee > 0
+          ? formatCurrency(plan.pricing.activationFee)
+          : "—"}
+      </td>
+      <td className="px-4 py-3 text-right font-semibold text-primary tabular-nums">
         {formatCurrency(plan.pricing.allInCost)}
       </td>
       <td
-        className={cn(CELL, "text-right tabular-nums", FUNDED_CELL_BORDER)}
+        className={cn(
+          "px-4 py-3 text-right tabular-nums",
+          FUNDED_CELL_BORDER,
+        )}
       >
-        <FundedPayCell plan={plan} />
+        {formatMinimumDays(plan.minimumDaysToPayout)}
       </td>
-      <td className={cn(CELL, "text-right tabular-nums")}>
+      <td className="px-4 py-3 text-right tabular-nums">
         {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
       </td>
-      <td className={cn(CELL, "text-right tabular-nums")}>
-        <FundedSplitCell plan={plan} />
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCurrency(plan.maxPayout)}
       </td>
-      <td className={cn(CELL, "text-right tabular-nums")}>
-        {formatReturnMultiple(plan.pricing.returnMultiple)}
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatOptionalCount(plan.maxFundedAccounts)}
       </td>
-      <td className={CELL}>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatProfitSplit(plan.profitSplit)}
+      </td>
+      <td className="px-4 py-3">
         {plan.discount ? (
           <DiscountBadge discount={plan.discount} />
         ) : (
           <span className="text-muted-foreground">—</span>
         )}
       </td>
-      <td className={cn(CELL, "text-center")}>
+      <td className="px-4 py-3 text-right tabular-nums">
+        {formatReturnMultiple(plan.pricing.returnMultiple)}
+      </td>
+      <td className="px-4 py-3 text-center">
         <SavePlanButton planId={plan.id} />
       </td>
     </tr>
-  );
-}
-
-function DrawdownCell({ plan }: { plan: PlanSummary }) {
-  const type = getDrawdownTypeLabel(plan.drawdownType);
-  const hasLimits =
-    plan.profitTarget || plan.dailyDrawdown || plan.maxDrawdown;
-
-  return (
-    <div className="leading-snug">
-      <div className="font-medium">{type ?? "—"}</div>
-      {hasLimits ? (
-        <div className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
-          {formatOptionalCurrency(plan.profitTarget)} tgt ·{" "}
-          {formatOptionalCurrency(plan.dailyDrawdown)} day ·{" "}
-          {formatOptionalCurrency(plan.maxDrawdown)} max
-        </div>
-      ) : null}
-      {plan.minimumDays ? (
-        <div className="text-[11px] text-muted-foreground">
-          {formatMinimumDays(plan.minimumDays)}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function FeesCell({
-  plan,
-  hasDiscount,
-}: {
-  plan: PlanSummary;
-  hasDiscount: boolean;
-}) {
-  return (
-    <div className="leading-snug">
-      <div>
-        {hasDiscount ? (
-          <>
-            <span className="mr-1 text-muted-foreground line-through">
-              {formatCurrency(plan.pricing.evalPrice)}
-            </span>
-            {formatCurrency(plan.pricing.discountedPrice)}
-          </>
-        ) : (
-          formatCurrency(plan.pricing.evalPrice)
-        )}
-      </div>
-      <div className="text-[11px] text-muted-foreground">
-        {plan.pricing.activationFee > 0
-          ? `+${formatCurrency(plan.pricing.activationFee)} act`
-          : "No activation"}
-      </div>
-    </div>
-  );
-}
-
-function FundedPayCell({ plan }: { plan: PlanSummary }) {
-  return (
-    <div className="leading-snug">
-      <div>{formatMinimumDays(plan.minimumDaysToPayout)}</div>
-      <div className="text-[11px] text-muted-foreground">
-        {formatOptionalCurrency(plan.maxPayout)}
-      </div>
-    </div>
-  );
-}
-
-function FundedSplitCell({ plan }: { plan: PlanSummary }) {
-  return (
-    <div className="leading-snug">
-      <div>{formatProfitSplit(plan.profitSplit)}</div>
-      {plan.maxFundedAccounts ? (
-        <div className="text-[11px] text-muted-foreground">
-          {plan.maxFundedAccounts} acct
-          {plan.maxFundedAccounts === 1 ? "" : "s"}
-        </div>
-      ) : null}
-    </div>
   );
 }
