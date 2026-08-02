@@ -2,7 +2,6 @@
 
 Production-ready SaaS platform for comparing futures prop firms — with AI-powered recommendations, verified pricing, and transparent all-in cost comparisons.
 
-> Inspired by [PickAPropFirm.com](https://pickapropfirm.com), rebuilt with superior UX and modern architecture.
 
 ## Tech Stack
 
