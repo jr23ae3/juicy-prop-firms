@@ -136,7 +136,7 @@ export function PreferencesForm({ initialPreferences }: PreferencesFormProps) {
               value="true"
               className="size-4 rounded border-input"
             />
-            Email me about price drops and new deals (coming in Milestone 9)
+            Email me about price drops and new deals
           </label>
 
           <Button type="submit" disabled={isPending}>

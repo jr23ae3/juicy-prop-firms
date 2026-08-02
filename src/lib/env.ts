@@ -17,6 +17,7 @@ const serverEnvSchema = z.object({
   STRIPE_PRICE_ID: z.string().min(1).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
   RESEND_FROM_EMAIL: z.string().email().optional(),
+  CRON_SECRET: z.string().min(1).optional(),
 });
 
 function getClientEnv() {
@@ -44,6 +45,7 @@ function getServerEnv() {
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+    CRON_SECRET: process.env.CRON_SECRET,
   });
 }
 
@@ -121,4 +123,21 @@ export function requireOpenAIEnv() {
   }
 
   return { apiKey };
+}
+
+export function isResendConfigured() {
+  return Boolean(env.RESEND_API_KEY && env.RESEND_FROM_EMAIL);
+}
+
+export function requireResendEnv() {
+  const apiKey = env.RESEND_API_KEY;
+  const fromEmail = env.RESEND_FROM_EMAIL;
+
+  if (!apiKey || !fromEmail) {
+    throw new Error(
+      "Missing Resend env vars. Set RESEND_API_KEY and RESEND_FROM_EMAIL in .env.local",
+    );
+  }
+
+  return { apiKey, fromEmail };
 }

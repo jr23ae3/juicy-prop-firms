@@ -8,6 +8,7 @@ import {
   getSubscriptionPriceId,
 } from "@/lib/stripe-subscription";
 import { db } from "@/lib/db";
+import { sendSubscriptionConfirmationEmail } from "@/services/email/transactional-email-service";
 
 export const runtime = "nodejs";
 
@@ -93,16 +94,25 @@ async function syncStripeSubscription(stripeSubscriptionId: string) {
 
   if (!record) return;
 
+  const previousStatus = record.status;
   const priceId = getSubscriptionPriceId(stripeSub);
+  const newStatus = mapStripeSubscriptionStatus(stripeSub.status);
 
   await db.subscription.update({
     where: { id: record.id },
     data: {
       stripeSubscriptionId: stripeSub.id,
       stripePriceId: priceId,
-      status: mapStripeSubscriptionStatus(stripeSub.status),
+      status: newStatus,
       currentPeriodEnd: getSubscriptionPeriodEnd(stripeSub),
       cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
     },
   });
+
+  if (newStatus === "ACTIVE" && previousStatus !== "ACTIVE") {
+    const user = await db.user.findUnique({ where: { id: record.userId } });
+    if (user) {
+      void sendSubscriptionConfirmationEmail(user).catch(() => undefined);
+    }
+  }
 }

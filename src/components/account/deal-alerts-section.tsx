@@ -78,8 +78,7 @@ export function DealAlertsSection() {
           Deal alerts
         </CardTitle>
         <CardDescription>
-          Get notified when prices drop below your target. Email delivery
-          arrives in Milestone 9 — alerts are stored now.
+          Get notified by email when prices drop below your target. Checked hourly.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

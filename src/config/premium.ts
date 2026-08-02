@@ -20,7 +20,7 @@ export const premiumFeatures = [
   {
     id: "alerts",
     title: "Deal alerts",
-    description: "Track price drops and get notified (email in M9)",
+    description: "Track price drops and get email notifications",
   },
   {
     id: "saved",

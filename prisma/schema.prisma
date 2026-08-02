@@ -33,6 +33,7 @@ model User {
   preferences UserPreferences?
   dealAlerts  DealAlert[]
   subscription Subscription?
+  emailLogs   EmailLog[]
 
   @@map("users")
 }
@@ -55,17 +56,21 @@ model UserPreferences {
 }
 
 model DealAlert {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planId    String?  @map("plan_id")
-  plan      Plan?    @relation(fields: [planId], references: [id], onDelete: Cascade)
-  firmSlug  String?  @map("firm_slug")
-  maxAllIn  Decimal? @map("max_all_in") @db.Decimal(10, 2)
-  label     String?
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id                String    @id @default(cuid())
+  userId            String    @map("user_id")
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId            String?   @map("plan_id")
+  plan              Plan?     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  firmSlug          String?   @map("firm_slug")
+  maxAllIn          Decimal?  @map("max_all_in") @db.Decimal(10, 2)
+  label             String?
+  isActive          Boolean   @default(true) @map("is_active")
+  lastNotifiedAt    DateTime? @map("last_notified_at")
+  lastNotifiedAllIn Decimal?  @map("last_notified_all_in") @db.Decimal(10, 2)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  emailLogs EmailLog[]
 
   @@index([userId, isActive])
   @@map("deal_alerts")
@@ -214,4 +219,37 @@ model Subscription {
 
   @@index([status])
   @@map("subscriptions")
+}
+
+// ---------------------------------------------------------------------------
+// Email notifications (Milestone 9)
+// ---------------------------------------------------------------------------
+
+enum EmailType {
+  DEAL_ALERT
+  WELCOME
+  SUBSCRIPTION_CONFIRMATION
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+}
+
+model EmailLog {
+  id          String      @id @default(cuid())
+  userId      String      @map("user_id")
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dealAlertId String?     @map("deal_alert_id")
+  dealAlert   DealAlert?  @relation(fields: [dealAlertId], references: [id], onDelete: SetNull)
+  type        EmailType
+  toEmail     String      @map("to_email")
+  subject     String
+  status      EmailStatus @default(SENT)
+  metadata    Json?
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([userId, type])
+  @@index([dealAlertId])
+  @@map("email_logs")
 }

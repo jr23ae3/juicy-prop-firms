@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { DealAlertsSection } from "@/components/account/deal-alerts-section";
+import { EmailHistorySection } from "@/components/account/email-history-section";
 import { PreferencesForm } from "@/components/account/preferences-form";
 import { SavedPlansList } from "@/components/account/saved-plans-list";
 import { SubscriptionCard } from "@/components/premium/subscription-card";
@@ -75,6 +76,7 @@ export default async function AccountPage() {
             <SavedPlansList />
             <PreferencesForm initialPreferences={preferences} />
             <DealAlertsSection />
+            <EmailHistorySection />
           </>
         ) : (
           <Card>

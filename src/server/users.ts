@@ -3,6 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { db } from "@/lib/db";
 import { isDatabaseConfigured } from "@/lib/env";
 import type { User } from "@/generated/prisma/client";
+import { sendWelcomeEmail } from "@/services/email/transactional-email-service";
 
 export async function syncUserFromSupabase(
   supabaseUser: SupabaseUser,
@@ -19,7 +20,11 @@ export async function syncUserFromSupabase(
   const avatarUrl =
     (supabaseUser.user_metadata?.avatar_url as string | undefined) ?? null;
 
-  return db.user.upsert({
+  const existing = await db.user.findUnique({
+    where: { supabaseId: supabaseUser.id },
+  });
+
+  const user = await db.user.upsert({
     where: { supabaseId: supabaseUser.id },
     create: {
       supabaseId: supabaseUser.id,
@@ -33,6 +38,12 @@ export async function syncUserFromSupabase(
       avatarUrl,
     },
   });
+
+  if (!existing) {
+    void sendWelcomeEmail(user).catch(() => undefined);
+  }
+
+  return user;
 }
 
 export async function getUserBySupabaseId(supabaseId: string) {

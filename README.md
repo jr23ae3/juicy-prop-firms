@@ -88,7 +88,7 @@ Add `OPENAI_API_KEY` to `.env.local` for full AI reasoning.
 Signed-in users get a full account dashboard at [/account](/account):
 - **Saved plans** — bookmark plans from the compare table
 - **Preferences** — trading style, budget, and priorities (pre-fill AI Advisor)
-- **Deal alerts** — store price-drop targets (email delivery in Milestone 9)
+- **Deal alerts** — store price-drop targets and receive email notifications (Juicy Pro)
 
 User APIs: `GET/POST/DELETE /api/user/saved-plans`, `GET/PUT /api/user/preferences`, `GET/POST/DELETE /api/user/alerts`
 
@@ -117,6 +117,27 @@ Visit [/pricing](/pricing) for Free vs **Juicy Pro** ($9.99/mo):
 4. Local testing: `stripe listen --forward-to localhost:3000/api/stripe/webhook`
 
 APIs: `POST /api/stripe/checkout`, `POST /api/stripe/portal`, `GET /api/user/subscription`
+
+### Email & notifications (Milestone 9)
+
+Transactional email via [Resend](https://resend.com):
+
+- **Welcome email** — sent on first account sync
+- **Subscription confirmation** — sent when Juicy Pro activates
+- **Deal alert emails** — hourly cron checks active alerts for premium users
+
+**Resend setup:**
+1. Create a Resend account and verify your domain
+2. Add to `.env.local`:
+   ```
+   RESEND_API_KEY=re_...
+   RESEND_FROM_EMAIL=Juicy Prop Firms <notifications@yourdomain.com>
+   CRON_SECRET=your-random-secret
+   ```
+3. Deal alert cron: `GET /api/cron/deal-alerts` (hourly on Vercel via `vercel.json`)
+4. Manual test: `curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/deal-alerts`
+
+APIs: `GET /api/user/emails`, `GET /api/cron/deal-alerts`
 
 ## Project Structure
 
@@ -148,7 +169,7 @@ src/
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | ✅ Complete |
 | 7 | **User Features** — Saved plans, alerts, preferences (TanStack Query) | ✅ Complete |
 | 8 | **Stripe & Premium** — Subscriptions, premium features | ✅ Complete |
-| 9 | **Email & Notifications** — Resend integration, deal alerts | Pending |
+| 9 | **Email & Notifications** — Resend integration, deal alerts | ✅ Complete |
 | 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | Pending |
 
 ## Scripts
