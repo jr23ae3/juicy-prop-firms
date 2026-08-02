@@ -2,8 +2,9 @@ import { ArrowRight, BadgeCheck, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 
 const highlights = [
   {
@@ -73,10 +74,13 @@ export function HeroSection({ stats }: HeroSectionProps) {
           ) : null}
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" disabled className="w-full gap-2 sm:w-auto">
+            <Link
+              href="/compare"
+              className={cn(buttonVariants({ size: "lg" }), "w-full gap-2 sm:w-auto")}
+            >
               Compare Plans
               <ArrowRight className="size-4" aria-hidden />
-            </Button>
+            </Link>
             <Button
               variant="outline"
               size="lg"

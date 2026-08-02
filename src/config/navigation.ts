@@ -10,7 +10,6 @@ export const mainNav: NavItem[] = [
     title: "Compare",
     href: "/compare",
     description: "Side-by-side plan comparison with live pricing",
-    disabled: true,
   },
   {
     title: "Rankings",

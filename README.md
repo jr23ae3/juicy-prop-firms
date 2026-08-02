@@ -57,7 +57,16 @@ npm run db:seed
 ```
 
 This loads 5 prop firms, 10 plans, verified discount codes, and power rankings.
-Data APIs: `GET /api/plans`, `GET /api/rankings`
+Data APIs: `GET /api/plans`, `GET /api/rankings`, `GET /api/plans/metadata`
+
+### Compare page (Milestone 4)
+
+Visit [/compare](/compare) for the filterable plan comparison table with:
+- All-in cost column (eval + activation)
+- Verified discount code badges with copy
+- Filters: firm, account size, eval type, max budget, search
+- Mobile card layout + desktop table
+- TanStack Query for live data fetching
 
 ## Project Structure
 
@@ -84,7 +93,7 @@ src/
 | 1 | **Project Foundation** — Next.js, Tailwind, shadcn, architecture, shell UI | ✅ Complete |
 | 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | ✅ Complete |
 | 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | ✅ Complete |
-| 4 | **Comparison Table** — Filterable plan comparison with live pricing | Pending |
+| 4 | **Comparison Table** — Filterable plan comparison with live pricing | ✅ Complete |
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | Pending |
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | Pending |
 | 7 | **User Features** — Saved firms, alerts, preferences (TanStack Query) | Pending |
