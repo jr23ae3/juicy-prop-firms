@@ -1,20 +1,21 @@
 import "dotenv/config";
 
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 
 import { PrismaClient } from "../src/generated/prisma/client";
 import { CURRENT_RANKING_PERIOD } from "../src/config/rankings";
+import { createPgPool } from "../src/lib/pg-pool";
+import { resolveDatabaseUrl } from "../src/lib/resolve-env";
 import { SEED_FIRMS } from "./seed/data/firms";
 
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  console.error("DATABASE_URL is required to run the seed script.");
+if (!resolveDatabaseUrl()) {
+  console.error(
+    "DATABASE_URL or POSTGRES_URL is required to run the seed script.",
+  );
   process.exit(1);
 }
 
-const pool = new Pool({ connectionString });
+const pool = createPgPool();
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
