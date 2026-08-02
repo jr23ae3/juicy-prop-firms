@@ -35,7 +35,12 @@ export function formatMinimumDays(days: number | null | undefined) {
   return days === 1 ? "1 day" : `${days} days`;
 }
 
-export function formatProfitSplit(split: number | null) {
+export function formatProfitSplit(split: number | null | undefined) {
   if (split == null) return "—";
   return formatPercent(split);
+}
+
+export function formatOptionalCount(value: number | null | undefined) {
+  if (value == null || value <= 0) return "—";
+  return String(value);
 }

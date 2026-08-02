@@ -279,8 +279,17 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
                 </select>
               </div>
               <Field name="profitSplit" label="Profit split (0.9 = 90%)" type="number" step="0.01" />
+              <Field name="maxPayout" label="Max payout ($)" type="number" />
               <Field name="payoutFrequency" label="Payout frequency" />
             </div>
+            <fieldset className="space-y-3 rounded-lg border border-border/60 p-4">
+              <legend className="px-1 text-sm font-medium">Funded terms</legend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field name="minimumDaysToPayout" label="Min days to payout" type="number" />
+                <Field name="minimumTargetGoalCushion" label="Min target goal cushion ($)" type="number" />
+                <Field name="maxFundedAccounts" label="Max funded accounts" type="number" />
+              </div>
+            </fieldset>
             <fieldset className="space-y-3 rounded-lg border border-border/60 p-4">
               <legend className="px-1 text-sm font-medium">
                 Discount (optional)

@@ -7,7 +7,9 @@ import {
   formatAccountSize,
   formatCurrency,
   formatMinimumDays,
+  formatOptionalCount,
   formatOptionalCurrency,
+  formatProfitSplit,
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
@@ -112,6 +114,44 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
           </dd>
         </div>
       </dl>
+
+      <div className="mt-4 border-t border-border/60 pt-3">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Funded
+        </p>
+        <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <dt className="text-xs text-muted-foreground">Min days to payout</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatMinimumDays(plan.minimumDaysToPayout)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Min target cushion</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Max payout</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatOptionalCurrency(plan.maxPayout)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Max funded accounts</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatOptionalCount(plan.maxFundedAccounts)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Split %</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatProfitSplit(plan.profitSplit)}
+            </dd>
+          </div>
+        </dl>
+      </div>
 
       {plan.discount ? (
         <div className="mt-4 border-t border-border/60 pt-3">
