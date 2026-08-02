@@ -24,6 +24,14 @@ export function sortPlans(
         return (
           (a.firm.rankPosition ?? 999) - (b.firm.rankPosition ?? 999)
         );
+      case "maxPayout":
+        return (a.maxPayout ?? -1) - (b.maxPayout ?? -1);
+      case "profitSplit":
+        return (a.profitSplit ?? -1) - (b.profitSplit ?? -1);
+      case "daysToPayout":
+        return (
+          (a.minimumDaysToPayout ?? 999) - (b.minimumDaysToPayout ?? 999)
+        );
       default:
         return 0;
     }
@@ -39,6 +47,8 @@ export function sortPlans(
 export function getDefaultSortDirection(
   sort: CompareSortField,
 ): CompareSortDirection {
-  if (sort === "returnMultiple") return "desc";
+  if (sort === "returnMultiple" || sort === "maxPayout" || sort === "profitSplit") {
+    return "desc";
+  }
   return "asc";
 }

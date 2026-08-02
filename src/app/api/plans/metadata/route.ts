@@ -20,6 +20,7 @@ export async function GET() {
       })),
       accountSizes,
       evalTypes: ["CHALLENGE", "DIRECT_TO_FUNDED", "INSTANT_FUNDING"],
+      drawdownTypes: ["END_OF_DAY", "TRAILING", "STATIC"],
     };
 
     return NextResponse.json(

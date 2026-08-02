@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { filterPlansByBudget } from "@/lib/plans/filter-plans";
+import { applyCompareFilters } from "@/lib/plans/filter-plans";
 import { getDefaultSortDirection, sortPlans } from "@/lib/plans/sort-plans";
 import type { CompareFilters } from "@/types/compare";
 import type { ApiResponse, PlanSummary } from "@/types";
@@ -38,8 +38,8 @@ export function usePlans(filters: CompareFilters) {
     queryKey: ["plans", filters],
     queryFn: () => fetchPlans(filters),
     select: (plans) => {
-      const budgetFiltered = filterPlansByBudget(plans, filters.maxBudget);
-      return sortPlans(budgetFiltered, sort, direction);
+      const filtered = applyCompareFilters(plans, filters);
+      return sortPlans(filtered, sort, direction);
     },
   });
 }

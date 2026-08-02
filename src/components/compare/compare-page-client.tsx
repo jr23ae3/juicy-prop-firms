@@ -26,6 +26,16 @@ function filtersToSearchParams(filters: CompareFilters): URLSearchParams {
   if (filters.accountSize) params.set("accountSize", String(filters.accountSize));
   if (filters.maxBudget) params.set("maxBudget", String(filters.maxBudget));
   if (filters.search) params.set("q", filters.search);
+  if (filters.drawdownType) params.set("drawdownType", filters.drawdownType);
+  if (filters.minProfitSplit) {
+    params.set("minProfitSplit", String(filters.minProfitSplit));
+  }
+  if (filters.maxDaysToPayout) {
+    params.set("maxDaysToPayout", String(filters.maxDaysToPayout));
+  }
+  if (filters.minMaxPayout) {
+    params.set("minMaxPayout", String(filters.minMaxPayout));
+  }
   if (filters.sort) params.set("sort", filters.sort);
   if (filters.direction) params.set("direction", filters.direction);
 
@@ -61,12 +71,12 @@ export function ComparePageClient({ metadata }: ComparePageClientProps) {
   }
 
   return (
-    <Container className="space-y-6 py-8 md:py-12">
+    <Container size="full" className="space-y-6 py-8 md:py-12">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">
           Compare prop firm plans
         </h1>
-        <p className="max-w-2xl text-muted-foreground">
+        <p className="max-w-3xl text-muted-foreground">
           Live pricing with verified discount codes and transparent all-in costs
           — eval price plus activation fees, surfaced upfront.
         </p>

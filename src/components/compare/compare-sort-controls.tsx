@@ -13,6 +13,9 @@ import type { CompareFilters, CompareSortField } from "@/types/compare";
 const SORT_OPTIONS: { value: CompareSortField; label: string }[] = [
   { value: "allInCost", label: "All-in cost" },
   { value: "returnMultiple", label: "Return multiple" },
+  { value: "maxPayout", label: "Max payout" },
+  { value: "profitSplit", label: "Split %" },
+  { value: "daysToPayout", label: "Days to payout" },
   { value: "accountSize", label: "Account size" },
   { value: "firmRank", label: "Firm rank" },
 ];

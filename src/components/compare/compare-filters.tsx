@@ -13,8 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getEvalTypeLabel } from "@/lib/plans/labels";
-import { formatAccountSize } from "@/lib/format";
+import { formatAccountSize, formatPercent } from "@/lib/format";
+import { getDrawdownTypeLabel, getEvalTypeLabel } from "@/lib/plans/labels";
 import type { CompareFilterMetadata, CompareFilters } from "@/types/compare";
 
 type CompareFiltersBarProps = {
@@ -23,6 +23,10 @@ type CompareFiltersBarProps = {
   onChange: (filters: CompareFilters) => void;
   resultCount: number;
 };
+
+const MIN_SPLIT_OPTIONS = [0.8, 0.85, 0.9] as const;
+const MAX_DAYS_TO_PAYOUT_OPTIONS = [5, 8, 10, 15] as const;
+const MIN_MAX_PAYOUT_OPTIONS = [2500, 3000, 3500] as const;
 
 export function CompareFiltersBar({
   metadata,
@@ -61,7 +65,11 @@ export function CompareFiltersBar({
       filters.evalType ||
       filters.accountSize ||
       filters.maxBudget ||
-      filters.search,
+      filters.search ||
+      filters.drawdownType ||
+      filters.minProfitSplit ||
+      filters.maxDaysToPayout ||
+      filters.minMaxPayout,
   );
 
   return (
@@ -109,8 +117,7 @@ export function CompareFiltersBar({
             value={filters.firm ?? "all"}
             onValueChange={(value) =>
               update({
-                firm:
-                  !value || value === "all" ? undefined : value,
+                firm: !value || value === "all" ? undefined : value,
               })
             }
           >
@@ -201,6 +208,121 @@ export function CompareFiltersBar({
             </SelectContent>
           </Select>
         </FilterField>
+      </div>
+
+      <div className="border-t border-border/60 pt-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Drawdown & funded
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <FilterField label="Draw down type">
+            <Select
+              value={filters.drawdownType ?? "all"}
+              onValueChange={(value) =>
+                update({
+                  drawdownType:
+                    !value || value === "all"
+                      ? undefined
+                      : (value as CompareFilters["drawdownType"]),
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All types</SelectItem>
+                {metadata.drawdownTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {getDrawdownTypeLabel(type)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FilterField>
+
+          <FilterField label="Min split %">
+            <Select
+              value={
+                filters.minProfitSplit
+                  ? String(filters.minProfitSplit)
+                  : "all"
+              }
+              onValueChange={(value) =>
+                update({
+                  minProfitSplit:
+                    !value || value === "all" ? undefined : Number(value),
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Any split" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Any split</SelectItem>
+                {MIN_SPLIT_OPTIONS.map((split) => (
+                  <SelectItem key={split} value={String(split)}>
+                    {formatPercent(split)}+
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FilterField>
+
+          <FilterField label="Max days to payout">
+            <Select
+              value={
+                filters.maxDaysToPayout
+                  ? String(filters.maxDaysToPayout)
+                  : "all"
+              }
+              onValueChange={(value) =>
+                update({
+                  maxDaysToPayout:
+                    !value || value === "all" ? undefined : Number(value),
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Any timeline" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Any timeline</SelectItem>
+                {MAX_DAYS_TO_PAYOUT_OPTIONS.map((days) => (
+                  <SelectItem key={days} value={String(days)}>
+                    Within {days} days
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FilterField>
+
+          <FilterField label="Min max payout">
+            <Select
+              value={
+                filters.minMaxPayout ? String(filters.minMaxPayout) : "all"
+              }
+              onValueChange={(value) =>
+                update({
+                  minMaxPayout:
+                    !value || value === "all" ? undefined : Number(value),
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Any payout" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Any payout</SelectItem>
+                {MIN_MAX_PAYOUT_OPTIONS.map((payout) => (
+                  <SelectItem key={payout} value={String(payout)}>
+                    ${payout.toLocaleString()}+
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FilterField>
+        </div>
       </div>
     </div>
   );

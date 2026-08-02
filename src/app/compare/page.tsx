@@ -35,12 +35,14 @@ async function getFilterMetadata(): Promise<CompareFilterMetadata> {
       })),
       accountSizes,
       evalTypes: ["CHALLENGE", "DIRECT_TO_FUNDED", "INSTANT_FUNDING"],
+      drawdownTypes: ["END_OF_DAY", "TRAILING", "STATIC"],
     };
   } catch {
     return {
       firms: [],
       accountSizes: [],
       evalTypes: ["CHALLENGE", "DIRECT_TO_FUNDED", "INSTANT_FUNDING"],
+      drawdownTypes: ["END_OF_DAY", "TRAILING", "STATIC"],
     };
   }
 }
