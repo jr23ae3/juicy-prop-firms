@@ -35,19 +35,6 @@ export function formatMinimumDays(days: number | null | undefined) {
   return days === 1 ? "1 day" : `${days} days`;
 }
 
-export function formatMinimumDaysCompact(days: number | null | undefined) {
-  if (days == null || days <= 0) return "—";
-  return `${days}d`;
-}
-
-export function formatCompactCurrency(value: number | null | undefined) {
-  if (value == null || value <= 0) return "—";
-  if (value >= 1000) {
-    return `$${Math.round(value / 1000)}K`;
-  }
-  return formatCurrency(value);
-}
-
 export function formatProfitSplit(split: number | null | undefined) {
   if (split == null) return "—";
   return formatPercent(split);

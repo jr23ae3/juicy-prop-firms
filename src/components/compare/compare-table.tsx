@@ -10,14 +10,13 @@ import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
   formatAccountSize,
-  formatCompactCurrency,
   formatCurrency,
-  formatMinimumDaysCompact,
+  formatMinimumDays,
   formatOptionalCurrency,
   formatProfitSplit,
   formatReturnMultiple,
 } from "@/lib/format";
-import { getDrawdownLabel } from "@/lib/plans/labels";
+import { getDrawdownTypeLabel } from "@/lib/plans/labels";
 import {
   getDefaultSortDirection,
   toggleSortDirection,
@@ -345,7 +344,7 @@ function CompareTableRow({
         <FundedPayCell plan={plan} />
       </td>
       <td className={cn(CELL, "text-right tabular-nums")}>
-        {formatCompactCurrency(plan.minimumTargetGoalCushion)}
+        {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
       </td>
       <td className={cn(CELL, "text-right tabular-nums")}>
         <FundedSplitCell plan={plan} />
@@ -368,7 +367,7 @@ function CompareTableRow({
 }
 
 function DrawdownCell({ plan }: { plan: PlanSummary }) {
-  const type = getDrawdownLabel(plan.drawdownType);
+  const type = getDrawdownTypeLabel(plan.drawdownType);
   const hasLimits =
     plan.profitTarget || plan.dailyDrawdown || plan.maxDrawdown;
 
@@ -377,14 +376,14 @@ function DrawdownCell({ plan }: { plan: PlanSummary }) {
       <div className="font-medium">{type ?? "—"}</div>
       {hasLimits ? (
         <div className="mt-0.5 text-[11px] tabular-nums text-muted-foreground">
-          {formatCompactCurrency(plan.profitTarget)} tgt ·{" "}
-          {formatCompactCurrency(plan.dailyDrawdown)} day ·{" "}
-          {formatCompactCurrency(plan.maxDrawdown)} max
+          {formatOptionalCurrency(plan.profitTarget)} tgt ·{" "}
+          {formatOptionalCurrency(plan.dailyDrawdown)} day ·{" "}
+          {formatOptionalCurrency(plan.maxDrawdown)} max
         </div>
       ) : null}
       {plan.minimumDays ? (
         <div className="text-[11px] text-muted-foreground">
-          {formatMinimumDaysCompact(plan.minimumDays)} min
+          {formatMinimumDays(plan.minimumDays)}
         </div>
       ) : null}
     </div>
@@ -424,7 +423,7 @@ function FeesCell({
 function FundedPayCell({ plan }: { plan: PlanSummary }) {
   return (
     <div className="leading-snug">
-      <div>{formatMinimumDaysCompact(plan.minimumDaysToPayout)}</div>
+      <div>{formatMinimumDays(plan.minimumDaysToPayout)}</div>
       <div className="text-[11px] text-muted-foreground">
         {formatOptionalCurrency(plan.maxPayout)}
       </div>
