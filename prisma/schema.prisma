@@ -1,0 +1,161 @@
+// Juicy Prop Firms — PostgreSQL schema
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Users (synced from Supabase Auth)
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id         String   @id @default(cuid())
+  supabaseId String   @unique @map("supabase_id")
+  email      String   @unique
+  name       String?
+  avatarUrl  String?  @map("avatar_url")
+  role       UserRole @default(USER)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  savedPlans  SavedPlan[]
+  preferences UserPreferences?
+
+  @@map("users")
+}
+
+model UserPreferences {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradingStyle  String?  @map("trading_style")
+  preferredSize Int?     @map("preferred_size")
+  maxBudget     Decimal? @map("max_budget") @db.Decimal(10, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("user_preferences")
+}
+
+// ---------------------------------------------------------------------------
+// Prop Firms & Plans
+// ---------------------------------------------------------------------------
+
+model PropFirm {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  description  String?  @db.Text
+  websiteUrl   String?  @map("website_url")
+  logoUrl      String?  @map("logo_url")
+  isActive     Boolean  @default(true) @map("is_active")
+  rankScore    Float?   @map("rank_score")
+  rankPosition Int?     @map("rank_position")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  plans    Plan[]
+  rankings FirmRanking[]
+
+  @@index([isActive, rankPosition])
+  @@map("prop_firms")
+}
+
+enum EvalType {
+  CHALLENGE
+  DIRECT_TO_FUNDED
+  INSTANT_FUNDING
+}
+
+enum DrawdownType {
+  END_OF_DAY
+  TRAILING
+  STATIC
+}
+
+model Plan {
+  id              String        @id @default(cuid())
+  propFirmId      String        @map("prop_firm_id")
+  propFirm        PropFirm      @relation(fields: [propFirmId], references: [id], onDelete: Cascade)
+  slug            String
+  name            String
+  accountSize     Int           @map("account_size")
+  evalType        EvalType      @map("eval_type")
+  evalPrice       Decimal       @map("eval_price") @db.Decimal(10, 2)
+  activationFee   Decimal       @default(0) @map("activation_fee") @db.Decimal(10, 2)
+  profitTarget    Decimal?      @map("profit_target") @db.Decimal(10, 2)
+  maxDrawdown     Decimal?      @map("max_drawdown") @db.Decimal(10, 2)
+  drawdownType    DrawdownType? @map("drawdown_type")
+  profitSplit     Decimal?      @map("profit_split") @db.Decimal(5, 4)
+  maxPayout       Decimal?      @map("max_payout") @db.Decimal(10, 2)
+  payoutFrequency String?       @map("payout_frequency")
+  isActive        Boolean       @default(true) @map("is_active")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  discounts Discount[]
+  savedBy   SavedPlan[]
+
+  @@unique([propFirmId, slug])
+  @@index([isActive, accountSize])
+  @@map("plans")
+}
+
+model Discount {
+  id          String    @id @default(cuid())
+  planId      String    @map("plan_id")
+  plan        Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  code        String
+  discountPct Decimal?  @map("discount_pct") @db.Decimal(5, 4)
+  discountAmt Decimal?  @map("discount_amt") @db.Decimal(10, 2)
+  expiresAt   DateTime? @map("expires_at")
+  isActive    Boolean   @default(true) @map("is_active")
+  verifiedAt  DateTime? @map("verified_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([planId, isActive])
+  @@map("discounts")
+}
+
+// ---------------------------------------------------------------------------
+// Rankings
+// ---------------------------------------------------------------------------
+
+model FirmRanking {
+  id         String   @id @default(cuid())
+  propFirmId String   @map("prop_firm_id")
+  propFirm   PropFirm @relation(fields: [propFirmId], references: [id], onDelete: Cascade)
+  score      Float
+  position   Int
+  period     String
+  factors    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([propFirmId, period])
+  @@index([period, position])
+  @@map("firm_rankings")
+}
+
+model SavedPlan {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId    String   @map("plan_id")
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, planId])
+  @@map("saved_plans")
+}

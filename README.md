@@ -32,6 +32,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Database & Auth setup (Milestone 2)
+
+1. Create a [Supabase](https://supabase.com) project and copy URL + anon key into `.env.local`
+2. Add your PostgreSQL `DATABASE_URL` (Supabase → Settings → Database)
+3. Run migrations:
+
+```bash
+npm run db:migrate
+```
+
+4. In Supabase → Authentication → URL Configuration, set:
+   - Site URL: `http://localhost:3000`
+   - Redirect URLs: `http://localhost:3000/auth/callback`
+
+Auth routes: `/login`, `/signup`, `/account` (protected)
+
 ## Project Structure
 
 ```
@@ -55,7 +71,7 @@ src/
 | # | Milestone | Status |
 |---|-----------|--------|
 | 1 | **Project Foundation** — Next.js, Tailwind, shadcn, architecture, shell UI | ✅ Complete |
-| 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | Pending |
+| 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | ✅ Complete |
 | 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | Pending |
 | 4 | **Comparison Table** — Filterable plan comparison with live pricing | Pending |
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | Pending |
@@ -68,10 +84,14 @@ src/
 ## Scripts
 
 ```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Production server
-npm run lint     # ESLint
+npm run dev          # Development server
+npm run build        # Production build
+npm run start        # Production server
+npm run lint         # ESLint
+npm run db:generate  # Generate Prisma client
+npm run db:migrate   # Run database migrations
+npm run db:push      # Push schema (prototyping)
+npm run db:studio    # Open Prisma Studio
 ```
 
 ## License

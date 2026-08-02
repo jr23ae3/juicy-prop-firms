@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { AuthButtons } from "@/components/auth/auth-buttons";
 import { Container } from "@/components/layout/container";
 import { MainNav } from "@/components/layout/main-nav";
 import { siteConfig } from "@/config/site";
@@ -21,22 +20,13 @@ export function SiteHeader() {
             >
               J
             </span>
-            <span className="text-base sm:text-lg">
-              {siteConfig.name}
-            </span>
+            <span className="text-base sm:text-lg">{siteConfig.name}</span>
           </Link>
           <MainNav />
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" disabled>
-            Sign in
-          </Button>
-          <Button size="sm" disabled className="gap-1.5">
-            <Sparkles className="size-3.5" aria-hidden />
-            <span className="hidden sm:inline">Get AI Match</span>
-            <span className="sm:hidden">AI Match</span>
-          </Button>
+          <AuthButtons />
         </div>
       </Container>
     </header>
