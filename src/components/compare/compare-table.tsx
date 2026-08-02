@@ -379,7 +379,7 @@ function CompareTableRow({
   return (
     <tr
       className={cn(
-        "border-b border-border/40 transition-colors last:border-0 hover:bg-muted/40",
+        "border-b border-border/40 transition-colors last:border-0 hover:bg-primary/10",
         isStriped && "bg-muted/25",
       )}
     >
@@ -437,7 +437,6 @@ function CompareTableRow({
         className={cn(
           "px-4 py-3 text-right tabular-nums",
           FUNDED_CELL_BORDER,
-          isStriped && "bg-muted/35",
         )}
       >
         {formatMinimumDays(plan.minimumDaysToPayout)}
