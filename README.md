@@ -74,6 +74,15 @@ Visit [/compare](/compare) for the filterable plan comparison table with:
 - [/firms/{slug}](/firms/lucid-trading) — SEO firm profiles with plans & ranking scores
 - [/methodology](/methodology) — How we verify and rank firms
 
+### AI Advisor (Milestone 6)
+
+Visit [/advisor](/advisor) for personalized plan recommendations:
+- Questionnaire: trading style, experience, budget, priorities
+- OpenAI-powered matching (falls back to smart rules without API key)
+- Top 3 plans with reasoning, match scores, and discount codes
+
+Add `OPENAI_API_KEY` to `.env.local` for full AI reasoning.
+
 ## Project Structure
 
 ```
@@ -101,7 +110,7 @@ src/
 | 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | ✅ Complete |
 | 4 | **Comparison Table** — Filterable plan comparison with live pricing | ✅ Complete |
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | ✅ Complete |
-| 6 | **AI Advisor** — OpenAI-powered personalized recommendations | Pending |
+| 6 | **AI Advisor** — OpenAI-powered personalized recommendations | ✅ Complete |
 | 7 | **User Features** — Saved firms, alerts, preferences (TanStack Query) | Pending |
 | 8 | **Stripe & Premium** — Subscriptions, premium features | Pending |
 | 9 | **Email & Notifications** — Resend integration, deal alerts | Pending |

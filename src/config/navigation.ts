@@ -20,7 +20,6 @@ export const mainNav: NavItem[] = [
     title: "AI Advisor",
     href: "/advisor",
     description: "Get personalized firm recommendations",
-    disabled: true,
   },
   {
     title: "How We Rank",

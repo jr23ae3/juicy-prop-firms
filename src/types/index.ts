@@ -6,6 +6,12 @@ export type ApiResponse<T> =
   | { success: false; error: string };
 
 export type {
+  AdvisorInput,
+  AdvisorRecommendation,
+  AdvisorResponse,
+} from "@/types/advisor";
+
+export type {
   DiscountSummary,
   FirmRecord,
   FirmSummary,

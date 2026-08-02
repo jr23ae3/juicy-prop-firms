@@ -2,7 +2,7 @@ import { ArrowRight, BadgeCheck, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -81,15 +81,16 @@ export function HeroSection({ stats }: HeroSectionProps) {
               Compare Plans
               <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              disabled
-              className="w-full gap-2 sm:w-auto"
+            <Link
+              href="/advisor"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "w-full gap-2 sm:w-auto",
+              )}
             >
               <Sparkles className="size-4" aria-hidden />
               Try AI Advisor
-            </Button>
+            </Link>
           </div>
         </div>
 

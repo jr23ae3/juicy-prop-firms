@@ -32,6 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    {
+      url: `${siteConfig.url}/advisor`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
   ];
 
   const firmRoutes: MetadataRoute.Sitemap = firmSlugs.map((slug) => ({

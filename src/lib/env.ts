@@ -84,3 +84,19 @@ export function isSupabaseConfigured() {
 export function isDatabaseConfigured() {
   return Boolean(env.DATABASE_URL);
 }
+
+export function isOpenAIConfigured() {
+  return Boolean(env.OPENAI_API_KEY);
+}
+
+export function requireOpenAIEnv() {
+  const apiKey = env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error(
+      "Missing OPENAI_API_KEY. Set it in .env.local to enable AI recommendations.",
+    );
+  }
+
+  return { apiKey };
+}
