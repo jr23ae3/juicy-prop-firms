@@ -7,18 +7,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { COMPARE_SORT_FIELDS } from "@/lib/plans/compare-sort-config";
 import { getDefaultSortDirection } from "@/lib/plans/sort-plans";
 import type { CompareFilters, CompareSortField } from "@/types/compare";
 
-const SORT_OPTIONS: { value: CompareSortField; label: string }[] = [
-  { value: "allInCost", label: "All-in cost" },
-  { value: "returnMultiple", label: "Return multiple" },
-  { value: "maxPayout", label: "Max payout" },
-  { value: "profitSplit", label: "Split %" },
-  { value: "daysToPayout", label: "Days to payout" },
-  { value: "accountSize", label: "Account size" },
-  { value: "firmRank", label: "Firm rank" },
-];
+const SORT_LABELS: Record<CompareSortField, string> = {
+  firmRank: "Firm rank",
+  firmName: "Firm name",
+  accountSize: "Account size",
+  evalType: "Eval type",
+  drawdownType: "Draw down type",
+  profitTarget: "Target goal",
+  dailyDrawdown: "Daily draw down",
+  maxDrawdown: "Max draw down",
+  minimumDays: "Minimum days",
+  evalPrice: "Eval price",
+  activationFee: "Activation fee",
+  allInCost: "All-in cost",
+  daysToPayout: "Days to payout",
+  minimumTargetGoalCushion: "Target goal cushion",
+  maxPayout: "Max payout",
+  maxFundedAccounts: "Max funded accounts",
+  profitSplit: "Split %",
+  returnMultiple: "Return multiple",
+};
 
 type CompareSortControlsProps = {
   filters: CompareFilters;
@@ -32,7 +44,7 @@ export function CompareSortControls({
   const sort = filters.sort ?? "allInCost";
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2 lg:hidden">
       <span className="text-xs font-medium text-muted-foreground">Sort by</span>
       <Select
         value={sort}
@@ -46,13 +58,13 @@ export function CompareSortControls({
           });
         }}
       >
-        <SelectTrigger size="sm" className="min-w-36">
+        <SelectTrigger size="sm" className="min-w-40">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {SORT_OPTIONS.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
+          {COMPARE_SORT_FIELDS.map((field) => (
+            <SelectItem key={field} value={field}>
+              {SORT_LABELS[field]}
             </SelectItem>
           ))}
         </SelectContent>

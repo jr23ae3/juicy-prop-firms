@@ -1,3 +1,8 @@
+"use client";
+
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+
+import type { CompareFilters, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
@@ -13,92 +18,170 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import {
+  getDefaultSortDirection,
+  toggleSortDirection,
+} from "@/lib/plans/sort-plans";
 import { cn } from "@/lib/utils";
 
 type CompareTableProps = {
   plans: PlanSummary[];
+  filters?: CompareFilters;
+  onSortChange?: (filters: CompareFilters) => void;
 };
 
-const FUNDED_GROUP_CLASS =
-  "border-l border-border/60 bg-muted/20";
-
+const FUNDED_GROUP_CLASS = "border-l border-border/60 bg-muted/20";
 const FUNDED_CELL_BORDER = "border-l border-border/60";
 
-export function CompareTable({ plans }: CompareTableProps) {
+export function CompareTable({ plans, filters, onSortChange }: CompareTableProps) {
+  const sort = filters?.sort ?? "allInCost";
+  const direction = filters?.direction ?? getDefaultSortDirection(sort);
+  const sortable = Boolean(filters && onSortChange);
+
+  function handleSort(field: CompareSortField) {
+    if (!filters || !onSortChange) return;
+
+    if (sort === field) {
+      onSortChange({
+        ...filters,
+        sort: field,
+        direction: toggleSortDirection(field, direction),
+      });
+      return;
+    }
+
+    onSortChange({
+      ...filters,
+      sort: field,
+      direction: getDefaultSortDirection(field),
+    });
+  }
+
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm lg:block">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1880px] border-collapse text-sm">
           <caption className="sr-only">
             Prop firm plan comparison with all-in costs, funded terms, and
-            discount codes
+            discount codes. Click column headers to sort.
           </caption>
           <thead>
             <tr className="border-b border-border/60 bg-muted/40 text-left">
-              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
-                Rank
-              </th>
-              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
-                Firm
-              </th>
-              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
-                Plan
-              </th>
-              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
-                Type
-              </th>
-              <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
-                Draw Down Type
-              </th>
-              <th
-                scope="col"
+              <SortableTh
+                field="firmRank"
+                label="Rank"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Target Goal
-              </th>
-              <th
-                scope="col"
+              />
+              <SortableTh
+                field="firmName"
+                label="Firm"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Daily Draw Down
-              </th>
-              <th
-                scope="col"
+              />
+              <SortableTh
+                field="accountSize"
+                label="Plan"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Max Draw Down
-              </th>
-              <th
-                scope="col"
+              />
+              <SortableTh
+                field="evalType"
+                label="Type"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Minimum Day
-              </th>
-              <th
-                scope="col"
+              />
+              <SortableTh
+                field="drawdownType"
+                label="Draw Down Type"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Eval
-              </th>
-              <th
-                scope="col"
+              />
+              <SortableTh
+                field="profitTarget"
+                label="Target Goal"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Activation
-              </th>
-              <th
-                scope="col"
+                align="right"
+              />
+              <SortableTh
+                field="dailyDrawdown"
+                label="Daily Draw Down"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                All-in
-              </th>
+                align="right"
+              />
+              <SortableTh
+                field="maxDrawdown"
+                label="Max Draw Down"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="minimumDays"
+                label="Minimum Day"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="evalPrice"
+                label="Eval"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="activationFee"
+                label="Activation"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
+              <SortableTh
+                field="allInCost"
+                label="All-in"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                rowSpan={2}
+                align="right"
+              />
               <th
                 scope="colgroup"
                 colSpan={5}
@@ -109,13 +192,16 @@ export function CompareTable({ plans }: CompareTableProps) {
               <th scope="col" rowSpan={2} className="px-4 py-3 font-medium">
                 Code
               </th>
-              <th
-                scope="col"
+              <SortableTh
+                field="returnMultiple"
+                label="Return"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
                 rowSpan={2}
-                className="px-4 py-3 font-medium text-right"
-              >
-                Return
-              </th>
+                align="right"
+              />
               <th
                 scope="col"
                 rowSpan={2}
@@ -125,24 +211,57 @@ export function CompareTable({ plans }: CompareTableProps) {
               </th>
             </tr>
             <tr className="border-b border-border/60 bg-muted/30 text-left text-xs">
-              <th
-                scope="col"
-                className={`px-4 py-2 font-medium text-right ${FUNDED_GROUP_CLASS}`}
-              >
-                Min Days to Payout
-              </th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">
-                Min Target Goal Cushion
-              </th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">
-                Max Payout
-              </th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">
-                Max Funded Accounts
-              </th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">
-                Split %
-              </th>
+              <SortableTh
+                field="daysToPayout"
+                label="Min Days to Payout"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                className={FUNDED_GROUP_CLASS}
+                compact
+              />
+              <SortableTh
+                field="minimumTargetGoalCushion"
+                label="Min Target Goal Cushion"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
+              <SortableTh
+                field="maxPayout"
+                label="Max Payout"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
+              <SortableTh
+                field="maxFundedAccounts"
+                label="Max Funded Accounts"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
+              <SortableTh
+                field="profitSplit"
+                label="Split %"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                compact
+              />
             </tr>
           </thead>
           <tbody>
@@ -153,6 +272,97 @@ export function CompareTable({ plans }: CompareTableProps) {
         </table>
       </div>
     </div>
+  );
+}
+
+function SortableTh({
+  field,
+  label,
+  sort,
+  direction,
+  sortable,
+  onSort,
+  align = "left",
+  rowSpan,
+  className,
+  compact = false,
+}: {
+  field: CompareSortField;
+  label: string;
+  sort: CompareSortField;
+  direction: CompareFilters["direction"];
+  sortable: boolean;
+  onSort: (field: CompareSortField) => void;
+  align?: "left" | "right";
+  rowSpan?: number;
+  className?: string;
+  compact?: boolean;
+}) {
+  const isActive = sort === field;
+  const padding = compact ? "px-4 py-2" : "px-4 py-3";
+
+  if (!sortable) {
+    return (
+      <th
+        scope="col"
+        rowSpan={rowSpan}
+        className={cn(
+          padding,
+          "font-medium",
+          align === "right" && "text-right",
+          className,
+        )}
+      >
+        {label}
+      </th>
+    );
+  }
+
+  return (
+    <th
+      scope="col"
+      rowSpan={rowSpan}
+      aria-sort={
+        isActive ? (direction === "asc" ? "ascending" : "descending") : "none"
+      }
+      className={cn(padding, align === "right" && "text-right", className)}
+    >
+      <button
+        type="button"
+        onClick={() => onSort(field)}
+        className={cn(
+          "group inline-flex max-w-full items-center gap-1 font-medium transition-colors hover:text-foreground",
+          align === "right" && "ml-auto",
+          isActive ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        <span className="truncate">{label}</span>
+        <SortIcon active={isActive} direction={direction} />
+      </button>
+    </th>
+  );
+}
+
+function SortIcon({
+  active,
+  direction,
+}: {
+  active: boolean;
+  direction?: CompareFilters["direction"];
+}) {
+  if (active && direction === "asc") {
+    return <ArrowUp className="size-3.5 shrink-0 text-primary" aria-hidden />;
+  }
+
+  if (active && direction === "desc") {
+    return <ArrowDown className="size-3.5 shrink-0 text-primary" aria-hidden />;
+  }
+
+  return (
+    <ArrowUpDown
+      className="size-3.5 shrink-0 opacity-40 group-hover:opacity-70"
+      aria-hidden
+    />
   );
 }
 

@@ -3,6 +3,8 @@ import type { DrawdownType } from "@/generated/prisma/client";
 import type { CompareFilters } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
+import { isCompareSortField } from "@/lib/plans/compare-sort-config";
+
 export function filterPlansByBudget(
   plans: PlanSummary[],
   maxBudget?: number,
@@ -70,16 +72,6 @@ export function applyCompareFilters(
   );
 }
 
-const SORT_FIELDS = [
-  "allInCost",
-  "returnMultiple",
-  "accountSize",
-  "firmRank",
-  "maxPayout",
-  "profitSplit",
-  "daysToPayout",
-] as const;
-
 export function parseCompareFiltersFromSearchParams(
   params: URLSearchParams,
 ): CompareFilters {
@@ -112,9 +104,7 @@ export function parseCompareFiltersFromSearchParams(
     minMaxPayout: params.get("minMaxPayout")
       ? Number(params.get("minMaxPayout"))
       : undefined,
-    sort: SORT_FIELDS.includes(sort as (typeof SORT_FIELDS)[number])
-      ? (sort as CompareFilters["sort"])
-      : undefined,
+    sort: isCompareSortField(sort) ? sort : undefined,
     direction: direction === "asc" || direction === "desc" ? direction : undefined,
   };
 }

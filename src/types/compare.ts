@@ -1,13 +1,24 @@
 import type { DrawdownType, EvalType } from "@/generated/prisma/client";
 
 export type CompareSortField =
-  | "allInCost"
-  | "returnMultiple"
-  | "accountSize"
   | "firmRank"
+  | "firmName"
+  | "accountSize"
+  | "evalType"
+  | "drawdownType"
+  | "profitTarget"
+  | "dailyDrawdown"
+  | "maxDrawdown"
+  | "minimumDays"
+  | "evalPrice"
+  | "activationFee"
+  | "allInCost"
+  | "daysToPayout"
+  | "minimumTargetGoalCushion"
   | "maxPayout"
+  | "maxFundedAccounts"
   | "profitSplit"
-  | "daysToPayout";
+  | "returnMultiple";
 
 export type CompareSortDirection = "asc" | "desc";
 

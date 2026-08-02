@@ -106,7 +106,11 @@ export function ComparePageClient({ metadata }: ComparePageClientProps) {
       {!isLoading && !isError && plans.length > 0 ? (
         <>
           <CompareCardList plans={plans} />
-          <CompareTable plans={plans} />
+          <CompareTable
+            plans={plans}
+            filters={filters}
+            onSortChange={updateFilters}
+          />
         </>
       ) : null}
     </Container>
