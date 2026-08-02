@@ -2,6 +2,11 @@ import "dotenv/config";
 
 import { defineConfig, env } from "prisma/config";
 
+import {
+  resolveDatabaseUrl,
+  resolveDirectUrl,
+} from "./src/lib/resolve-env";
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
@@ -10,6 +15,6 @@ export default defineConfig({
   },
   datasource: {
     // Use direct connection for migrations when available (e.g. Supabase)
-    url: process.env.DIRECT_URL ?? env("DATABASE_URL"),
+    url: resolveDirectUrl() ?? resolveDatabaseUrl() ?? env("DATABASE_URL"),
   },
 });

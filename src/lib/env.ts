@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+import {
+  resolveDatabaseUrl,
+  resolveDirectUrl,
+  resolveSupabaseAnonKey,
+  resolveSupabaseServiceRoleKey,
+  resolveSupabaseUrl,
+} from "@/lib/resolve-env";
+
 const clientEnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
@@ -23,8 +31,8 @@ const serverEnvSchema = z.object({
 function getClientEnv() {
   return clientEnvSchema.parse({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_SUPABASE_URL: resolveSupabaseUrl(),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: resolveSupabaseAnonKey(),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   });
@@ -36,9 +44,9 @@ function getServerEnv() {
   }
 
   return serverEnvSchema.parse({
-    DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_URL: process.env.DIRECT_URL,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    DATABASE_URL: resolveDatabaseUrl(),
+    DIRECT_URL: resolveDirectUrl(),
+    SUPABASE_SERVICE_ROLE_KEY: resolveSupabaseServiceRoleKey(),
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
