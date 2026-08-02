@@ -139,6 +139,38 @@ Transactional email via [Resend](https://resend.com):
 
 APIs: `GET /api/user/emails`, `GET /api/cron/deal-alerts`
 
+### Production polish (Milestone 10)
+
+Production-ready optimizations across performance, accessibility, SEO, and monitoring:
+
+**Performance**
+- ISR (`revalidate: 3600`) on home, compare, and rankings pages
+- `Cache-Control` headers on public read APIs (plans, rankings)
+- Security headers via `next.config.ts`
+- Loading skeletons for compare and rankings routes
+
+**Accessibility**
+- Skip-to-content link (layout)
+- Mobile navigation menu with dialog pattern
+- `prefers-reduced-motion` support
+- Screen reader announcements on loading states
+
+**SEO**
+- Expanded sitemap (pricing, legal, ROI calculator, firm pages)
+- `robots.txt` blocks auth/account routes
+- JSON-LD structured data (WebSite, Organization) on homepage
+- Canonical URLs via `createPageMetadata` helper
+- Static pages: `/about`, `/contact`, `/privacy`, `/terms`, `/affiliate-disclosure`
+- Web app manifest + favicon
+
+**Monitoring**
+- `GET /api/health` — database and integration status checks
+- Vercel Analytics + Speed Insights
+- Global and route-level error boundaries
+
+**New pages**
+- [/roi-calculator](/roi-calculator) — break-even and ROI estimator
+
 ## Project Structure
 
 ```
@@ -170,7 +202,7 @@ src/
 | 7 | **User Features** — Saved plans, alerts, preferences (TanStack Query) | ✅ Complete |
 | 8 | **Stripe & Premium** — Subscriptions, premium features | ✅ Complete |
 | 9 | **Email & Notifications** — Resend integration, deal alerts | ✅ Complete |
-| 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | Pending |
+| 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | ✅ Complete |
 
 ## Scripts
 

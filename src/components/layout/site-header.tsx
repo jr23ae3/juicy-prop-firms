@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AuthButtons } from "@/components/auth/auth-buttons";
 import { Container } from "@/components/layout/container";
 import { MainNav } from "@/components/layout/main-nav";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { siteConfig } from "@/config/site";
 
 export function SiteHeader() {
@@ -26,6 +27,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <MobileNav />
           <AuthButtons />
         </div>
       </Container>

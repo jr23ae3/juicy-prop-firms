@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { withPublicCache } from "@/lib/api/cache-headers";
 import { getActiveFirms } from "@/services/firm-service";
 import { getDistinctAccountSizes } from "@/services/plan-service";
 import type { CompareFilterMetadata } from "@/types/compare";
@@ -21,7 +22,10 @@ export async function GET() {
       evalTypes: ["CHALLENGE", "DIRECT_TO_FUNDED", "INSTANT_FUNDING"],
     };
 
-    return NextResponse.json({ success: true, data: metadata });
+    return NextResponse.json(
+      { success: true, data: metadata },
+      withPublicCache(),
+    );
   } catch {
     return NextResponse.json(
       { success: false, error: "Failed to load filter metadata" },

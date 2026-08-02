@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { withPublicCache } from "@/lib/api/cache-headers";
 import { loadPlansWithPricing } from "@/server/data/plans";
 import type { EvalType } from "@/generated/prisma/client";
 
@@ -17,7 +18,10 @@ export async function GET(request: Request) {
 
   try {
     const plans = await loadPlansWithPricing(filters);
-    return NextResponse.json({ success: true, data: plans });
+    return NextResponse.json(
+      { success: true, data: plans },
+      withPublicCache(),
+    );
   } catch {
     return NextResponse.json(
       { success: false, error: "Failed to load plans" },

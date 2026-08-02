@@ -8,12 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const firmSlugs = await loadFirmSlugsForSitemap();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: siteConfig.url,
-      lastModified,
-      changeFrequency: "daily",
-      priority: 1,
-    },
+    { url: siteConfig.url, lastModified, changeFrequency: "daily", priority: 1 },
     {
       url: `${siteConfig.url}/compare`,
       lastModified,
@@ -27,16 +22,58 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${siteConfig.url}/advisor`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${siteConfig.url}/pricing`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${siteConfig.url}/methodology`,
       lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${siteConfig.url}/advisor`,
+      url: `${siteConfig.url}/roi-calculator`,
       lastModified,
-      changeFrequency: "weekly",
-      priority: 0.85,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${siteConfig.url}/about`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.url}/contact`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.url}/privacy`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${siteConfig.url}/terms`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${siteConfig.url}/affiliate-disclosure`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
 

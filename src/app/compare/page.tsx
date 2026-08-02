@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 async function getFilterMetadata(): Promise<CompareFilterMetadata> {
   try {
     const [firms, accountSizes] = await Promise.all([

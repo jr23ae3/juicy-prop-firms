@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 export default async function RankingsPage() {
   const { rankings, period } = await loadRankingsPageData();
 

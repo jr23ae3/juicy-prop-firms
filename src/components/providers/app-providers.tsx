@@ -1,3 +1,6 @@
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import { QueryProvider } from "@/components/providers/query-provider";
 
 type AppProvidersProps = {
@@ -5,5 +8,11 @@ type AppProvidersProps = {
 };
 
 export function AppProviders({ children }: AppProvidersProps) {
-  return <QueryProvider>{children}</QueryProvider>;
+  return (
+    <QueryProvider>
+      {children}
+      <Analytics />
+      <SpeedInsights />
+    </QueryProvider>
+  );
 }
