@@ -23,7 +23,25 @@ const highlights = [
   },
 ] as const;
 
-export function HeroSection() {
+type HeroSectionProps = {
+  stats?: {
+    firms: number;
+    plans: number;
+    lowestAllIn: number | null;
+  };
+};
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export function HeroSection({ stats }: HeroSectionProps) {
+  const hasStats = stats && stats.plans > 0;
+
   return (
     <section className="relative overflow-hidden border-b border-border/60">
       <div
@@ -33,7 +51,9 @@ export function HeroSection() {
       <Container className="relative py-16 sm:py-20 lg:py-28">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-4 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            Coming soon — Milestone 1 foundation complete
+            {hasStats
+              ? `Tracking ${stats.plans} plans across ${stats.firms} firms`
+              : "Run npm run db:seed to load sample data"}
           </p>
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Find the{" "}
@@ -42,6 +62,15 @@ export function HeroSection() {
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
             {siteConfig.description}
           </p>
+
+          {hasStats && stats.lowestAllIn != null ? (
+            <p className="mt-4 text-sm font-medium text-foreground">
+              Lowest all-in cost:{" "}
+              <span className="text-primary">
+                {formatCurrency(stats.lowestAllIn)}
+              </span>
+            </p>
+          ) : null}
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" disabled className="w-full gap-2 sm:w-auto">

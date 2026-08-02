@@ -48,6 +48,17 @@ npm run db:migrate
 
 Auth routes: `/login`, `/signup`, `/account` (protected)
 
+### Seed data (Milestone 3)
+
+After running migrations, seed sample firms and plans:
+
+```bash
+npm run db:seed
+```
+
+This loads 5 prop firms, 10 plans, verified discount codes, and power rankings.
+Data APIs: `GET /api/plans`, `GET /api/rankings`
+
 ## Project Structure
 
 ```
@@ -72,7 +83,7 @@ src/
 |---|-----------|--------|
 | 1 | **Project Foundation** — Next.js, Tailwind, shadcn, architecture, shell UI | ✅ Complete |
 | 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | ✅ Complete |
-| 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | Pending |
+| 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | ✅ Complete |
 | 4 | **Comparison Table** — Filterable plan comparison with live pricing | Pending |
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | Pending |
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | Pending |
@@ -90,6 +101,7 @@ npm run start        # Production server
 npm run lint         # ESLint
 npm run db:generate  # Generate Prisma client
 npm run db:migrate   # Run database migrations
+npm run db:seed      # Seed sample firms & plans
 npm run db:push      # Push schema (prototyping)
 npm run db:studio    # Open Prisma Studio
 ```
