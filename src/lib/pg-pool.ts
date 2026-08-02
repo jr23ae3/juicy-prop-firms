@@ -14,6 +14,11 @@ function normalizeSupabaseUrl(connectionString: string): string {
     const parsed = new URL(connectionString);
     parsed.searchParams.delete("sslmode");
     parsed.searchParams.delete("sslaccept");
+
+    if (parsed.port === "6543" || parsed.hostname.includes("pooler")) {
+      parsed.searchParams.set("pgbouncer", "true");
+    }
+
     return parsed.toString();
   } catch {
     return connectionString.replace(/([?&])sslmode=[^&]*&?/g, "$1").replace(/[?&]$/, "");
@@ -36,6 +41,9 @@ export function createPgPool(connectionString?: string): Pool {
   const config: PoolConfig = {
     connectionString: url,
     max: process.env.NODE_ENV === "production" ? 1 : undefined,
+    idleTimeoutMillis: process.env.NODE_ENV === "production" ? 5_000 : undefined,
+    connectionTimeoutMillis: 10_000,
+    allowExitOnIdle: process.env.NODE_ENV === "production",
   };
 
   if (isSupabaseConnectionString(rawUrl)) {
