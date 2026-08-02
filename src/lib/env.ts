@@ -4,6 +4,7 @@ const clientEnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1).optional(),
 });
 
 const serverEnvSchema = z.object({
@@ -13,6 +14,7 @@ const serverEnvSchema = z.object({
   OPENAI_API_KEY: z.string().min(1).optional(),
   STRIPE_SECRET_KEY: z.string().min(1).optional(),
   STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
+  STRIPE_PRICE_ID: z.string().min(1).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
   RESEND_FROM_EMAIL: z.string().email().optional(),
 });
@@ -22,6 +24,8 @@ function getClientEnv() {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   });
 }
 
@@ -37,6 +41,7 @@ function getServerEnv() {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
   });
@@ -87,6 +92,23 @@ export function isDatabaseConfigured() {
 
 export function isOpenAIConfigured() {
   return Boolean(env.OPENAI_API_KEY);
+}
+
+export function isStripeConfigured() {
+  return Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_PRICE_ID);
+}
+
+export function requireStripeEnv() {
+  const secretKey = env.STRIPE_SECRET_KEY;
+  const priceId = env.STRIPE_PRICE_ID;
+
+  if (!secretKey || !priceId) {
+    throw new Error(
+      "Missing Stripe env vars. Set STRIPE_SECRET_KEY and STRIPE_PRICE_ID in .env.local",
+    );
+  }
+
+  return { secretKey, priceId, webhookSecret: env.STRIPE_WEBHOOK_SECRET };
 }
 
 export function requireOpenAIEnv() {

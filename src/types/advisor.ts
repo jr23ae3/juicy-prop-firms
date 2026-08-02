@@ -22,6 +22,8 @@ export type AdvisorResponse = {
   summary: string;
   recommendations: AdvisorRecommendation[];
   poweredBy: "openai" | "rules";
+  premiumLocked?: boolean;
+  lockedCount?: number;
 };
 
 export type AdvisorActionState = {

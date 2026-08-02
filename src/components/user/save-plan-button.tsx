@@ -55,11 +55,15 @@ export function SavePlanButton({
         toggleSave.mutate(
           { planId, isSaved },
           {
-            onError: (error) => {
-              if (error.message === "UNAUTHORIZED") {
-                window.location.href = `/login?redirectTo=${encodeURIComponent(pathname)}`;
-              }
-            },
+            onError: (err) => {
+          if (err.message === "UNAUTHORIZED") {
+            window.location.href = `/login?redirectTo=${encodeURIComponent(pathname)}`;
+            return;
+          }
+          if (err.message === "PREMIUM_REQUIRED") {
+            window.location.href = "/pricing";
+          }
+        },
           },
         );
       }}

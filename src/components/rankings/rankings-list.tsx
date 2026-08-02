@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { RankingCard } from "@/components/rankings/ranking-card";
-import { RankingFactorBars } from "@/components/rankings/ranking-factor-bars";
+import { RankingFactorGate } from "@/components/rankings/ranking-factor-gate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RankingSummary } from "@/types/plan";
@@ -99,7 +99,7 @@ export function RankingsList({ rankings }: RankingsListProps) {
                     </div>
                   </div>
                   <div className="mt-4 hidden lg:block">
-                    <RankingFactorBars factors={ranking.factors} compact />
+                    <RankingFactorGate factors={ranking.factors} compact />
                   </div>
                 </div>
               </li>

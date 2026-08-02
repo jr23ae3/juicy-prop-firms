@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PremiumGate } from "@/components/premium/premium-gate";
+import { UpgradePrompt } from "@/components/premium/upgrade-prompt";
 import {
   useCreateDealAlert,
   useDealAlerts,
@@ -50,6 +52,25 @@ export function DealAlertsSection() {
   }
 
   return (
+    <PremiumGate
+      feature="Deal alerts"
+      fallback={
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="size-5" aria-hidden />
+              Deal alerts
+            </CardTitle>
+            <CardDescription>
+              Track price drops and get notified when deals hit your target.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UpgradePrompt feature="Deal alerts" />
+          </CardContent>
+        </Card>
+      }
+    >
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -148,5 +169,6 @@ export function DealAlertsSection() {
         )}
       </CardContent>
     </Card>
+    </PremiumGate>
   );
 }

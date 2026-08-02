@@ -1,7 +1,9 @@
 "use server";
 
 import { advisorInputSchema } from "@/lib/validations/advisor";
+import { freeTierLimits } from "@/config/premium";
 import { getAdvisorRecommendations } from "@/services/advisor/advisor-service";
+import { isUserPremium } from "@/services/subscription/subscription-service";
 import { saveAdvisorPreferences } from "@/services/user/preferences-service";
 import { getDbUserOptional } from "@/server/user/require-db-user";
 import type { AdvisorActionState } from "@/types/advisor";
@@ -34,7 +36,28 @@ export async function getAdvisorRecommendationsAction(
       await saveAdvisorPreferences(session.user.id, parsed.data);
     }
 
-    return { data };
+    const isPremium = session
+      ? await isUserPremium(session.user.id)
+      : false;
+
+    if (isPremium || data.recommendations.length <= freeTierLimits.advisorRecommendations) {
+      return { data };
+    }
+
+    const lockedCount =
+      data.recommendations.length - freeTierLimits.advisorRecommendations;
+
+    return {
+      data: {
+        ...data,
+        recommendations: data.recommendations.slice(
+          0,
+          freeTierLimits.advisorRecommendations,
+        ),
+        premiumLocked: true,
+        lockedCount,
+      },
+    };
   } catch {
     return {
       error:

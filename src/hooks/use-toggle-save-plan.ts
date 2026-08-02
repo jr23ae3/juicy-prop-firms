@@ -23,6 +23,10 @@ async function toggleSavePlan({ planId, isSaved }: ToggleSaveInput) {
     throw new Error("UNAUTHORIZED");
   }
 
+  if (response.status === 403) {
+    throw new Error("PREMIUM_REQUIRED");
+  }
+
   if (!response.ok) {
     throw new Error("Failed to update saved plan");
   }

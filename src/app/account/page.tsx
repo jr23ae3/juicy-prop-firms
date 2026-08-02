@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { DealAlertsSection } from "@/components/account/deal-alerts-section";
 import { PreferencesForm } from "@/components/account/preferences-form";
 import { SavedPlansList } from "@/components/account/saved-plans-list";
+import { SubscriptionCard } from "@/components/premium/subscription-card";
 import { Container } from "@/components/layout/container";
 import {
   Card,
@@ -70,6 +71,7 @@ export default async function AccountPage() {
 
         {dbUser ? (
           <>
+            <SubscriptionCard />
             <SavedPlansList />
             <PreferencesForm initialPreferences={preferences} />
             <DealAlertsSection />

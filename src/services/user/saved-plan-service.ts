@@ -1,5 +1,7 @@
 import { serializePlan } from "@/lib/serializers/plan";
 import { db } from "@/lib/db";
+import { freeTierLimits } from "@/config/premium";
+import { isUserPremium } from "@/services/subscription/subscription-service";
 import type { SavedPlansResponse } from "@/types/user";
 
 export async function getSavedPlansForUser(
@@ -45,6 +47,18 @@ export async function getSavedPlanIds(userId: string): Promise<string[]> {
 }
 
 export async function savePlanForUser(userId: string, planId: string) {
+  const alreadySaved = await isPlanSaved(userId, planId);
+
+  if (!alreadySaved) {
+    const premium = await isUserPremium(userId);
+    if (!premium) {
+      const count = await db.savedPlan.count({ where: { userId } });
+      if (count >= freeTierLimits.maxSavedPlans) {
+        throw new Error("PREMIUM_REQUIRED");
+      }
+    }
+  }
+
   return db.savedPlan.upsert({
     where: {
       userId_planId: { userId, planId },

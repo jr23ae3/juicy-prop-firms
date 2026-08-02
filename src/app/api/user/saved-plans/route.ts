@@ -43,7 +43,13 @@ export async function POST(request: Request) {
     await savePlanForUser(session.user.id, parsed.data.planId);
     const planIds = await getSavedPlanIds(session.user.id);
     return NextResponse.json({ success: true, data: { planIds } });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message === "PREMIUM_REQUIRED") {
+      return NextResponse.json(
+        { success: false, error: "PREMIUM_REQUIRED" },
+        { status: 403 },
+      );
+    }
     return NextResponse.json(
       { success: false, error: "Failed to save plan" },
       { status: 500 },

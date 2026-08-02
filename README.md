@@ -92,6 +92,32 @@ Signed-in users get a full account dashboard at [/account](/account):
 
 User APIs: `GET/POST/DELETE /api/user/saved-plans`, `GET/PUT /api/user/preferences`, `GET/POST/DELETE /api/user/alerts`
 
+### Stripe & Premium (Milestone 8)
+
+Visit [/pricing](/pricing) for Free vs **Juicy Pro** ($9.99/mo):
+
+| Feature | Free | Juicy Pro |
+|---------|------|-----------|
+| Plan comparison | Full access | Full access |
+| AI Advisor | 1 match | Top 3 + full AI reasoning |
+| Saved plans | Up to 3 | Unlimited |
+| Deal alerts | — | Create & manage |
+| Ranking breakdowns | — | Factor scores for all firms |
+
+**Stripe setup:**
+1. Create a product + recurring price in [Stripe Dashboard](https://dashboard.stripe.com)
+2. Add to `.env.local`:
+   ```
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_PRICE_ID=price_...
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+3. Webhook endpoint: `POST /api/stripe/webhook` — events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+4. Local testing: `stripe listen --forward-to localhost:3000/api/stripe/webhook`
+
+APIs: `POST /api/stripe/checkout`, `POST /api/stripe/portal`, `GET /api/user/subscription`
+
 ## Project Structure
 
 ```
@@ -121,7 +147,7 @@ src/
 | 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | ✅ Complete |
 | 6 | **AI Advisor** — OpenAI-powered personalized recommendations | ✅ Complete |
 | 7 | **User Features** — Saved plans, alerts, preferences (TanStack Query) | ✅ Complete |
-| 8 | **Stripe & Premium** — Subscriptions, premium features | Pending |
+| 8 | **Stripe & Premium** — Subscriptions, premium features | ✅ Complete |
 | 9 | **Email & Notifications** — Resend integration, deal alerts | Pending |
 | 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | Pending |
 

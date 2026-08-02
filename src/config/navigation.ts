@@ -22,6 +22,11 @@ export const mainNav: NavItem[] = [
     description: "Get personalized firm recommendations",
   },
   {
+    title: "Pricing",
+    href: "/pricing",
+    description: "Free vs Juicy Pro plans",
+  },
+  {
     title: "How We Rank",
     href: "/methodology",
     description: "Our verification and ranking methodology",

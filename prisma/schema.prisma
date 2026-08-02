@@ -32,6 +32,7 @@ model User {
   savedPlans  SavedPlan[]
   preferences UserPreferences?
   dealAlerts  DealAlert[]
+  subscription Subscription?
 
   @@map("users")
 }
@@ -181,4 +182,36 @@ model SavedPlan {
 
   @@unique([userId, planId])
   @@map("saved_plans")
+}
+
+// ---------------------------------------------------------------------------
+// Stripe Subscriptions (Milestone 8)
+// ---------------------------------------------------------------------------
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  UNPAID
+  PAUSED
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique @map("user_id")
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String             @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?            @unique @map("stripe_subscription_id")
+  stripePriceId        String?            @map("stripe_price_id")
+  status               SubscriptionStatus @default(INCOMPLETE)
+  currentPeriodEnd     DateTime?          @map("current_period_end")
+  cancelAtPeriodEnd    Boolean            @default(false) @map("cancel_at_period_end")
+  createdAt            DateTime           @default(now()) @map("created_at")
+  updatedAt            DateTime           @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("subscriptions")
 }

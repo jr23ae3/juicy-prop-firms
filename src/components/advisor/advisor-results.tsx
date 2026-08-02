@@ -5,6 +5,7 @@ import { Sparkles, Trophy } from "lucide-react";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
+import { UpgradePrompt } from "@/components/premium/upgrade-prompt";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -119,6 +120,12 @@ export function AdvisorResults({ result }: AdvisorResultsProps) {
           </li>
         ))}
       </ol>
+
+      {result.premiumLocked && result.lockedCount ? (
+        <UpgradePrompt
+          feature={`${result.lockedCount} more AI match${result.lockedCount === 1 ? "" : "es"}`}
+        />
+      ) : null}
     </div>
   );
 }

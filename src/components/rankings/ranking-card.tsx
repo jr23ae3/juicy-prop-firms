@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Trophy } from "lucide-react";
 
-import { RankingFactorBars } from "@/components/rankings/ranking-factor-bars";
+import { RankingFactorGate } from "@/components/rankings/ranking-factor-gate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RankingSummary } from "@/types/plan";
@@ -57,7 +57,7 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
 
       {isPodium ? (
         <div className="mt-4">
-          <RankingFactorBars factors={ranking.factors} compact />
+          <RankingFactorGate factors={ranking.factors} compact />
         </div>
       ) : null}
 

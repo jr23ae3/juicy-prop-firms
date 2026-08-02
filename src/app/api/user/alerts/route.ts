@@ -5,6 +5,7 @@ import {
   deleteDealAlert,
   getDealAlertsForUser,
 } from "@/services/user/deal-alert-service";
+import { isUserPremium } from "@/services/subscription/subscription-service";
 import { dealAlertSchema } from "@/lib/validations/user";
 import { getDbUserOptional } from "@/server/user/require-db-user";
 
@@ -38,6 +39,14 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Invalid input" },
       { status: 400 },
+    );
+  }
+
+  const premium = await isUserPremium(session.user.id);
+  if (!premium) {
+    return NextResponse.json(
+      { success: false, error: "PREMIUM_REQUIRED" },
+      { status: 403 },
     );
   }
 
