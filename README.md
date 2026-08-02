@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Juicy Prop Firms
+
+Production-ready SaaS platform for comparing futures prop firms — with AI-powered recommendations, verified pricing, and transparent all-in cost comparisons.
+
+> Inspired by [PickAPropFirm.com](https://pickapropfirm.com), rebuilt with superior UX and modern architecture.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 15, React 19, TypeScript |
+| Styling | Tailwind CSS 4, shadcn/ui |
+| Database | PostgreSQL, Prisma ORM |
+| Auth | Supabase Auth |
+| Data fetching | TanStack Query |
+| Forms | React Hook Form + Zod |
+| AI | OpenAI API |
+| Payments | Stripe |
+| Email | Resend |
+| Hosting | Vercel |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Copy environment template
+cp .env.example .env.local
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── actions/          # Server Actions (mutations, form handlers)
+├── app/              # Next.js App Router (pages, layouts, API routes)
+├── components/
+│   ├── layout/       # Header, footer, container
+│   ├── marketing/    # Landing page sections
+│   └── ui/           # shadcn/ui primitives
+├── config/           # Site config, navigation
+├── hooks/            # Custom React hooks
+├── lib/              # Utilities, env validation
+├── server/           # Server-only modules
+├── services/         # Business logic & data access
+└── types/            # Shared TypeScript types
+```
 
-## Learn More
+## Milestone Roadmap
 
-To learn more about Next.js, take a look at the following resources:
+| # | Milestone | Status |
+|---|-----------|--------|
+| 1 | **Project Foundation** — Next.js, Tailwind, shadcn, architecture, shell UI | ✅ Complete |
+| 2 | **Database & Auth** — Prisma schema, PostgreSQL, Supabase Auth | Pending |
+| 3 | **Core Data Models** — Prop firms, plans, pricing, seed data | Pending |
+| 4 | **Comparison Table** — Filterable plan comparison with live pricing | Pending |
+| 5 | **Rankings & Firm Pages** — Power rankings, firm detail pages | Pending |
+| 6 | **AI Advisor** — OpenAI-powered personalized recommendations | Pending |
+| 7 | **User Features** — Saved firms, alerts, preferences (TanStack Query) | Pending |
+| 8 | **Stripe & Premium** — Subscriptions, premium features | Pending |
+| 9 | **Email & Notifications** — Resend integration, deal alerts | Pending |
+| 10 | **Production Polish** — Performance, a11y audit, SEO, monitoring | Pending |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev      # Development server
+npm run build    # Production build
+npm run start    # Production server
+npm run lint     # ESLint
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private — all rights reserved.
