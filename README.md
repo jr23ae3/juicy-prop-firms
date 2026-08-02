@@ -134,7 +134,7 @@ Transactional email via [Resend](https://resend.com):
    RESEND_FROM_EMAIL=Juicy Prop Firms <notifications@yourdomain.com>
    CRON_SECRET=your-random-secret
    ```
-3. Deal alert cron: `GET /api/cron/deal-alerts` (hourly on Vercel via `vercel.json`)
+3. Deal alert cron: `GET /api/cron/deal-alerts` (daily on Vercel Hobby; hourly locally with `curl`)
 4. Manual test: `curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/deal-alerts`
 
 APIs: `GET /api/user/emails`, `GET /api/cron/deal-alerts`
