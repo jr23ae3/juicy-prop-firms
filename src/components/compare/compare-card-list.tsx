@@ -114,8 +114,8 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
         </div>
       </dl>
 
-      <div className="mt-4 border-t border-border/60 pt-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <div className="compare-funded-panel mt-4 rounded-lg p-3 pt-3">
+        <p className="compare-funded-panel-label text-xs font-semibold uppercase tracking-wide">
           Funded
         </p>
         <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">

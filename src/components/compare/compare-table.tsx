@@ -31,8 +31,17 @@ type CompareTableProps = {
   onSortChange?: (filters: CompareFilters) => void;
 };
 
-const FUNDED_GROUP_CLASS = "border-l border-border/60 bg-muted/20";
-const FUNDED_CELL_BORDER = "border-l border-border/60";
+const FUNDED_GROUP_CLASS = "compare-funded-border compare-funded-group-header";
+const FUNDED_HEADER_SUB_CLASS = "compare-funded-header-sub";
+const FUNDED_CELL_BORDER = "compare-funded-border";
+
+function fundedBodyClass(striped: boolean, isFirst = false) {
+  return cn(
+    isFirst && FUNDED_CELL_BORDER,
+    striped ? "compare-funded-cell--striped" : "compare-funded-cell",
+    "transition-colors",
+  );
+}
 
 type StickyColumn = "rank" | "firm" | "plan";
 
@@ -226,7 +235,10 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               <th
                 scope="colgroup"
                 colSpan={6}
-                className={`px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground ${FUNDED_GROUP_CLASS}`}
+                className={cn(
+                  "px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide",
+                  FUNDED_GROUP_CLASS,
+                )}
               >
                 Funded
               </th>
@@ -251,7 +263,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 <span className="sr-only">Save</span>
               </th>
             </tr>
-            <tr className="border-b border-border/60 bg-muted/30 text-left text-xs">
+            <tr className="border-b border-border/60 text-left text-xs">
               <SortableTh
                 field="daysToPayout"
                 label="Min Days to Payout"
@@ -260,7 +272,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
-                className={FUNDED_GROUP_CLASS}
+                className={cn(FUNDED_CELL_BORDER, FUNDED_HEADER_SUB_CLASS)}
                 compact
               />
               <SortableTh
@@ -271,6 +283,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
+                className={FUNDED_HEADER_SUB_CLASS}
                 compact
               />
               <SortableTh
@@ -281,6 +294,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
+                className={FUNDED_HEADER_SUB_CLASS}
                 compact
               />
               <SortableTh
@@ -291,6 +305,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
+                className={FUNDED_HEADER_SUB_CLASS}
                 compact
               />
               <SortableTh
@@ -301,6 +316,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
+                className={FUNDED_HEADER_SUB_CLASS}
                 compact
               />
               <SortableTh
@@ -311,6 +327,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="left"
+                className={FUNDED_HEADER_SUB_CLASS}
                 compact
               />
             </tr>
@@ -493,27 +510,22 @@ function CompareTableRow({
       <td className="px-4 py-3 text-right font-semibold text-primary tabular-nums">
         {formatCurrency(plan.pricing.allInCost)}
       </td>
-      <td
-        className={cn(
-          "px-4 py-3 text-right tabular-nums",
-          FUNDED_CELL_BORDER,
-        )}
-      >
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped, true))}>
         {formatMinimumDays(plan.minimumDaysToPayout)}
       </td>
-      <td className="px-4 py-3 text-right tabular-nums">
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
       </td>
-      <td className="px-4 py-3 text-right tabular-nums">
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCurrency(plan.maxPayout)}
       </td>
-      <td className="px-4 py-3 text-right tabular-nums">
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCount(plan.maxFundedAccounts)}
       </td>
-      <td className="px-4 py-3 text-right tabular-nums">
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatProfitSplit(plan.profitSplit)}
       </td>
-      <td className="px-4 py-3">
+      <td className={cn("px-4 py-3", fundedBodyClass(isStriped))}>
         {getDrawdownTypeLabel(plan.fundedDrawdownType) ?? (
           <span className="text-muted-foreground">—</span>
         )}

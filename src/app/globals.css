@@ -81,6 +81,12 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --compare-funded-bg: oklch(0.97 0.025 250);
+  --compare-funded-bg-striped: oklch(0.945 0.035 250);
+  --compare-funded-header: oklch(0.91 0.055 250);
+  --compare-funded-header-sub: oklch(0.935 0.04 250);
+  --compare-funded-border: oklch(0.82 0.07 250);
+  --compare-funded-label: oklch(0.42 0.14 250);
 }
 
 .dark {
@@ -115,6 +121,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --compare-funded-bg: oklch(0.21 0.045 250);
+  --compare-funded-bg-striped: oklch(0.24 0.055 250);
+  --compare-funded-header: oklch(0.27 0.065 250);
+  --compare-funded-header-sub: oklch(0.24 0.055 250);
+  --compare-funded-border: oklch(0.38 0.08 250);
+  --compare-funded-label: oklch(0.74 0.1 250);
 }
 
 @layer base {
@@ -148,6 +160,48 @@
 
   .group:hover .compare-sticky-cell--striped {
     background-color: color-mix(in oklch, var(--primary) 10%, var(--muted));
+  }
+
+  .compare-funded-border {
+    border-left: 1px solid var(--compare-funded-border);
+  }
+
+  .compare-funded-group-header {
+    background-color: var(--compare-funded-header);
+    color: var(--compare-funded-label);
+  }
+
+  .compare-funded-header-sub {
+    background-color: var(--compare-funded-header-sub);
+  }
+
+  .compare-funded-cell {
+    background-color: var(--compare-funded-bg);
+  }
+
+  .compare-funded-cell--striped {
+    background-color: var(--compare-funded-bg-striped);
+  }
+
+  .group:hover .compare-funded-cell {
+    background-color: color-mix(in oklch, var(--primary) 10%, var(--compare-funded-bg));
+  }
+
+  .group:hover .compare-funded-cell--striped {
+    background-color: color-mix(
+      in oklch,
+      var(--primary) 10%,
+      var(--compare-funded-bg-striped)
+    );
+  }
+
+  .compare-funded-panel {
+    background-color: var(--compare-funded-bg);
+    border: 1px solid var(--compare-funded-border);
+  }
+
+  .compare-funded-panel-label {
+    color: var(--compare-funded-label);
   }
 }
 
