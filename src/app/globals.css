@@ -129,6 +129,28 @@
   }
 }
 
+@layer utilities {
+  .compare-sticky-cell {
+    background-color: var(--card);
+  }
+
+  .compare-sticky-cell--striped {
+    background-color: var(--muted);
+  }
+
+  .compare-sticky-cell--header {
+    background-color: var(--muted);
+  }
+
+  .group:hover .compare-sticky-cell {
+    background-color: color-mix(in oklch, var(--primary) 10%, var(--card));
+  }
+
+  .group:hover .compare-sticky-cell--striped {
+    background-color: color-mix(in oklch, var(--primary) 10%, var(--muted));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

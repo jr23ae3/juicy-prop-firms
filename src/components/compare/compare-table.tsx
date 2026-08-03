@@ -36,21 +36,38 @@ const FUNDED_CELL_BORDER = "border-l border-border/60";
 
 type StickyColumn = "rank" | "firm" | "plan";
 
+const STICKY_Z_INDEX: Record<StickyColumn, string> = {
+  rank: "z-[21]",
+  firm: "z-[22]",
+  plan: "z-[23]",
+};
+
+const STICKY_HEADER_Z_INDEX: Record<StickyColumn, string> = {
+  rank: "z-[31]",
+  firm: "z-[32]",
+  plan: "z-[33]",
+};
+
 const STICKY_COLUMN_CLASS: Record<StickyColumn, string> = {
-  rank: "sticky left-0 z-10 min-w-[52px] w-[52px]",
-  firm: "sticky left-[52px] z-10 min-w-[128px] w-[128px]",
-  plan: "sticky left-[180px] z-10 min-w-[152px] w-[152px] border-r border-border/60 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.08)]",
+  rank: "sticky left-0 min-w-[52px] w-[52px]",
+  firm: "sticky left-[52px] min-w-[128px] w-[128px]",
+  plan: "sticky left-[180px] min-w-[152px] w-[152px] border-r border-border/60 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.12)]",
 };
 
 function stickyHeaderClass(column: StickyColumn) {
-  return cn(STICKY_COLUMN_CLASS[column], "z-20 bg-muted/40");
+  return cn(
+    STICKY_COLUMN_CLASS[column],
+    STICKY_HEADER_Z_INDEX[column],
+    "compare-sticky-cell--header",
+  );
 }
 
 function stickyBodyClass(column: StickyColumn, striped: boolean) {
   return cn(
     STICKY_COLUMN_CLASS[column],
-    striped ? "bg-muted/25" : "bg-card",
-    "group-hover:bg-primary/10 transition-colors",
+    STICKY_Z_INDEX[column],
+    striped ? "compare-sticky-cell--striped" : "compare-sticky-cell",
+    "transition-colors",
   );
 }
 
