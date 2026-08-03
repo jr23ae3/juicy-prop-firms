@@ -265,7 +265,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <SortableTh
                 field="minimumTargetGoalCushion"
-                label="Min Target Goal Cushion"
+                label="Min Target Buffer"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}

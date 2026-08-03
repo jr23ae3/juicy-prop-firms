@@ -126,7 +126,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Min target cushion</dt>
+            <dt className="text-xs text-muted-foreground">Min target buffer</dt>
             <dd className="mt-0.5 tabular-nums">
               {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
             </dd>

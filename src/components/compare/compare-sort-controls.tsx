@@ -25,7 +25,7 @@ const SORT_LABELS: Record<CompareSortField, string> = {
   activationFee: "Activation fee",
   allInCost: "All-in cost",
   daysToPayout: "Days to payout",
-  minimumTargetGoalCushion: "Target goal cushion",
+  minimumTargetGoalCushion: "Min target buffer",
   maxPayout: "Max payout",
   maxFundedAccounts: "Max funded accounts",
   fundedDrawdownType: "Funded draw down type",

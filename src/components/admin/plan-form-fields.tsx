@@ -210,7 +210,7 @@ export function PlanFormFields({
           />
           <FormField
             name="minimumTargetGoalCushion"
-            label="Min target goal cushion ($)"
+            label="Min target buffer ($)"
             type="number"
             defaultValue={formatNumber(values?.minimumTargetGoalCushion)}
           />
