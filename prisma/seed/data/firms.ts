@@ -4,6 +4,7 @@ export type SeedDiscount = {
   code: string;
   discountPct?: number;
   discountAmt?: number;
+  waivesActivationFee?: boolean;
 };
 
 export type SeedPlan = {
@@ -131,7 +132,7 @@ export const SEED_FIRMS: SeedFirm[] = [
         minimumTargetGoalCushion: 500,
         maxFundedAccounts: 20,
         payoutFrequency: "8 trading days",
-        discount: { code: "JUICY", discountPct: 0.8 },
+        discount: { code: "JUICY", discountPct: 0.8, waivesActivationFee: true },
       },
       {
         slug: "100k-full",
@@ -152,7 +153,7 @@ export const SEED_FIRMS: SeedFirm[] = [
         minimumTargetGoalCushion: 750,
         maxFundedAccounts: 20,
         payoutFrequency: "8 trading days",
-        discount: { code: "JUICY", discountPct: 0.8 },
+        discount: { code: "JUICY", discountPct: 0.8, waivesActivationFee: true },
       },
     ],
   },

@@ -26,6 +26,7 @@ export type PlanFormValues = {
     code: string;
     discountPct: number | null;
     discountAmt: number | null;
+    waivesActivationFee: boolean;
   } | null;
 };
 
@@ -259,6 +260,16 @@ export function PlanFormFields({
               defaultValue={formatNumber(values?.discount?.discountAmt)}
             />
           </div>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="waivesActivationFee"
+              value="true"
+              defaultChecked={values?.discount?.waivesActivationFee ?? false}
+              className="size-4 rounded border-input"
+            />
+            Waives activation fee when this code is used
+          </label>
         </fieldset>
       ) : null}
     </>

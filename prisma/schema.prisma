@@ -154,6 +154,7 @@ model Discount {
   code        String
   discountPct Decimal?  @map("discount_pct") @db.Decimal(5, 4)
   discountAmt Decimal?  @map("discount_amt") @db.Decimal(10, 2)
+  waivesActivationFee Boolean @default(false) @map("waives_activation_fee")
   expiresAt   DateTime? @map("expires_at")
   isActive    Boolean   @default(true) @map("is_active")
   verifiedAt  DateTime? @map("verified_at")

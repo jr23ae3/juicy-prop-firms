@@ -22,6 +22,7 @@ export type DiscountSummary = {
   code: string;
   discountPct: number | null;
   discountAmt: number | null;
+  waivesActivationFee: boolean;
   expiresAt: string | null;
   verifiedAt: string | null;
 };
@@ -29,6 +30,8 @@ export type DiscountSummary = {
 export type PlanPricing = {
   evalPrice: number;
   activationFee: number;
+  effectiveActivationFee: number;
+  activationFeeWaived: boolean;
   discountedPrice: number;
   allInCost: number;
   savings: number;

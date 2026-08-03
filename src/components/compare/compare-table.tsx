@@ -6,6 +6,7 @@ import type { CompareFilters, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
+import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
@@ -436,9 +437,7 @@ function CompareTableRow({
         )}
       </td>
       <td className="px-4 py-3 text-right tabular-nums">
-        {plan.pricing.activationFee > 0
-          ? formatCurrency(plan.pricing.activationFee)
-          : "—"}
+        <ActivationFeeDisplay plan={plan} />
       </td>
       <td className="px-4 py-3 text-right font-semibold text-primary tabular-nums">
         {formatCurrency(plan.pricing.allInCost)}

@@ -217,6 +217,7 @@ export async function createPlan(input: CreatePlanInput) {
     discountCode,
     discountPct,
     discountAmt,
+    waivesActivationFee,
     propFirmId,
     ...planData
   } = input;
@@ -252,6 +253,7 @@ export async function createPlan(input: CreatePlanInput) {
       code: discountCode,
       discountPct,
       discountAmt,
+      waivesActivationFee,
       isActive: true,
     });
   }
@@ -262,7 +264,7 @@ export async function createPlan(input: CreatePlanInput) {
 export async function updatePlan(planId: string, input: UpdatePlanInput) {
   assertDb();
 
-  const { discountCode, discountPct, discountAmt, ...planData } = input;
+  const { discountCode, discountPct, discountAmt, waivesActivationFee, ...planData } = input;
 
   const plan = await db.plan.update({
     where: { id: planId },
@@ -295,6 +297,7 @@ export async function updatePlan(planId: string, input: UpdatePlanInput) {
       code: discountCode,
       discountPct,
       discountAmt,
+      waivesActivationFee,
       isActive: true,
     });
   }
@@ -324,6 +327,7 @@ export async function createDiscount(input: CreateDiscountInput) {
       code: input.code,
       discountPct: input.discountPct,
       discountAmt: input.discountAmt,
+      waivesActivationFee: input.waivesActivationFee ?? false,
       expiresAt: input.expiresAt,
       isActive: input.isActive,
       verifiedAt: new Date(),

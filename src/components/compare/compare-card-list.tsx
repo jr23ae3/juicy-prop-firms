@@ -1,6 +1,7 @@
 import type { PlanSummary } from "@/types/plan";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
+import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
 import {
@@ -96,9 +97,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
         <div>
           <dt className="text-xs text-muted-foreground">Activation</dt>
           <dd className="mt-0.5 tabular-nums">
-            {plan.pricing.activationFee > 0
-              ? formatCurrency(plan.pricing.activationFee)
-              : "—"}
+            <ActivationFeeDisplay plan={plan} />
           </dd>
         </div>
         <div>

@@ -3,6 +3,7 @@ import { roundCurrency } from "@/lib/decimal";
 export type DiscountInput = {
   discountPct?: number | null;
   discountAmt?: number | null;
+  waivesActivationFee?: boolean;
 };
 
 export function applyDiscount(
@@ -29,7 +30,9 @@ export function calculateAllInCost(
   discount?: DiscountInput | null,
 ): number {
   const discountedPrice = applyDiscount(evalPrice, discount);
-  return roundCurrency(discountedPrice + activationFee);
+  const effectiveActivation =
+    discount?.waivesActivationFee === true ? 0 : activationFee;
+  return roundCurrency(discountedPrice + effectiveActivation);
 }
 
 export function calculateSavings(

@@ -126,6 +126,7 @@ async function main() {
             code: planData.discount.code,
             discountPct: planData.discount.discountPct,
             discountAmt: planData.discount.discountAmt,
+            waivesActivationFee: planData.discount.waivesActivationFee ?? false,
             isActive: true,
             verifiedAt: new Date(),
           },

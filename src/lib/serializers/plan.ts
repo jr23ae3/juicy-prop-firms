@@ -24,6 +24,7 @@ function serializeDiscount(
     code: discount.code,
     discountPct: toNumberOrNull(discount.discountPct),
     discountAmt: toNumberOrNull(discount.discountAmt),
+    waivesActivationFee: discount.waivesActivationFee,
     expiresAt: discount.expiresAt?.toISOString() ?? null,
     verifiedAt: discount.verifiedAt?.toISOString() ?? null,
   };
@@ -59,11 +60,16 @@ function serializePricing(plan: PlanRecord): PlanPricing {
     ? {
         discountPct: toNumberOrNull(discount.discountPct),
         discountAmt: toNumberOrNull(discount.discountAmt),
+        waivesActivationFee: discount.waivesActivationFee,
       }
     : null;
 
   const discountedPrice = calculateAllInCost(evalPrice, 0, discountInput);
   const allInCost = calculateAllInCost(evalPrice, activationFee, discountInput);
+  const activationFeeWaived = Boolean(
+    discount?.waivesActivationFee && activationFee > 0,
+  );
+  const effectiveActivationFee = activationFeeWaived ? 0 : activationFee;
   const netPayout = calculateNetPayout(
     toNumberOrNull(plan.maxPayout),
     toNumberOrNull(plan.profitSplit),
@@ -73,6 +79,8 @@ function serializePricing(plan: PlanRecord): PlanPricing {
   return {
     evalPrice,
     activationFee,
+    effectiveActivationFee,
+    activationFeeWaived,
     discountedPrice,
     allInCost,
     savings: calculateSavings(evalPrice, discountInput),

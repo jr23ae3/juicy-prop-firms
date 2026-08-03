@@ -37,6 +37,7 @@ export function DiscountBadge({ discount }: DiscountBadgeProps) {
       <Badge variant="secondary" className="font-mono">
         {discount.code}
         {savingsLabel ? ` · ${savingsLabel}` : null}
+        {discount.waivesActivationFee ? " · waived activation" : null}
       </Badge>
       <Button
         type="button"

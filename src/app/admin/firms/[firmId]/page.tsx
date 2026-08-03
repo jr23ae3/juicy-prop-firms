@@ -73,6 +73,7 @@ export default async function AdminFirmPage({ params }: PageProps) {
               discountAmt: discount.discountAmt
                 ? toNumber(discount.discountAmt)
                 : null,
+              waivesActivationFee: discount.waivesActivationFee,
             }
           : null,
       };

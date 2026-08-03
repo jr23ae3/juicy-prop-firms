@@ -166,6 +166,7 @@ export async function createPlanAction(
     discountCode: formData.get("discountCode") || undefined,
     discountPct: formData.get("discountPct") || undefined,
     discountAmt: formData.get("discountAmt") || undefined,
+    waivesActivationFee: parseFormBoolean(formData.get("waivesActivationFee")),
   });
 
   if (!parsed.success) {
@@ -215,6 +216,7 @@ export async function updatePlanAction(
     discountCode: formData.get("discountCode") || undefined,
     discountPct: formData.get("discountPct") || undefined,
     discountAmt: formData.get("discountAmt") || undefined,
+    waivesActivationFee: parseFormBoolean(formData.get("waivesActivationFee")),
   });
 
   if (!parsed.success) {
@@ -259,6 +261,7 @@ export async function addDiscountAction(
     code: formData.get("code"),
     discountPct: formData.get("discountPct") || undefined,
     discountAmt: formData.get("discountAmt") || undefined,
+    waivesActivationFee: parseFormBoolean(formData.get("waivesActivationFee")),
     isActive: true,
   });
 

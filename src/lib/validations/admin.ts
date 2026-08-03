@@ -56,6 +56,7 @@ export const createPlanSchema = z.object({
   discountCode: z.string().max(32).optional(),
   discountPct: z.coerce.number().min(0).max(1).optional(),
   discountAmt: z.coerce.number().positive().optional(),
+  waivesActivationFee: z.boolean().default(false),
 });
 
 const optionalNumber = z.preprocess(
@@ -109,6 +110,7 @@ export const updatePlanSchema = z.object({
   discountCode: z.string().max(32).optional(),
   discountPct: z.coerce.number().min(0).max(1).optional(),
   discountAmt: z.coerce.number().positive().optional(),
+  waivesActivationFee: z.boolean().default(false),
 });
 
 export const createDiscountSchema = z.object({
@@ -116,6 +118,7 @@ export const createDiscountSchema = z.object({
   code: z.string().min(2).max(32),
   discountPct: z.coerce.number().min(0).max(1).optional(),
   discountAmt: z.coerce.number().positive().optional(),
+  waivesActivationFee: z.boolean().default(false),
   expiresAt: z.coerce.date().optional(),
   isActive: z.boolean().default(true),
 });
