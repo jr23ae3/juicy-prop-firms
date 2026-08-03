@@ -17,6 +17,7 @@ export const COMPARE_SORT_FIELDS = [
   "minimumTargetGoalCushion",
   "maxPayout",
   "maxFundedAccounts",
+  "fundedDrawdownType",
   "profitSplit",
   "returnMultiple",
 ] as const satisfies readonly CompareSortField[];

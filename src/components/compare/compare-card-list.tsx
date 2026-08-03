@@ -150,6 +150,12 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
               {formatProfitSplit(plan.profitSplit)}
             </dd>
           </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Funded draw down type</dt>
+            <dd className="mt-0.5">
+              {getDrawdownTypeLabel(plan.fundedDrawdownType) ?? "—"}
+            </dd>
+          </div>
         </dl>
       </div>
 

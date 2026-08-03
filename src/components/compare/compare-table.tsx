@@ -60,7 +60,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm lg:block">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1880px] border-collapse text-sm">
+        <table className="w-full min-w-[2040px] border-collapse text-sm">
           <caption className="sr-only">
             Prop firm plan comparison with all-in costs, funded terms, and
             discount codes. Click column headers to sort.
@@ -184,7 +184,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <th
                 scope="colgroup"
-                colSpan={5}
+                colSpan={6}
                 className={`px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground ${FUNDED_GROUP_CLASS}`}
               >
                 Funded
@@ -260,6 +260,16 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 align="right"
+                compact
+              />
+              <SortableTh
+                field="fundedDrawdownType"
+                label="Funded Draw Down Type"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="left"
                 compact
               />
             </tr>
@@ -452,6 +462,11 @@ function CompareTableRow({
       </td>
       <td className="px-4 py-3 text-right tabular-nums">
         {formatProfitSplit(plan.profitSplit)}
+      </td>
+      <td className="px-4 py-3">
+        {getDrawdownTypeLabel(plan.fundedDrawdownType) ?? (
+          <span className="text-muted-foreground">—</span>
+        )}
       </td>
       <td className="px-4 py-3">
         {plan.discount ? (

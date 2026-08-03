@@ -52,6 +52,7 @@ export type PlanSummary = {
   minimumDaysToPayout: number | null;
   minimumTargetGoalCushion: number | null;
   maxFundedAccounts: number | null;
+  fundedDrawdownType: DrawdownType | null;
   payoutFrequency: string | null;
   firm: FirmSummary;
   discount: DiscountSummary | null;

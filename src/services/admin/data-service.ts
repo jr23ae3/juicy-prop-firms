@@ -4,6 +4,7 @@ import type {
   CreateFirmInput,
   CreatePlanInput,
   UpdateFirmInput,
+  UpdatePlanInput,
 } from "@/lib/validations/admin";
 import { db } from "@/lib/db";
 import { isDatabaseConfigured } from "@/lib/env";
@@ -239,6 +240,7 @@ export async function createPlan(input: CreatePlanInput) {
       minimumDaysToPayout: planData.minimumDaysToPayout,
       minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
       maxFundedAccounts: planData.maxFundedAccounts,
+      fundedDrawdownType: planData.fundedDrawdownType,
       payoutFrequency: planData.payoutFrequency,
       isActive: planData.isActive,
     },
@@ -255,6 +257,57 @@ export async function createPlan(input: CreatePlanInput) {
   }
 
   return plan;
+}
+
+export async function updatePlan(planId: string, input: UpdatePlanInput) {
+  assertDb();
+
+  const { discountCode, discountPct, discountAmt, ...planData } = input;
+
+  const plan = await db.plan.update({
+    where: { id: planId },
+    data: {
+      slug: planData.slug,
+      name: planData.name,
+      accountSize: planData.accountSize,
+      evalType: planData.evalType,
+      evalPrice: planData.evalPrice,
+      activationFee: planData.activationFee ?? 0,
+      profitTarget: planData.profitTarget,
+      maxDrawdown: planData.maxDrawdown,
+      dailyDrawdown: planData.dailyDrawdown,
+      drawdownType: planData.drawdownType,
+      minimumDays: planData.minimumDays,
+      profitSplit: planData.profitSplit,
+      maxPayout: planData.maxPayout,
+      minimumDaysToPayout: planData.minimumDaysToPayout,
+      minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
+      maxFundedAccounts: planData.maxFundedAccounts,
+      fundedDrawdownType: planData.fundedDrawdownType,
+      payoutFrequency: planData.payoutFrequency,
+      isActive: planData.isActive,
+    },
+  });
+
+  if (discountCode) {
+    await createDiscount({
+      planId: plan.id,
+      code: discountCode,
+      discountPct,
+      discountAmt,
+      isActive: true,
+    });
+  }
+
+  return plan;
+}
+
+export async function deletePlan(planId: string) {
+  assertDb();
+
+  return db.plan.delete({
+    where: { id: planId },
+  });
 }
 
 export async function createDiscount(input: CreateDiscountInput) {

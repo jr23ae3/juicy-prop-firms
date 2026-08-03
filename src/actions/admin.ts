@@ -9,6 +9,7 @@ import {
   createPlanSchema,
   parseFormBoolean,
   updateFirmSchema,
+  updatePlanSchema,
 } from "@/lib/validations/admin";
 import { requireAdminUser } from "@/server/admin/require-admin-user";
 import {
@@ -17,7 +18,9 @@ import {
   createPlan,
   deactivateFirm,
   deactivatePlan,
+  deletePlan,
   updateFirmWithRanking,
+  updatePlan,
 } from "@/services/admin/data-service";
 
 export type AdminActionState = {
@@ -157,6 +160,7 @@ export async function createPlanAction(
     minimumDaysToPayout: formData.get("minimumDaysToPayout") || undefined,
     minimumTargetGoalCushion: formData.get("minimumTargetGoalCushion") || undefined,
     maxFundedAccounts: formData.get("maxFundedAccounts") || undefined,
+    fundedDrawdownType: formData.get("fundedDrawdownType") || undefined,
     payoutFrequency: formData.get("payoutFrequency") || undefined,
     isActive: true,
     discountCode: formData.get("discountCode") || undefined,
@@ -175,6 +179,71 @@ export async function createPlanAction(
     return { success: true };
   } catch {
     return { error: "Failed to create plan" };
+  }
+}
+
+export async function updatePlanAction(
+  firmId: string,
+  planId: string,
+  _prevState: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  await requireAdminUser();
+
+  const parsed = updatePlanSchema.safeParse({
+    slug: formData.get("slug"),
+    name: formData.get("name"),
+    accountSize: formData.get("accountSize"),
+    evalType: formData.get("evalType"),
+    evalPrice: formData.get("evalPrice"),
+    activationFee: formData.get("activationFee") || 0,
+    profitTarget: formData.get("profitTarget"),
+    maxDrawdown: formData.get("maxDrawdown"),
+    dailyDrawdown: formData.get("dailyDrawdown"),
+    drawdownType: formData.get("drawdownType"),
+    minimumDays: formData.get("minimumDays"),
+    profitSplit: formData.get("profitSplit"),
+    maxPayout: formData.get("maxPayout"),
+    minimumDaysToPayout: formData.get("minimumDaysToPayout"),
+    minimumTargetGoalCushion: formData.get("minimumTargetGoalCushion"),
+    maxFundedAccounts: formData.get("maxFundedAccounts"),
+    fundedDrawdownType: formData.get("fundedDrawdownType"),
+    payoutFrequency: formData.get("payoutFrequency"),
+    isActive: formData.has("isActive")
+      ? parseFormBoolean(formData.get("isActive"))
+      : false,
+    discountCode: formData.get("discountCode") || undefined,
+    discountPct: formData.get("discountPct") || undefined,
+    discountAmt: formData.get("discountAmt") || undefined,
+  });
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  try {
+    await updatePlan(planId, parsed.data);
+    revalidateCatalog();
+    revalidatePath(`/admin/firms/${firmId}`);
+    return { success: true };
+  } catch (error) {
+    const message =
+      error instanceof Error && error.message.includes("Unique constraint")
+        ? "A plan with this slug already exists for this firm"
+        : "Failed to update plan";
+    return { error: message };
+  }
+}
+
+export async function deletePlanAction(firmId: string, planId: string) {
+  await requireAdminUser();
+
+  try {
+    await deletePlan(planId);
+    revalidateCatalog();
+    revalidatePath(`/admin/firms/${firmId}`);
+  } catch {
+    throw new Error("Failed to delete plan");
   }
 }
 

@@ -38,17 +38,45 @@ export default async function AdminFirmPage({ params }: PageProps) {
       position: r.position,
       factors: r.factors as Record<string, number> | null,
     })),
-    plans: firm.plans.map((plan) => ({
-      id: plan.id,
-      slug: plan.slug,
-      name: plan.name,
-      accountSize: plan.accountSize,
-      evalType: plan.evalType,
-      evalPrice: toNumber(plan.evalPrice),
-      activationFee: toNumber(plan.activationFee),
-      isActive: plan.isActive,
-      discounts: plan.discounts.map((d) => ({ code: d.code })),
-    })),
+    plans: firm.plans.map((plan) => {
+      const discount = plan.discounts[0];
+
+      return {
+        id: plan.id,
+        slug: plan.slug,
+        name: plan.name,
+        accountSize: plan.accountSize,
+        evalType: plan.evalType,
+        evalPrice: toNumber(plan.evalPrice),
+        activationFee: toNumber(plan.activationFee),
+        profitTarget: plan.profitTarget ? toNumber(plan.profitTarget) : null,
+        maxDrawdown: plan.maxDrawdown ? toNumber(plan.maxDrawdown) : null,
+        dailyDrawdown: plan.dailyDrawdown ? toNumber(plan.dailyDrawdown) : null,
+        drawdownType: plan.drawdownType,
+        minimumDays: plan.minimumDays,
+        profitSplit: plan.profitSplit ? toNumber(plan.profitSplit) : null,
+        maxPayout: plan.maxPayout ? toNumber(plan.maxPayout) : null,
+        minimumDaysToPayout: plan.minimumDaysToPayout,
+        minimumTargetGoalCushion: plan.minimumTargetGoalCushion
+          ? toNumber(plan.minimumTargetGoalCushion)
+          : null,
+        maxFundedAccounts: plan.maxFundedAccounts,
+        fundedDrawdownType: plan.fundedDrawdownType,
+        payoutFrequency: plan.payoutFrequency,
+        isActive: plan.isActive,
+        discount: discount
+          ? {
+              code: discount.code,
+              discountPct: discount.discountPct
+                ? toNumber(discount.discountPct)
+                : null,
+              discountAmt: discount.discountAmt
+                ? toNumber(discount.discountAmt)
+                : null,
+            }
+          : null,
+      };
+    }),
   };
 
   return (

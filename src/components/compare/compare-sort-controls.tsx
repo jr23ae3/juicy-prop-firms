@@ -28,6 +28,7 @@ const SORT_LABELS: Record<CompareSortField, string> = {
   minimumTargetGoalCushion: "Target goal cushion",
   maxPayout: "Max payout",
   maxFundedAccounts: "Max funded accounts",
+  fundedDrawdownType: "Funded draw down type",
   profitSplit: "Split %",
   returnMultiple: "Return multiple",
 };

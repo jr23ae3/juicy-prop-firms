@@ -23,6 +23,7 @@ export type SeedPlan = {
   minimumDaysToPayout?: number;
   minimumTargetGoalCushion?: number;
   maxFundedAccounts?: number;
+  fundedDrawdownType?: DrawdownType;
   payoutFrequency?: string;
   discount?: SeedDiscount;
 };
@@ -122,6 +123,7 @@ export const SEED_FIRMS: SeedFirm[] = [
         maxDrawdown: 2500,
         dailyDrawdown: 1500,
         drawdownType: "TRAILING",
+        fundedDrawdownType: "END_OF_DAY",
         minimumDays: 8,
         profitSplit: 0.9,
         maxPayout: 2500,
@@ -142,6 +144,7 @@ export const SEED_FIRMS: SeedFirm[] = [
         maxDrawdown: 3000,
         dailyDrawdown: 1800,
         drawdownType: "TRAILING",
+        fundedDrawdownType: "END_OF_DAY",
         minimumDays: 8,
         profitSplit: 0.9,
         maxPayout: 3500,

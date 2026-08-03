@@ -100,6 +100,7 @@ export function serializePlan(plan: PlanRecord): PlanSummary {
     minimumDaysToPayout: plan.minimumDaysToPayout,
     minimumTargetGoalCushion: toNumberOrNull(plan.minimumTargetGoalCushion),
     maxFundedAccounts: plan.maxFundedAccounts,
+    fundedDrawdownType: plan.fundedDrawdownType,
     payoutFrequency: plan.payoutFrequency,
     firm: serializeFirm(plan.propFirm),
     discount: serializeDiscount(discount),

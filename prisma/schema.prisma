@@ -132,6 +132,7 @@ model Plan {
   minimumDaysToPayout       Int?     @map("minimum_days_to_payout")
   minimumTargetGoalCushion  Decimal? @map("minimum_target_goal_cushion") @db.Decimal(10, 2)
   maxFundedAccounts         Int?     @map("max_funded_accounts")
+  fundedDrawdownType        DrawdownType? @map("funded_drawdown_type")
   payoutFrequency String?       @map("payout_frequency")
   isActive        Boolean       @default(true) @map("is_active")
   createdAt       DateTime      @default(now()) @map("created_at")

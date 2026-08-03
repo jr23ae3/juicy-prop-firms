@@ -78,6 +78,8 @@ export function sortPlans(
         return compareNumbers(a.maxPayout, b.maxPayout);
       case "maxFundedAccounts":
         return compareNumbers(a.maxFundedAccounts, b.maxFundedAccounts);
+      case "fundedDrawdownType":
+        return compareDrawdownType(a.fundedDrawdownType, b.fundedDrawdownType);
       case "profitSplit":
         return compareNumbers(a.profitSplit, b.profitSplit);
       case "returnMultiple":

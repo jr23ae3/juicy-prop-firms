@@ -50,8 +50,62 @@ export const createPlanSchema = z.object({
   minimumDaysToPayout: z.coerce.number().int().positive().optional(),
   minimumTargetGoalCushion: z.coerce.number().positive().optional(),
   maxFundedAccounts: z.coerce.number().int().positive().optional(),
+  fundedDrawdownType: drawdownTypeSchema.optional(),
   payoutFrequency: z.string().max(64).optional(),
   isActive: z.boolean().default(true),
+  discountCode: z.string().max(32).optional(),
+  discountPct: z.coerce.number().min(0).max(1).optional(),
+  discountAmt: z.coerce.number().positive().optional(),
+});
+
+const optionalNumber = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : value),
+  z.coerce.number().positive().nullable(),
+);
+
+const optionalInt = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : value),
+  z.coerce.number().int().positive().nullable(),
+);
+
+const optionalSplit = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : value),
+  z.coerce.number().min(0).max(1).nullable(),
+);
+
+const optionalDrawdownType = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : value),
+  drawdownTypeSchema.nullable(),
+);
+
+const optionalFundedDrawdownType = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : value),
+  drawdownTypeSchema.nullable(),
+);
+
+export const updatePlanSchema = z.object({
+  slug: slugSchema,
+  name: z.string().min(2).max(120),
+  accountSize: z.coerce.number().int().positive(),
+  evalType: evalTypeSchema,
+  evalPrice: z.coerce.number().positive(),
+  activationFee: z.coerce.number().min(0).default(0),
+  profitTarget: optionalNumber,
+  maxDrawdown: optionalNumber,
+  dailyDrawdown: optionalNumber,
+  drawdownType: optionalDrawdownType,
+  minimumDays: optionalInt,
+  profitSplit: optionalSplit,
+  maxPayout: optionalNumber,
+  minimumDaysToPayout: optionalInt,
+  minimumTargetGoalCushion: optionalNumber,
+  maxFundedAccounts: optionalInt,
+  fundedDrawdownType: optionalFundedDrawdownType,
+  payoutFrequency: z.preprocess(
+    (value) => (value === "" || value === null || value === undefined ? null : value),
+    z.string().max(64).nullable(),
+  ),
+  isActive: z.boolean(),
   discountCode: z.string().max(32).optional(),
   discountPct: z.coerce.number().min(0).max(1).optional(),
   discountAmt: z.coerce.number().positive().optional(),
@@ -69,6 +123,7 @@ export const createDiscountSchema = z.object({
 export type CreateFirmInput = z.infer<typeof createFirmSchema>;
 export type UpdateFirmInput = z.infer<typeof updateFirmSchema>;
 export type CreatePlanInput = z.infer<typeof createPlanSchema>;
+export type UpdatePlanInput = z.infer<typeof updatePlanSchema>;
 export type CreateDiscountInput = z.infer<typeof createDiscountSchema>;
 
 export function parseOptionalUrl(value: string | undefined) {
