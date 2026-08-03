@@ -34,6 +34,26 @@ type CompareTableProps = {
 const FUNDED_GROUP_CLASS = "border-l border-border/60 bg-muted/20";
 const FUNDED_CELL_BORDER = "border-l border-border/60";
 
+type StickyColumn = "rank" | "firm" | "plan";
+
+const STICKY_COLUMN_CLASS: Record<StickyColumn, string> = {
+  rank: "sticky left-0 z-10 min-w-[52px] w-[52px]",
+  firm: "sticky left-[52px] z-10 min-w-[128px] w-[128px]",
+  plan: "sticky left-[180px] z-10 min-w-[152px] w-[152px] border-r border-border/60 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.08)]",
+};
+
+function stickyHeaderClass(column: StickyColumn) {
+  return cn(STICKY_COLUMN_CLASS[column], "z-20 bg-muted/40");
+}
+
+function stickyBodyClass(column: StickyColumn, striped: boolean) {
+  return cn(
+    STICKY_COLUMN_CLASS[column],
+    striped ? "bg-muted/25" : "bg-card",
+    "group-hover:bg-primary/10 transition-colors",
+  );
+}
+
 export function CompareTable({ plans, filters, onSortChange }: CompareTableProps) {
   const sort = filters?.sort ?? "allInCost";
   const direction = filters?.direction ?? getDefaultSortDirection(sort);
@@ -76,6 +96,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 rowSpan={2}
+                stickyColumn="rank"
               />
               <SortableTh
                 field="firmName"
@@ -85,6 +106,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 rowSpan={2}
+                stickyColumn="firm"
               />
               <SortableTh
                 field="accountSize"
@@ -94,6 +116,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 sortable={sortable}
                 onSort={handleSort}
                 rowSpan={2}
+                stickyColumn="plan"
               />
               <SortableTh
                 field="evalType"
@@ -297,6 +320,7 @@ function SortableTh({
   rowSpan,
   className,
   compact = false,
+  stickyColumn,
 }: {
   field: CompareSortField;
   label: string;
@@ -308,9 +332,11 @@ function SortableTh({
   rowSpan?: number;
   className?: string;
   compact?: boolean;
+  stickyColumn?: StickyColumn;
 }) {
   const isActive = sort === field;
   const padding = compact ? "px-4 py-2" : "px-4 py-3";
+  const stickyClass = stickyColumn ? stickyHeaderClass(stickyColumn) : undefined;
 
   if (!sortable) {
     return (
@@ -321,6 +347,7 @@ function SortableTh({
           padding,
           "font-medium",
           align === "right" && "text-right",
+          stickyClass,
           className,
         )}
       >
@@ -336,7 +363,12 @@ function SortableTh({
       aria-sort={
         isActive ? (direction === "asc" ? "ascending" : "descending") : "none"
       }
-      className={cn(padding, align === "right" && "text-right", className)}
+      className={cn(
+        padding,
+        align === "right" && "text-right",
+        stickyClass,
+        className,
+      )}
     >
       <button
         type="button"
@@ -390,16 +422,18 @@ function CompareTableRow({
   return (
     <tr
       className={cn(
-        "border-b border-border/40 transition-colors last:border-0 hover:bg-primary/10",
+        "group border-b border-border/40 transition-colors last:border-0 hover:bg-primary/10",
         isStriped && "bg-muted/25",
       )}
     >
-      <td className="px-4 py-3 text-muted-foreground">
+      <td className={cn("px-4 py-3 text-muted-foreground", stickyBodyClass("rank", isStriped))}>
         #{plan.firm.rankPosition ?? "—"}
       </td>
-      <td className="px-4 py-3 font-medium">{plan.firm.name}</td>
-      <td className="px-4 py-3">
-        <div>{plan.name}</div>
+      <td className={cn("px-4 py-3 font-medium", stickyBodyClass("firm", isStriped))}>
+        <span className="block truncate">{plan.firm.name}</span>
+      </td>
+      <td className={cn("px-4 py-3", stickyBodyClass("plan", isStriped))}>
+        <div className="truncate">{plan.name}</div>
         <div className="text-xs text-muted-foreground">
           {formatAccountSize(plan.accountSize)}
         </div>
