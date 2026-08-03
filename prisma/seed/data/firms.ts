@@ -14,6 +14,7 @@ export type SeedPlan = {
   evalType: EvalType;
   evalPrice: number;
   activationFee?: number;
+  resetFee?: number;
   profitTarget?: number;
   maxDrawdown?: number;
   dailyDrawdown?: number;
@@ -120,6 +121,7 @@ export const SEED_FIRMS: SeedFirm[] = [
         evalType: "CHALLENGE",
         evalPrice: 167,
         activationFee: 85,
+        resetFee: 57,
         profitTarget: 3000,
         maxDrawdown: 2500,
         dailyDrawdown: 1500,

@@ -94,6 +94,7 @@ export function PlanSummaryLine({ plan }: { plan: PlanForAdmin }) {
       {formatAccountSize(plan.accountSize)} · {plan.evalType} · Eval{" "}
       {formatCurrency(plan.evalPrice)} + {formatCurrency(plan.activationFee)}{" "}
       activation
+      {plan.resetFee > 0 ? ` · Reset ${formatCurrency(plan.resetFee)}` : ""}
       {plan.discount?.code ? ` · Code: ${plan.discount.code}` : ""}
     </p>
   );

@@ -46,6 +46,7 @@ export type PlanSummary = {
   accountSize: number;
   evalType: EvalType;
   profitTarget: number | null;
+  resetFee: number;
   maxDrawdown: number | null;
   dailyDrawdown: number | null;
   drawdownType: DrawdownType | null;

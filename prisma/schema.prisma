@@ -122,6 +122,7 @@ model Plan {
   evalType        EvalType      @map("eval_type")
   evalPrice       Decimal       @map("eval_price") @db.Decimal(10, 2)
   activationFee   Decimal       @default(0) @map("activation_fee") @db.Decimal(10, 2)
+  resetFee        Decimal       @default(0) @map("reset_fee") @db.Decimal(10, 2)
   profitTarget    Decimal?      @map("profit_target") @db.Decimal(10, 2)
   maxDrawdown     Decimal?      @map("max_drawdown") @db.Decimal(10, 2)
   dailyDrawdown   Decimal?      @map("daily_drawdown") @db.Decimal(10, 2)

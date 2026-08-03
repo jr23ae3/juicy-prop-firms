@@ -99,6 +99,7 @@ export function serializePlan(plan: PlanRecord): PlanSummary {
     accountSize: plan.accountSize,
     evalType: plan.evalType,
     profitTarget: toNumberOrNull(plan.profitTarget),
+    resetFee: toNumber(plan.resetFee),
     maxDrawdown: toNumberOrNull(plan.maxDrawdown),
     dailyDrawdown: toNumberOrNull(plan.dailyDrawdown),
     drawdownType: plan.drawdownType,

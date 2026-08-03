@@ -49,6 +49,7 @@ export default async function AdminFirmPage({ params }: PageProps) {
         evalType: plan.evalType,
         evalPrice: toNumber(plan.evalPrice),
         activationFee: toNumber(plan.activationFee),
+        resetFee: toNumber(plan.resetFee),
         profitTarget: plan.profitTarget ? toNumber(plan.profitTarget) : null,
         maxDrawdown: plan.maxDrawdown ? toNumber(plan.maxDrawdown) : null,
         dailyDrawdown: plan.dailyDrawdown ? toNumber(plan.dailyDrawdown) : null,

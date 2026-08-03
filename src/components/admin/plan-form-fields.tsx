@@ -10,6 +10,7 @@ export type PlanFormValues = {
   evalType: string;
   evalPrice: number;
   activationFee: number;
+  resetFee: number;
   profitTarget: number | null;
   dailyDrawdown: number | null;
   maxDrawdown: number | null;
@@ -132,6 +133,12 @@ export function PlanFormFields({
           label="Activation fee ($)"
           type="number"
           defaultValue={formatNumber(values?.activationFee ?? 0)}
+        />
+        <FormField
+          name="resetFee"
+          label="Reset fee ($)"
+          type="number"
+          defaultValue={formatNumber(values?.resetFee ?? 0)}
         />
         <FormField
           name="profitTarget"
