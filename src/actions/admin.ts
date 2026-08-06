@@ -140,7 +140,7 @@ export async function createPlanAction(
   _prevState: AdminActionState,
   formData: FormData,
 ): Promise<AdminActionState> {
-  await requireAdminUser();
+  const { user } = await requireAdminUser();
 
   const parsed = createPlanSchema.safeParse({
     propFirmId: firmId,
@@ -175,7 +175,7 @@ export async function createPlanAction(
   }
 
   try {
-    await createPlan(parsed.data);
+    await createPlan(parsed.data, { changedByUserId: user.id });
     revalidateCatalog();
     revalidatePath(`/admin/firms/${firmId}`);
     return { success: true };
@@ -190,7 +190,7 @@ export async function updatePlanAction(
   _prevState: AdminActionState,
   formData: FormData,
 ): Promise<AdminActionState> {
-  await requireAdminUser();
+  const { user } = await requireAdminUser();
 
   const parsed = updatePlanSchema.safeParse({
     slug: formData.get("slug"),
@@ -226,7 +226,7 @@ export async function updatePlanAction(
   }
 
   try {
-    await updatePlan(planId, parsed.data);
+    await updatePlan(planId, parsed.data, { changedByUserId: user.id });
     revalidateCatalog();
     revalidatePath(`/admin/firms/${firmId}`);
     return { success: true };

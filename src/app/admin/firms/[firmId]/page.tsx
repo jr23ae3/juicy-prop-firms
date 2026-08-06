@@ -9,6 +9,25 @@ import { cn } from "@/lib/utils";
 import { requireAdminUser } from "@/server/admin/require-admin-user";
 import { getFirmForAdmin } from "@/services/admin/data-service";
 
+function serializePlanFieldHistory<
+  T extends {
+    id: string;
+    createdAt: Date;
+    changedByUser: { name: string | null; email: string } | null;
+  },
+>(entries: T[], valueKey: keyof T, previousValueKey: keyof T) {
+  return entries.map((entry) => ({
+    id: entry.id,
+    value: toNumber(entry[valueKey] as Parameters<typeof toNumber>[0]),
+    previousValue: entry[previousValueKey]
+      ? toNumber(entry[previousValueKey] as Parameters<typeof toNumber>[0])
+      : null,
+    createdAt: entry.createdAt.toISOString(),
+    changedBy:
+      entry.changedByUser?.name ?? entry.changedByUser?.email ?? null,
+  }));
+}
+
 export const dynamic = "force-dynamic";
 
 type PageProps = {
@@ -77,6 +96,16 @@ export default async function AdminFirmPage({ params }: PageProps) {
               waivesActivationFee: discount.waivesActivationFee,
             }
           : null,
+        evalPriceHistory: serializePlanFieldHistory(
+          plan.evalPriceHistory,
+          "evalPrice",
+          "previousEvalPrice",
+        ),
+        resetFeeHistory: serializePlanFieldHistory(
+          plan.resetFeeHistory,
+          "resetFee",
+          "previousResetFee",
+        ),
       };
     }),
   };

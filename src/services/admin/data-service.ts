@@ -7,7 +7,12 @@ import type {
   UpdatePlanInput,
 } from "@/lib/validations/admin";
 import { db } from "@/lib/db";
+import { toNumber, decimalValuesEqual } from "@/lib/decimal";
 import { isDatabaseConfigured } from "@/lib/env";
+import {
+  logEvalPriceChange,
+} from "@/services/admin/eval-price-history";
+import { logResetFeeChange } from "@/services/admin/reset-fee-history";
 
 function assertDb() {
   if (!isDatabaseConfigured()) {
@@ -56,6 +61,24 @@ export async function getFirmForAdmin(firmId: string) {
             where: { isActive: true },
             orderBy: { verifiedAt: "desc" },
             take: 1,
+          },
+          evalPriceHistory: {
+            orderBy: { createdAt: "desc" },
+            take: 20,
+            include: {
+              changedByUser: {
+                select: { email: true, name: true },
+              },
+            },
+          },
+          resetFeeHistory: {
+            orderBy: { createdAt: "desc" },
+            take: 20,
+            include: {
+              changedByUser: {
+                select: { email: true, name: true },
+              },
+            },
           },
         },
       },
@@ -210,7 +233,10 @@ export async function updateFirmWithRanking(
   return firm;
 }
 
-export async function createPlan(input: CreatePlanInput) {
+export async function createPlan(
+  input: CreatePlanInput,
+  options?: { changedByUserId?: string },
+) {
   assertDb();
 
   const {
@@ -222,30 +248,48 @@ export async function createPlan(input: CreatePlanInput) {
     ...planData
   } = input;
 
-  const plan = await db.plan.create({
-    data: {
-      propFirmId,
-      slug: planData.slug,
-      name: planData.name,
-      accountSize: planData.accountSize,
-      evalType: planData.evalType,
+  const plan = await db.$transaction(async (tx) => {
+    const created = await tx.plan.create({
+      data: {
+        propFirmId,
+        slug: planData.slug,
+        name: planData.name,
+        accountSize: planData.accountSize,
+        evalType: planData.evalType,
+        evalPrice: planData.evalPrice,
+        activationFee: planData.activationFee ?? 0,
+        resetFee: planData.resetFee ?? 0,
+        profitTarget: planData.profitTarget,
+        maxDrawdown: planData.maxDrawdown,
+        dailyDrawdown: planData.dailyDrawdown,
+        drawdownType: planData.drawdownType,
+        minimumDays: planData.minimumDays,
+        profitSplit: planData.profitSplit,
+        maxPayout: planData.maxPayout,
+        minimumDaysToPayout: planData.minimumDaysToPayout,
+        minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
+        maxFundedAccounts: planData.maxFundedAccounts,
+        fundedDrawdownType: planData.fundedDrawdownType,
+        payoutFrequency: planData.payoutFrequency,
+        isActive: planData.isActive,
+      },
+    });
+
+    await logEvalPriceChange(tx, {
+      planId: created.id,
       evalPrice: planData.evalPrice,
-      activationFee: planData.activationFee ?? 0,
+      previousEvalPrice: null,
+      changedByUserId: options?.changedByUserId,
+    });
+
+    await logResetFeeChange(tx, {
+      planId: created.id,
       resetFee: planData.resetFee ?? 0,
-      profitTarget: planData.profitTarget,
-      maxDrawdown: planData.maxDrawdown,
-      dailyDrawdown: planData.dailyDrawdown,
-      drawdownType: planData.drawdownType,
-      minimumDays: planData.minimumDays,
-      profitSplit: planData.profitSplit,
-      maxPayout: planData.maxPayout,
-      minimumDaysToPayout: planData.minimumDaysToPayout,
-      minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
-      maxFundedAccounts: planData.maxFundedAccounts,
-      fundedDrawdownType: planData.fundedDrawdownType,
-      payoutFrequency: planData.payoutFrequency,
-      isActive: planData.isActive,
-    },
+      previousResetFee: null,
+      changedByUserId: options?.changedByUserId,
+    });
+
+    return created;
   });
 
   if (discountCode) {
@@ -262,35 +306,71 @@ export async function createPlan(input: CreatePlanInput) {
   return plan;
 }
 
-export async function updatePlan(planId: string, input: UpdatePlanInput) {
+export async function updatePlan(
+  planId: string,
+  input: UpdatePlanInput,
+  options?: { changedByUserId?: string },
+) {
   assertDb();
 
   const { discountCode, discountPct, discountAmt, waivesActivationFee, ...planData } = input;
 
-  const plan = await db.plan.update({
-    where: { id: planId },
-    data: {
-      slug: planData.slug,
-      name: planData.name,
-      accountSize: planData.accountSize,
-      evalType: planData.evalType,
-      evalPrice: planData.evalPrice,
-      activationFee: planData.activationFee ?? 0,
-      resetFee: planData.resetFee ?? 0,
-      profitTarget: planData.profitTarget,
-      maxDrawdown: planData.maxDrawdown,
-      dailyDrawdown: planData.dailyDrawdown,
-      drawdownType: planData.drawdownType,
-      minimumDays: planData.minimumDays,
-      profitSplit: planData.profitSplit,
-      maxPayout: planData.maxPayout,
-      minimumDaysToPayout: planData.minimumDaysToPayout,
-      minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
-      maxFundedAccounts: planData.maxFundedAccounts,
-      fundedDrawdownType: planData.fundedDrawdownType,
-      payoutFrequency: planData.payoutFrequency,
-      isActive: planData.isActive,
-    },
+  const plan = await db.$transaction(async (tx) => {
+    const existing = await tx.plan.findUnique({
+      where: { id: planId },
+      select: { evalPrice: true, resetFee: true },
+    });
+
+    if (!existing) {
+      throw new Error("Plan not found");
+    }
+
+    const updated = await tx.plan.update({
+      where: { id: planId },
+      data: {
+        slug: planData.slug,
+        name: planData.name,
+        accountSize: planData.accountSize,
+        evalType: planData.evalType,
+        evalPrice: planData.evalPrice,
+        activationFee: planData.activationFee ?? 0,
+        resetFee: planData.resetFee ?? 0,
+        profitTarget: planData.profitTarget,
+        maxDrawdown: planData.maxDrawdown,
+        dailyDrawdown: planData.dailyDrawdown,
+        drawdownType: planData.drawdownType,
+        minimumDays: planData.minimumDays,
+        profitSplit: planData.profitSplit,
+        maxPayout: planData.maxPayout,
+        minimumDaysToPayout: planData.minimumDaysToPayout,
+        minimumTargetGoalCushion: planData.minimumTargetGoalCushion,
+        maxFundedAccounts: planData.maxFundedAccounts,
+        fundedDrawdownType: planData.fundedDrawdownType,
+        payoutFrequency: planData.payoutFrequency,
+        isActive: planData.isActive,
+      },
+    });
+
+    if (!decimalValuesEqual(existing.evalPrice, planData.evalPrice)) {
+      await logEvalPriceChange(tx, {
+        planId,
+        evalPrice: planData.evalPrice,
+        previousEvalPrice: toNumber(existing.evalPrice),
+        changedByUserId: options?.changedByUserId,
+      });
+    }
+
+    const nextResetFee = planData.resetFee ?? 0;
+    if (!decimalValuesEqual(existing.resetFee, nextResetFee)) {
+      await logResetFeeChange(tx, {
+        planId,
+        resetFee: nextResetFee,
+        previousResetFee: toNumber(existing.resetFee),
+        changedByUserId: options?.changedByUserId,
+      });
+    }
+
+    return updated;
   });
 
   if (discountCode) {

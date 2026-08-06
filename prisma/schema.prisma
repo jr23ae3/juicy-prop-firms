@@ -34,6 +34,8 @@ model User {
   dealAlerts  DealAlert[]
   subscription Subscription?
   emailLogs   EmailLog[]
+  planEvalPriceChanges PlanEvalPriceHistory[]
+  planResetFeeChanges  PlanResetFeeHistory[]
 
   @@map("users")
 }
@@ -142,6 +144,8 @@ model Plan {
   discounts Discount[]
   savedBy   SavedPlan[]
   dealAlerts DealAlert[]
+  evalPriceHistory PlanEvalPriceHistory[]
+  resetFeeHistory  PlanResetFeeHistory[]
 
   @@unique([propFirmId, slug])
   @@index([isActive, accountSize])
@@ -164,6 +168,34 @@ model Discount {
 
   @@index([planId, isActive])
   @@map("discounts")
+}
+
+model PlanEvalPriceHistory {
+  id                String   @id @default(cuid())
+  planId            String   @map("plan_id")
+  plan              Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  evalPrice         Decimal  @map("eval_price") @db.Decimal(10, 2)
+  previousEvalPrice Decimal? @map("previous_eval_price") @db.Decimal(10, 2)
+  changedByUserId   String?  @map("changed_by_user_id")
+  changedByUser     User?    @relation(fields: [changedByUserId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([planId, createdAt(sort: Desc)])
+  @@map("plan_eval_price_history")
+}
+
+model PlanResetFeeHistory {
+  id               String   @id @default(cuid())
+  planId           String   @map("plan_id")
+  plan             Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  resetFee         Decimal  @map("reset_fee") @db.Decimal(10, 2)
+  previousResetFee Decimal? @map("previous_reset_fee") @db.Decimal(10, 2)
+  changedByUserId  String?  @map("changed_by_user_id")
+  changedByUser    User?    @relation(fields: [changedByUserId], references: [id], onDelete: SetNull)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([planId, createdAt(sort: Desc)])
+  @@map("plan_reset_fee_history")
 }
 
 // ---------------------------------------------------------------------------

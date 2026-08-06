@@ -11,6 +11,7 @@ import {
 import { AddPlanForm } from "@/components/admin/add-plan-form";
 import { adminInputClassName } from "@/components/admin/admin-form-fields";
 import type { PlanFormValues } from "@/components/admin/plan-form-fields";
+import type { PlanFieldHistoryEntry } from "@/components/admin/plan-field-history";
 import {
   PlanEditForm,
   PlanSummaryLine,
@@ -29,6 +30,8 @@ import { cn } from "@/lib/utils";
 type PlanForAdmin = PlanFormValues & {
   id: string;
   isActive: boolean;
+  evalPriceHistory: PlanFieldHistoryEntry[];
+  resetFeeHistory: PlanFieldHistoryEntry[];
 };
 
 type FirmForAdmin = {

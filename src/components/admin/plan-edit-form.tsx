@@ -12,12 +12,18 @@ import {
   PlanFormFields,
   type PlanFormValues,
 } from "@/components/admin/plan-form-fields";
+import {
+  PlanFieldHistory,
+  type PlanFieldHistoryEntry,
+} from "@/components/admin/plan-field-history";
 import { Button } from "@/components/ui/button";
 import { formatAccountSize, formatCurrency } from "@/lib/format";
 
 type PlanForAdmin = PlanFormValues & {
   id: string;
   isActive: boolean;
+  evalPriceHistory: PlanFieldHistoryEntry[];
+  resetFeeHistory: PlanFieldHistoryEntry[];
 };
 
 export function PlanEditForm({
@@ -56,6 +62,18 @@ export function PlanEditForm({
           </Button>
         </div>
       </form>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <PlanFieldHistory
+          title="Eval price history"
+          emptyMessage="No eval price changes recorded yet."
+          history={plan.evalPriceHistory}
+        />
+        <PlanFieldHistory
+          title="Reset fee history"
+          emptyMessage="No reset fee changes recorded yet."
+          history={plan.resetFeeHistory}
+        />
+      </div>
       <div className="flex flex-wrap gap-2 border-t border-border/40 pt-4">
         <DeletePlanButton firmId={firmId} planId={plan.id} planName={plan.name} />
       </div>

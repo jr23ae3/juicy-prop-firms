@@ -20,3 +20,7 @@ export function roundRatio(value: number, decimals = 2): number {
   const factor = 10 ** decimals;
   return Math.round(value * factor) / factor;
 }
+
+export function decimalValuesEqual(a: DecimalLike, b: number): boolean {
+  return toNumber(a) === b;
+}
