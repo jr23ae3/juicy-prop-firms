@@ -1,19 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 
 import {
-  createPlanAction,
   deactivateFirmAction,
   updateFirmAction,
   type AdminActionState,
 } from "@/actions/admin";
+import { AddPlanForm } from "@/components/admin/add-plan-form";
 import { adminInputClassName } from "@/components/admin/admin-form-fields";
-import {
-  PlanActiveCheckbox,
-  PlanFormFields,
-} from "@/components/admin/plan-form-fields";
+import type { PlanFormValues } from "@/components/admin/plan-form-fields";
 import {
   PlanEditForm,
   PlanSummaryLine,
@@ -28,7 +25,6 @@ import {
 } from "@/components/ui/card";
 import { CURRENT_RANKING_PERIOD } from "@/config/rankings";
 import { cn } from "@/lib/utils";
-import type { PlanFormValues } from "@/components/admin/plan-form-fields";
 
 type PlanForAdmin = PlanFormValues & {
   id: string;
@@ -55,6 +51,8 @@ type FirmForAdmin = {
 export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
   const ranking = firm.rankings[0];
   const factors = (ranking?.factors ?? {}) as Record<string, number>;
+  const addPlanRef = useRef<HTMLDivElement>(null);
+  const [duplicateSourceId, setDuplicateSourceId] = useState("");
 
   const updateAction = updateFirmAction.bind(null, firm.id);
   const [updateState, updateFormAction, updatePending] = useActionState(
@@ -62,11 +60,10 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
     {} as AdminActionState,
   );
 
-  const createPlanBound = createPlanAction.bind(null, firm.id);
-  const [planState, planFormAction, planPending] = useActionState(
-    createPlanBound,
-    {} as AdminActionState,
-  );
+  function handleDuplicatePlan(planId: string) {
+    setDuplicateSourceId(planId);
+    addPlanRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
     <div className="space-y-8">
@@ -185,7 +182,7 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
         <CardHeader>
           <CardTitle>Plans ({firm.plans.length})</CardTitle>
           <CardDescription>
-            Expand a plan to edit all fields, change active status, or delete
+            Expand a plan to edit, duplicate it into Add plan, or delete
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -208,9 +205,23 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
                       </p>
                       <PlanSummaryLine plan={plan} />
                     </div>
-                    <span className="text-xs text-muted-foreground group-open:hidden">
-                      Click to edit
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          handleDuplicatePlan(plan.id);
+                        }}
+                      >
+                        Duplicate
+                      </Button>
+                      <span className="text-xs text-muted-foreground group-open:hidden">
+                        Click to edit
+                      </span>
+                    </div>
                   </div>
                 </summary>
                 <PlanEditForm firmId={firm.id} plan={plan} />
@@ -220,26 +231,21 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card ref={addPlanRef} id="add-plan">
         <CardHeader>
           <CardTitle>Add plan</CardTitle>
+          <CardDescription>
+            Create a new plan or duplicate an existing one to pre-fill the form
+          </CardDescription>
         </CardHeader>
-        <form action={planFormAction}>
-          <CardContent className="space-y-4">
-            {planState.error ? (
-              <p role="alert" className="text-sm text-destructive">
-                {planState.error}
-              </p>
-            ) : null}
-            {planState.success ? (
-              <p className="text-sm text-emerald-600">Plan added.</p>
-            ) : null}
-            <PlanFormFields showDiscount />
-            <Button type="submit" disabled={planPending}>
-              {planPending ? "Adding…" : "Add plan"}
-            </Button>
-          </CardContent>
-        </form>
+        <CardContent>
+          <AddPlanForm
+            firmId={firm.id}
+            plans={firm.plans}
+            duplicateSourceId={duplicateSourceId}
+            onDuplicateSourceChange={setDuplicateSourceId}
+          />
+        </CardContent>
       </Card>
     </div>
   );
