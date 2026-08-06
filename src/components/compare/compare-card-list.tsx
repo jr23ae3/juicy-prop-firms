@@ -1,5 +1,6 @@
 import type { PlanSummary } from "@/types/plan";
 
+import { CalculatedValue } from "@/components/compare/calculated-value";
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
@@ -14,6 +15,13 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import {
+  getAllInCostTooltip,
+  getAllInTargetTooltip,
+  getReturnMultipleTooltip,
+  getRiskRatioTooltip,
+  getRiskRewardTooltip,
+} from "@/lib/plans/calculation-tooltips";
 import { getAllInTarget, getRiskRatio, getRiskReward } from "@/lib/plans/metrics";
 
 type CompareCardListProps = {
@@ -104,13 +112,17 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
         <div>
           <dt className="text-xs text-muted-foreground">All-in cost</dt>
           <dd className="mt-0.5 text-lg font-semibold text-primary tabular-nums">
-            {formatCurrency(plan.pricing.allInCost)}
+            <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
+              {formatCurrency(plan.pricing.allInCost)}
+            </CalculatedValue>
           </dd>
         </div>
         <div>
           <dt className="text-xs text-muted-foreground">Return multiple</dt>
           <dd className="mt-0.5 tabular-nums">
-            {formatReturnMultiple(plan.pricing.returnMultiple)}
+            <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
+              {formatReturnMultiple(plan.pricing.returnMultiple)}
+            </CalculatedValue>
           </dd>
         </div>
       </dl>
@@ -135,9 +147,11 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
           <div>
             <dt className="text-xs text-muted-foreground">All-in target</dt>
             <dd className="mt-0.5 tabular-nums">
-              {formatOptionalCurrency(
-                getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
-              )}
+              <CalculatedValue tooltip={getAllInTargetTooltip(plan)}>
+                {formatOptionalCurrency(
+                  getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
+                )}
+              </CalculatedValue>
             </dd>
           </div>
           <div>
@@ -149,25 +163,29 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
           <div>
             <dt className="text-xs text-muted-foreground">Risk ratio</dt>
             <dd className="mt-0.5 tabular-nums">
-              {formatReturnMultiple(
-                getRiskRatio(
-                  plan.maxDrawdown,
-                  plan.profitTarget,
-                  plan.minimumTargetGoalCushion,
-                ),
-              )}
+              <CalculatedValue tooltip={getRiskRatioTooltip(plan)}>
+                {formatReturnMultiple(
+                  getRiskRatio(
+                    plan.maxDrawdown,
+                    plan.profitTarget,
+                    plan.minimumTargetGoalCushion,
+                  ),
+                )}
+              </CalculatedValue>
             </dd>
           </div>
           <div>
             <dt className="text-xs text-muted-foreground">Risk reward</dt>
             <dd className="mt-0.5 tabular-nums">
-              {formatReturnMultiple(
-                getRiskReward(
-                  plan.maxPayout,
-                  plan.profitTarget,
-                  plan.minimumTargetGoalCushion,
-                ),
-              )}
+              <CalculatedValue tooltip={getRiskRewardTooltip(plan)}>
+                {formatReturnMultiple(
+                  getRiskReward(
+                    plan.maxPayout,
+                    plan.profitTarget,
+                    plan.minimumTargetGoalCushion,
+                  ),
+                )}
+              </CalculatedValue>
             </dd>
           </div>
           <div>

@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import type { CompareFilters, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
+import { CalculatedValue } from "@/components/compare/calculated-value";
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
@@ -19,6 +20,13 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import {
+  getAllInCostTooltip,
+  getAllInTargetTooltip,
+  getReturnMultipleTooltip,
+  getRiskRatioTooltip,
+  getRiskRewardTooltip,
+} from "@/lib/plans/calculation-tooltips";
 import { getAllInTarget, getRiskRatio, getRiskReward } from "@/lib/plans/metrics";
 import {
   getDefaultSortDirection,
@@ -542,7 +550,9 @@ function CompareTableRow({
         <ActivationFeeDisplay plan={plan} />
       </td>
       <td className="px-4 py-3 text-right font-semibold text-primary tabular-nums">
-        {formatCurrency(plan.pricing.allInCost)}
+        <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
+          {formatCurrency(plan.pricing.allInCost)}
+        </CalculatedValue>
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped, true))}>
         {formatMinimumDays(plan.minimumDaysToPayout)}
@@ -551,30 +561,36 @@ function CompareTableRow({
         {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
-        {formatOptionalCurrency(
-          getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
-        )}
+        <CalculatedValue tooltip={getAllInTargetTooltip(plan)}>
+          {formatOptionalCurrency(
+            getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
+          )}
+        </CalculatedValue>
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCurrency(plan.maxPayout)}
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
-        {formatReturnMultiple(
-          getRiskRatio(
-            plan.maxDrawdown,
-            plan.profitTarget,
-            plan.minimumTargetGoalCushion,
-          ),
-        )}
+        <CalculatedValue tooltip={getRiskRatioTooltip(plan)}>
+          {formatReturnMultiple(
+            getRiskRatio(
+              plan.maxDrawdown,
+              plan.profitTarget,
+              plan.minimumTargetGoalCushion,
+            ),
+          )}
+        </CalculatedValue>
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
-        {formatReturnMultiple(
-          getRiskReward(
-            plan.maxPayout,
-            plan.profitTarget,
-            plan.minimumTargetGoalCushion,
-          ),
-        )}
+        <CalculatedValue tooltip={getRiskRewardTooltip(plan)}>
+          {formatReturnMultiple(
+            getRiskReward(
+              plan.maxPayout,
+              plan.profitTarget,
+              plan.minimumTargetGoalCushion,
+            ),
+          )}
+        </CalculatedValue>
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCount(plan.maxFundedAccounts)}
@@ -595,7 +611,9 @@ function CompareTableRow({
         )}
       </td>
       <td className="px-4 py-3 text-right tabular-nums">
-        {formatReturnMultiple(plan.pricing.returnMultiple)}
+        <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
+          {formatReturnMultiple(plan.pricing.returnMultiple)}
+        </CalculatedValue>
       </td>
       <td className="px-4 py-3 text-center">
         <SavePlanButton planId={plan.id} />
