@@ -341,7 +341,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <SortableTh
                 field="maxFundedAccounts"
-                label="Max Funded Accounts"
+                label="Max Funded"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}

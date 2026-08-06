@@ -189,7 +189,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Max funded accounts</dt>
+            <dt className="text-xs text-muted-foreground">Max funded</dt>
             <dd className="mt-0.5 tabular-nums">
               {formatOptionalCount(plan.maxFundedAccounts)}
             </dd>

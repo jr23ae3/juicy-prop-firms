@@ -30,7 +30,7 @@ const SORT_LABELS: Record<CompareSortField, string> = {
   maxPayout: "Max payout",
   riskRatio: "Risk ratio",
   rewardRatio: "Reward ratio",
-  maxFundedAccounts: "Max funded accounts",
+  maxFundedAccounts: "Max funded",
   fundedDrawdownType: "Funded draw down type",
   profitSplit: "Split %",
   returnMultiple: "Return multiple",
