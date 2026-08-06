@@ -17,6 +17,7 @@ export const COMPARE_SORT_FIELDS = [
   "minimumTargetGoalCushion",
   "allInTarget",
   "maxPayout",
+  "riskRatio",
   "maxFundedAccounts",
   "fundedDrawdownType",
   "profitSplit",

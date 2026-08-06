@@ -14,7 +14,7 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
-import { getAllInTarget } from "@/lib/plans/metrics";
+import { getAllInTarget, getRiskRatio } from "@/lib/plans/metrics";
 
 type CompareCardListProps = {
   plans: PlanSummary[];
@@ -144,6 +144,18 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
             <dt className="text-xs text-muted-foreground">Max payout</dt>
             <dd className="mt-0.5 tabular-nums">
               {formatOptionalCurrency(plan.maxPayout)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Risk ratio</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatReturnMultiple(
+                getRiskRatio(
+                  plan.maxPayout,
+                  plan.profitTarget,
+                  plan.minimumTargetGoalCushion,
+                ),
+              )}
             </dd>
           </div>
           <div>

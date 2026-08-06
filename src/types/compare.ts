@@ -17,6 +17,7 @@ export type CompareSortField =
   | "minimumTargetGoalCushion"
   | "allInTarget"
   | "maxPayout"
+  | "riskRatio"
   | "maxFundedAccounts"
   | "fundedDrawdownType"
   | "profitSplit"
