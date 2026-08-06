@@ -25,9 +25,9 @@ import {
   getAllInTargetTooltip,
   getReturnMultipleTooltip,
   getRiskRatioTooltip,
-  getRiskRewardTooltip,
+  getRewardRatioTooltip,
 } from "@/lib/plans/calculation-tooltips";
-import { getAllInTarget, getRiskRatio, getRiskReward } from "@/lib/plans/metrics";
+import { getAllInTarget, getRiskRatio, getRewardRatio } from "@/lib/plans/metrics";
 import {
   getDefaultSortDirection,
   toggleSortDirection,
@@ -329,8 +329,8 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 compact
               />
               <SortableTh
-                field="riskReward"
-                label="Risk Reward"
+                field="rewardRatio"
+                label="Reward Ratio"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -582,9 +582,9 @@ function CompareTableRow({
         </CalculatedValue>
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
-        <CalculatedValue tooltip={getRiskRewardTooltip(plan)}>
+        <CalculatedValue tooltip={getRewardRatioTooltip(plan)}>
           {formatReturnMultiple(
-            getRiskReward(
+            getRewardRatio(
               plan.maxPayout,
               plan.profitTarget,
               plan.minimumTargetGoalCushion,

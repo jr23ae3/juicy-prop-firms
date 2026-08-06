@@ -18,7 +18,7 @@ export type CompareSortField =
   | "allInTarget"
   | "maxPayout"
   | "riskRatio"
-  | "riskReward"
+  | "rewardRatio"
   | "maxFundedAccounts"
   | "fundedDrawdownType"
   | "profitSplit"

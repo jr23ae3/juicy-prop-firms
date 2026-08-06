@@ -4,7 +4,7 @@ import {
   DRAWDOWN_TYPE_FULL_LABELS,
   EVAL_TYPE_LABELS,
 } from "@/lib/plans/labels";
-import { getAllInTarget, getRiskRatio, getRiskReward } from "@/lib/plans/metrics";
+import { getAllInTarget, getRiskRatio, getRewardRatio } from "@/lib/plans/metrics";
 import type { CompareSortDirection, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
@@ -95,14 +95,14 @@ export function sortPlans(
             b.minimumTargetGoalCushion,
           ),
         );
-      case "riskReward":
+      case "rewardRatio":
         return compareNumbers(
-          getRiskReward(
+          getRewardRatio(
             a.maxPayout,
             a.profitTarget,
             a.minimumTargetGoalCushion,
           ),
-          getRiskReward(
+          getRewardRatio(
             b.maxPayout,
             b.profitTarget,
             b.minimumTargetGoalCushion,
@@ -137,7 +137,7 @@ const DESC_DEFAULT_FIELDS = new Set<CompareSortField>([
   "minimumTargetGoalCushion",
   "allInTarget",
   "riskRatio",
-  "riskReward",
+  "rewardRatio",
 ]);
 
 export function getDefaultSortDirection(

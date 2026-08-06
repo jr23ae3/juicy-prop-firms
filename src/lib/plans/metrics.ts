@@ -13,7 +13,7 @@ export function getAllInTarget(
 }
 
 /** Max payout divided by all-in target (target goal + min target buffer). */
-export function getRiskReward(
+export function getRewardRatio(
   maxPayout: number | null | undefined,
   profitTarget: number | null | undefined,
   minimumTargetGoalCushion: number | null | undefined,

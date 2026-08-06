@@ -12,7 +12,7 @@ import {
 import {
   getAllInTarget,
   getRiskRatio,
-  getRiskReward,
+  getRewardRatio,
 } from "@/lib/plans/metrics";
 import type { PlanSummary } from "@/types/plan";
 
@@ -69,12 +69,12 @@ export function getRiskRatioTooltip(plan: PlanSummary): ReactNode | null {
   );
 }
 
-export function getRiskRewardTooltip(plan: PlanSummary): ReactNode | null {
+export function getRewardRatioTooltip(plan: PlanSummary): ReactNode | null {
   const allInTarget = getAllInTarget(
     plan.profitTarget,
     plan.minimumTargetGoalCushion,
   );
-  const reward = getRiskReward(
+  const reward = getRewardRatio(
     plan.maxPayout,
     plan.profitTarget,
     plan.minimumTargetGoalCushion,
@@ -86,7 +86,7 @@ export function getRiskRewardTooltip(plan: PlanSummary): ReactNode | null {
 
   return (
     <CalculationTooltipBody
-      title="Risk Reward"
+      title="Reward Ratio"
       expression={
         <>
           {formatCurrency(plan.maxPayout)} ÷ {formatCurrency(allInTarget)} ={" "}

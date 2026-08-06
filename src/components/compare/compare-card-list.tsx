@@ -20,9 +20,9 @@ import {
   getAllInTargetTooltip,
   getReturnMultipleTooltip,
   getRiskRatioTooltip,
-  getRiskRewardTooltip,
+  getRewardRatioTooltip,
 } from "@/lib/plans/calculation-tooltips";
-import { getAllInTarget, getRiskRatio, getRiskReward } from "@/lib/plans/metrics";
+import { getAllInTarget, getRiskRatio, getRewardRatio } from "@/lib/plans/metrics";
 
 type CompareCardListProps = {
   plans: PlanSummary[];
@@ -175,11 +175,11 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Risk reward</dt>
+            <dt className="text-xs text-muted-foreground">Reward ratio</dt>
             <dd className="mt-0.5 tabular-nums">
-              <CalculatedValue tooltip={getRiskRewardTooltip(plan)}>
+              <CalculatedValue tooltip={getRewardRatioTooltip(plan)}>
                 {formatReturnMultiple(
-                  getRiskReward(
+                  getRewardRatio(
                     plan.maxPayout,
                     plan.profitTarget,
                     plan.minimumTargetGoalCushion,
