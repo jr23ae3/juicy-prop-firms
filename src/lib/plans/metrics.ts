@@ -26,7 +26,7 @@ export function getRiskReward(
   return roundRatio(maxPayout / allInTarget);
 }
 
-/** Max draw down divided by all-in target (target goal + min target buffer). */
+/** All-in target divided by max draw down. */
 export function getRiskRatio(
   maxDrawdown: number | null | undefined,
   profitTarget: number | null | undefined,
@@ -37,5 +37,5 @@ export function getRiskRatio(
     return null;
   }
 
-  return roundRatio(maxDrawdown / allInTarget);
+  return roundRatio(allInTarget / maxDrawdown);
 }
