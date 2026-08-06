@@ -13,7 +13,7 @@ export function getAllInTarget(
 }
 
 /** Max payout divided by all-in target (target goal + min target buffer). */
-export function getRiskRatio(
+export function getRiskReward(
   maxPayout: number | null | undefined,
   profitTarget: number | null | undefined,
   minimumTargetGoalCushion: number | null | undefined,
@@ -24,4 +24,18 @@ export function getRiskRatio(
   }
 
   return roundRatio(maxPayout / allInTarget);
+}
+
+/** Max draw down divided by all-in target (target goal + min target buffer). */
+export function getRiskRatio(
+  maxDrawdown: number | null | undefined,
+  profitTarget: number | null | undefined,
+  minimumTargetGoalCushion: number | null | undefined,
+): number | null {
+  const allInTarget = getAllInTarget(profitTarget, minimumTargetGoalCushion);
+  if (allInTarget == null || maxDrawdown == null || maxDrawdown <= 0) {
+    return null;
+  }
+
+  return roundRatio(maxDrawdown / allInTarget);
 }

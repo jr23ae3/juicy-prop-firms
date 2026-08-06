@@ -18,6 +18,7 @@ export const COMPARE_SORT_FIELDS = [
   "allInTarget",
   "maxPayout",
   "riskRatio",
+  "riskReward",
   "maxFundedAccounts",
   "fundedDrawdownType",
   "profitSplit",
