@@ -14,6 +14,7 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import { getAllInTarget } from "@/lib/plans/metrics";
 
 type CompareCardListProps = {
   plans: PlanSummary[];
@@ -129,6 +130,14 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
             <dt className="text-xs text-muted-foreground">Min target buffer</dt>
             <dd className="mt-0.5 tabular-nums">
               {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">All-in target</dt>
+            <dd className="mt-0.5 tabular-nums">
+              {formatOptionalCurrency(
+                getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
+              )}
             </dd>
           </div>
           <div>

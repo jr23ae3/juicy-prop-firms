@@ -15,6 +15,7 @@ export const COMPARE_SORT_FIELDS = [
   "allInCost",
   "daysToPayout",
   "minimumTargetGoalCushion",
+  "allInTarget",
   "maxPayout",
   "maxFundedAccounts",
   "fundedDrawdownType",

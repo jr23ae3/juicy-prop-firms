@@ -4,6 +4,7 @@ import {
   DRAWDOWN_TYPE_FULL_LABELS,
   EVAL_TYPE_LABELS,
 } from "@/lib/plans/labels";
+import { getAllInTarget } from "@/lib/plans/metrics";
 import type { CompareSortDirection, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
@@ -74,6 +75,11 @@ export function sortPlans(
           a.minimumTargetGoalCushion,
           b.minimumTargetGoalCushion,
         );
+      case "allInTarget":
+        return compareNumbers(
+          getAllInTarget(a.profitTarget, a.minimumTargetGoalCushion),
+          getAllInTarget(b.profitTarget, b.minimumTargetGoalCushion),
+        );
       case "maxPayout":
         return compareNumbers(a.maxPayout, b.maxPayout);
       case "maxFundedAccounts":
@@ -103,6 +109,7 @@ const DESC_DEFAULT_FIELDS = new Set<CompareSortField>([
   "maxFundedAccounts",
   "profitTarget",
   "minimumTargetGoalCushion",
+  "allInTarget",
 ]);
 
 export function getDefaultSortDirection(

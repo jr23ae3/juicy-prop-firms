@@ -19,6 +19,7 @@ import {
   formatReturnMultiple,
 } from "@/lib/format";
 import { getDrawdownTypeLabel } from "@/lib/plans/labels";
+import { getAllInTarget } from "@/lib/plans/metrics";
 import {
   getDefaultSortDirection,
   toggleSortDirection,
@@ -107,7 +108,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm lg:block">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[2040px] border-collapse text-sm">
+        <table className="w-full min-w-[2160px] border-collapse text-sm">
           <caption className="sr-only">
             Prop firm plan comparison with all-in costs, funded terms, and
             discount codes. Click column headers to sort.
@@ -234,7 +235,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               />
               <th
                 scope="colgroup"
-                colSpan={6}
+                colSpan={7}
                 className={cn(
                   "px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide",
                   FUNDED_GROUP_CLASS,
@@ -278,6 +279,17 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
               <SortableTh
                 field="minimumTargetGoalCushion"
                 label="Min Target Buffer"
+                sort={sort}
+                direction={direction}
+                sortable={sortable}
+                onSort={handleSort}
+                align="right"
+                className={FUNDED_HEADER_SUB_CLASS}
+                compact
+              />
+              <SortableTh
+                field="allInTarget"
+                label="All-in Target"
                 sort={sort}
                 direction={direction}
                 sortable={sortable}
@@ -515,6 +527,11 @@ function CompareTableRow({
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
+      </td>
+      <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
+        {formatOptionalCurrency(
+          getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
+        )}
       </td>
       <td className={cn("px-4 py-3 text-right tabular-nums", fundedBodyClass(isStriped))}>
         {formatOptionalCurrency(plan.maxPayout)}

@@ -15,6 +15,7 @@ export type CompareSortField =
   | "allInCost"
   | "daysToPayout"
   | "minimumTargetGoalCushion"
+  | "allInTarget"
   | "maxPayout"
   | "maxFundedAccounts"
   | "fundedDrawdownType"
