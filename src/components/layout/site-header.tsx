@@ -28,27 +28,28 @@ export function SiteHeader() {
       </div>
 
       <Container className="site-header-arcade-inner">
-        <div className="flex min-w-0 items-center gap-4 lg:gap-8">
+        <div className="site-header-arcade-brand">
           <div className="site-header-arcade-dots" aria-hidden>
             <span />
             <span />
             <span />
           </div>
           <SiteBrand compact variant="arcade" />
-          <MainNav />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <MainNav />
+
+        <div className="site-header-arcade-actions">
           <Link
             href="/compare"
             className={cn(
-              "arcade-btn arcade-btn--p1 hidden min-w-0 text-[8px] md:inline-flex sm:text-[9px]",
+              "arcade-btn arcade-btn--p1 hidden min-w-0 text-[8px] md:inline-flex lg:hidden sm:text-[9px]",
             )}
           >
             P1 · COMPARE
           </Link>
           <MobileNav />
-          <AuthButtons />
+          <AuthButtons variant="header" />
         </div>
       </Container>
     </header>

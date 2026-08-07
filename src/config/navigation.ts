@@ -2,6 +2,7 @@ export type NavItem = {
   title: string;
   href: string;
   description?: string;
+  shortTitle?: string;
   disabled?: boolean;
 };
 
@@ -13,16 +14,19 @@ export const mainNav: NavItem[] = [
   },
   {
     title: "AI Advisor",
+    shortTitle: "Advisor",
     href: "/advisor",
     description: "Get personalized firm recommendations",
   },
   {
     title: "Skills Test",
+    shortTitle: "Skills",
     href: "/skills-test",
     description: "Replay today's NQ, MNQ, ES, and MES session",
   },
   {
     title: "ROI Calculator",
+    shortTitle: "ROI",
     href: "/roi-calculator",
     description: "Estimate break-even and ROI on prop firm plans",
   },

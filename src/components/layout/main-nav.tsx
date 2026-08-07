@@ -22,11 +22,15 @@ export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Main navigation" className="hidden items-center lg:flex">
+    <nav
+      aria-label="Main navigation"
+      className="site-header-main-nav hidden min-w-0 lg:flex"
+    >
       {mainNav.map((item) => {
         const isActive =
           pathname === item.href || pathname.startsWith(`${item.href}/`);
         const Icon = navIcons[item.href];
+        const compactTitle = item.shortTitle ?? item.title;
 
         if (item.disabled) {
           return (
@@ -45,16 +49,24 @@ export function MainNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "nav-link inline-flex items-center gap-2",
+              "nav-link inline-flex shrink-0 items-center gap-1.5",
               isActive && "nav-link--active",
             )}
           >
             {Icon === "advisor" ? (
-              <ArcadeAdvisorCharacter size="xs" animate={false} />
+              <ArcadeAdvisorCharacter
+                size="xs"
+                animate={false}
+                className="hidden xl:block"
+              />
             ) : Icon ? (
-              <Icon className="size-4 shrink-0 opacity-60" aria-hidden />
+              <Icon
+                className="hidden size-3.5 shrink-0 opacity-60 xl:block"
+                aria-hidden
+              />
             ) : null}
-            {item.title}
+            <span className="xl:hidden">{compactTitle}</span>
+            <span className="hidden xl:inline">{item.title}</span>
           </Link>
         );
       })}

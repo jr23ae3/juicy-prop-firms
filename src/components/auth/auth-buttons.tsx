@@ -6,12 +6,19 @@ import { cn } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/env";
 import { getAuthUser } from "@/server/auth";
 
-export async function AuthButtons() {
+type AuthButtonsProps = {
+  variant?: "default" | "header";
+};
+
+export async function AuthButtons({ variant = "default" }: AuthButtonsProps) {
+  const isHeader = variant === "header";
+
   const aiMatchLink = (
     <Link
       href="/advisor"
       className={cn(
         "arcade-btn arcade-btn--p2 hidden min-w-0 gap-1.5 text-[8px] sm:inline-flex sm:text-[9px]",
+        isHeader && "lg:hidden",
       )}
     >
       <ArcadeAdvisorCharacter size="xs" animate={false} />
@@ -20,15 +27,28 @@ export async function AuthButtons() {
     </Link>
   );
 
+  const signInLink = (
+    <Link
+      href="/login"
+      className="arcade-btn arcade-btn--p2 hidden min-w-0 text-[8px] sm:inline-flex sm:text-[9px]"
+    >
+      SIGN IN
+    </Link>
+  );
+
+  const accountLink = (
+    <Link
+      href="/account"
+      className="arcade-btn arcade-btn--p2 min-w-0 text-[8px] sm:text-[9px]"
+    >
+      ACCOUNT
+    </Link>
+  );
+
   if (!isSupabaseConfigured()) {
     return (
       <>
-        <Link
-          href="/login"
-          className="arcade-btn arcade-btn--p2 hidden min-w-0 text-[8px] sm:inline-flex sm:text-[9px]"
-        >
-          SIGN IN
-        </Link>
+        {signInLink}
         {aiMatchLink}
       </>
     );
@@ -40,12 +60,7 @@ export async function AuthButtons() {
     return (
       <>
         {aiMatchLink}
-        <Link
-          href="/account"
-          className="arcade-btn arcade-btn--p2 min-w-0 text-[8px] sm:text-[9px]"
-        >
-          ACCOUNT
-        </Link>
+        {accountLink}
         <SignOutButton />
       </>
     );
@@ -53,12 +68,7 @@ export async function AuthButtons() {
 
   return (
     <>
-      <Link
-        href="/login"
-        className="arcade-btn arcade-btn--p2 hidden min-w-0 text-[8px] sm:inline-flex sm:text-[9px]"
-      >
-        SIGN IN
-      </Link>
+      {signInLink}
       {aiMatchLink}
     </>
   );
