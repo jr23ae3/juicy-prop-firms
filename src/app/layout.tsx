@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, IBM_Plex_Mono, Poppins } from "next/font/google";
+import { Fragment_Mono, IBM_Plex_Sans } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -8,24 +8,17 @@ import { siteConfig } from "@/config/site";
 
 import "./globals.css";
 
-const poppins = Poppins({
+const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
-const bebasNeue = Bebas_Neue({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
+const fragmentMono = Fragment_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -77,7 +70,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#050505",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -91,19 +84,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${bebasNeue.variable} ${ibmPlexMono.variable} h-full`}
+      className={`${ibmPlexSans.variable} ${fragmentMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-background font-sans font-normal">
+      <body className="retro-canvas flex min-h-full flex-col bg-background font-sans font-light">
         <AppProviders>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
           >
             Skip to main content
           </a>
           <SiteHeader />
-          <main id="main-content" className="flex-1 pt-24">
+          <main id="main-content" className="flex-1">
             {children}
           </main>
           <SiteFooter />

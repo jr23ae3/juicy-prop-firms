@@ -11,14 +11,14 @@ export function FirmLogoStrip({ firms }: FirmLogoStripProps) {
   if (firms.length === 0) return null;
 
   return (
-    <section aria-label="Tracked prop firms" className="mt-20 border-t border-border pt-12">
-      <p className="section-label mb-6">Trusted firms in the catalog</p>
+    <section aria-label="Tracked prop firms" className="mt-16 border-t border-border pt-10">
+      <p className="section-label mb-5">Firms in the catalog</p>
       <ul className="flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {firms.map((firm) => (
           <li key={firm.slug} className="shrink-0">
             <Link
               href={`/firms/${firm.slug}`}
-              className="surface flex items-center gap-3 px-4 py-3 transition-colors hover:border-white/20 hover:bg-[#242426]"
+              className="surface flex items-center gap-3 px-3 py-2 transition-colors hover:border-primary/40"
               title={firm.name}
             >
               <FirmLogo

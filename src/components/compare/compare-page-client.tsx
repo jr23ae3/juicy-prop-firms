@@ -94,7 +94,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
 
   return (
     <div className="site-canvas compare-workspace">
-      <Container size="wide" className="py-10 md:py-14">
+      <Container size="full" className="py-8 md:py-12">
         <PageHeader
           eyebrow="Plan comparison"
           title="Every plan, one view"
@@ -105,7 +105,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
         />
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-          <aside className="compare-sidebar surface shrink-0 p-5 lg:sticky lg:top-28 lg:w-80 lg:self-start">
+          <aside className="compare-sidebar surface shrink-0 p-4 lg:sticky lg:top-24 lg:w-72 lg:self-start">
             <CompareFiltersBar
               metadata={metadata}
               filters={filters}

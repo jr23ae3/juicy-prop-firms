@@ -12,7 +12,7 @@ export function IconTile({ icon: Icon, className, iconClassName }: IconTileProps
   return (
     <div
       className={cn(
-        "flex size-11 shrink-0 items-center justify-center rounded-2xl border border-border bg-black/40",
+        "flex size-10 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-primary/10",
         className,
       )}
     >

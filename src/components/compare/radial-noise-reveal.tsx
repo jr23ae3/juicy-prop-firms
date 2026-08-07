@@ -183,7 +183,7 @@ export function RadialNoiseReveal({
 
       {!open && !maskUrl && !isAnimating ? (
         <p className="plan-card-hint pointer-events-none absolute right-4 bottom-4 z-20">
-          Hover me
+          Click to reveal
         </p>
       ) : null}
     </div>
