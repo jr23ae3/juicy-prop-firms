@@ -9,6 +9,10 @@ import {
   type ReactNode,
 } from "react";
 
+import {
+  buildCodropsMaskUrl,
+  easeQuadOut,
+} from "@/lib/noise/radial-noise-shader";
 import { cn } from "@/lib/utils";
 
 type RadialNoiseRevealProps = {
@@ -20,56 +24,7 @@ type RadialNoiseRevealProps = {
   ariaLabel?: string;
 };
 
-function hashNoise(x: number, y: number) {
-  const value = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
-  return value - Math.floor(value);
-}
-
-function easeOutCubic(t: number) {
-  return 1 - (1 - t) ** 3;
-}
-
-function buildMaskUrl(
-  width: number,
-  height: number,
-  cx: number,
-  cy: number,
-  progress: number,
-) {
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
-
-  const imageData = ctx.createImageData(width, height);
-  const maxRadius = Math.hypot(width, height) * 1.15;
-  const radius = maxRadius * progress;
-  const noiseAmp = 16;
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const dist = Math.hypot(x - cx, y - cy);
-      const noise =
-        hashNoise(x * 0.09, y * 0.09) * 2 -
-        1 +
-        hashNoise(x * 0.04 + 12, y * 0.05) * 2 -
-        1;
-      const edge = radius + noise * noiseAmp;
-      const alpha = dist < edge ? 0 : 255;
-      const index = (y * width + x) * 4;
-      imageData.data[index] = 255;
-      imageData.data[index + 1] = 255;
-      imageData.data[index + 2] = 255;
-      imageData.data[index + 3] = alpha;
-    }
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-  return canvas.toDataURL();
-}
-
-const DURATION_MS = 650;
+const DURATION_MS = 1000;
 
 export function RadialNoiseReveal({
   open,
@@ -81,8 +36,10 @@ export function RadialNoiseReveal({
 }: RadialNoiseRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
+  const startTimeRef = useRef(0);
   const [maskUrl, setMaskUrl] = useState<string | null>(null);
   const [renderBack, setRenderBack] = useState(open);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const animate = useCallback(
     (toOpen: boolean, origin: { x: number; y: number }) => {
@@ -90,6 +47,7 @@ export function RadialNoiseReveal({
       if (!container) return;
 
       setRenderBack(true);
+      setIsAnimating(true);
 
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -97,22 +55,32 @@ export function RadialNoiseReveal({
 
       if (reducedMotion) {
         setMaskUrl(null);
+        setIsAnimating(false);
         onOpenChange(toOpen);
         if (!toOpen) setRenderBack(false);
         return;
       }
 
       const { width, height } = container.getBoundingClientRect();
-      const start = performance.now();
       const from = toOpen ? 0 : 1;
       const to = toOpen ? 1 : 0;
+      startTimeRef.current = performance.now();
 
       const tick = (now: number) => {
-        const elapsed = now - start;
+        const elapsed = now - startTimeRef.current;
         const t = Math.min(elapsed / DURATION_MS, 1);
-        const eased = easeOutCubic(t);
+        const eased = easeQuadOut(t);
         const progress = from + (to - from) * eased;
-        const url = buildMaskUrl(width, height, origin.x, origin.y, progress);
+        const time = elapsed * 0.001;
+
+        const url = buildCodropsMaskUrl(
+          width,
+          height,
+          origin.x,
+          origin.y,
+          progress,
+          time,
+        );
         setMaskUrl(url);
 
         if (t < 1) {
@@ -121,6 +89,7 @@ export function RadialNoiseReveal({
         }
 
         setMaskUrl(null);
+        setIsAnimating(false);
         onOpenChange(toOpen);
         if (!toOpen) setRenderBack(false);
       };
@@ -138,27 +107,27 @@ export function RadialNoiseReveal({
   }, []);
 
   useEffect(() => {
-    if (!open && maskUrl === null) {
+    if (!open && maskUrl === null && !isAnimating) {
       setRenderBack(false);
     }
-  }, [open, maskUrl]);
+  }, [open, maskUrl, isAnimating]);
 
   function handleClick(event: MouseEvent<HTMLDivElement>) {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isAnimating) return;
 
     const rect = container.getBoundingClientRect();
-    const origin = {
+    animate(!open, {
       x: event.clientX - rect.left,
       y: event.clientY - rect.top,
-    };
-
-    animate(!open, origin);
+    });
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
+    if (isAnimating) return;
+
     const container = containerRef.current;
     if (!container) return;
     animate(!open, {
@@ -167,7 +136,7 @@ export function RadialNoiseReveal({
     });
   }
 
-  const showFrontMask = maskUrl !== null || !open;
+  const showFront = maskUrl !== null || !open;
 
   return (
     <div
@@ -175,12 +144,14 @@ export function RadialNoiseReveal({
       role="button"
       tabIndex={0}
       aria-expanded={open}
+      aria-busy={isAnimating}
       aria-label={ariaLabel}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
         "relative cursor-pointer overflow-hidden rounded-lg border border-border bg-card outline-none transition-[border-color,box-shadow] focus-visible:ring-2 focus-visible:ring-primary/50",
         open && "border-primary/40 shadow-[0_0_40px_rgb(0_185_122_/_12%)]",
+        isAnimating && "ring-1 ring-accent/30",
         className,
       )}
     >
@@ -191,7 +162,7 @@ export function RadialNoiseReveal({
       <div
         className={cn(
           "absolute inset-0 z-10 min-h-full bg-card",
-          !showFrontMask && "pointer-events-none opacity-0",
+          !showFront && "pointer-events-none opacity-0",
         )}
         style={
           maskUrl
@@ -200,6 +171,7 @@ export function RadialNoiseReveal({
                 maskImage: `url(${maskUrl})`,
                 WebkitMaskSize: "100% 100%",
                 maskSize: "100% 100%",
+                imageRendering: "pixelated",
               }
             : undefined
         }
@@ -207,7 +179,7 @@ export function RadialNoiseReveal({
         {front}
       </div>
 
-      {!open && !maskUrl ? (
+      {!open && !maskUrl && !isAnimating ? (
         <p className="pointer-events-none absolute right-3 bottom-3 z-20 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
           Click to reveal
         </p>
