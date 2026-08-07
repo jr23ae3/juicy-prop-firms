@@ -1,6 +1,9 @@
 import { z } from "zod";
 
+import { MARKET_TYPES } from "@/lib/plans/market-type";
+
 export const advisorInputSchema = z.object({
+  marketType: z.enum(MARKET_TYPES),
   tradingStyle: z.enum(["scalper", "day-trader", "swing"]),
   experienceLevel: z.enum(["beginner", "intermediate", "advanced"]),
   accountSize: z.enum(["50000", "100000", "150000", "flexible"]),

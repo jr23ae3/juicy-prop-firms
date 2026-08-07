@@ -1,9 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useActionState, useState } from "react";
 
 import { getAdvisorRecommendationsAction } from "@/actions/advisor";
 import { AdvisorResults } from "@/components/advisor/advisor-results";
+import { MarketTypeToggle } from "@/components/compare/market-type-toggle";
+import { MarketTypeBadge } from "@/components/admin/market-type-select";
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUserPreferences } from "@/hooks/use-user-preferences";
 import { useUser } from "@/hooks/use-user";
+import {
+  DEFAULT_MARKET_TYPE,
+  marketTypeToParam,
+  parseMarketType,
+} from "@/lib/plans/market-type";
 import { cn } from "@/lib/utils";
+import type { MarketType } from "@/generated/prisma/client";
 import type { AdvisorActionState } from "@/types/advisor";
 
 const selectClassName = cn(
@@ -28,7 +37,16 @@ const selectClassName = cn(
 
 const initialState: AdvisorActionState = {};
 
-export function AdvisorQuestionnaire() {
+type AdvisorQuestionnaireProps = {
+  initialMarketType?: MarketType;
+};
+
+export function AdvisorQuestionnaire({
+  initialMarketType = DEFAULT_MARKET_TYPE,
+}: AdvisorQuestionnaireProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [marketType, setMarketType] = useState<MarketType>(initialMarketType);
   const [state, formAction, isPending] = useActionState(
     getAdvisorRecommendationsAction,
     initialState,
@@ -45,6 +63,20 @@ export function AdvisorQuestionnaire() {
   const priority = prefs?.priority ?? "affordability";
   const maxBudget = prefs?.maxBudget ?? 200;
   const prefsReady = !user || prefs !== undefined;
+
+  function handleMarketChange(nextMarketType: MarketType) {
+    setMarketType(nextMarketType);
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (nextMarketType === DEFAULT_MARKET_TYPE) {
+      params.delete("market");
+    } else {
+      params.set("market", marketTypeToParam(nextMarketType));
+    }
+
+    const query = params.toString();
+    router.replace(query ? `/advisor?${query}` : "/advisor", { scroll: false });
+  }
 
   return (
     <div className="space-y-8">
@@ -63,11 +95,12 @@ export function AdvisorQuestionnaire() {
             Tell Oracle OJ about your trading
           </CardTitle>
           <CardDescription>
-            Answer a few questions and we&apos;ll match you with the best prop
-            firm plans for your style and budget.
+            Pick a market, answer a few questions, and get matched with prop
+            firm plans for futures, forex, stocks, or crypto.
           </CardDescription>
         </CardHeader>
-        <form action={formAction} key={prefsReady ? "ready" : "loading"}>
+        <form action={formAction} key={`${prefsReady ? "ready" : "loading"}-${marketType}`}>
+          <input type="hidden" name="marketType" value={marketType} />
           <CardContent className="space-y-6">
             {state.error ? (
               <p
@@ -77,6 +110,25 @@ export function AdvisorQuestionnaire() {
                 {state.error}
               </p>
             ) : null}
+
+            <div className="space-y-3 rounded-lg border border-primary/25 bg-primary/5 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="arcade-level-num text-[9px] text-[#ffd700]">
+                    ★ SELECT MARKET ★
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Matches only plans in this market catalog.
+                  </p>
+                </div>
+                <MarketTypeBadge marketType={marketType} />
+              </div>
+              <MarketTypeToggle
+                value={marketType}
+                onChange={handleMarketChange}
+                className="compare-arcade-toggle w-full"
+              />
+            </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               <FormSelect
@@ -110,7 +162,7 @@ export function AdvisorQuestionnaire() {
                   { value: "100000", label: "$100K" },
                   { value: "150000", label: "$150K" },
                   { value: "flexible", label: "Flexible" },
-                  ]}
+                ]}
               />
 
               <FormSelect
@@ -161,10 +213,7 @@ export function AdvisorQuestionnaire() {
                 rows={3}
                 maxLength={500}
                 placeholder="e.g. I prefer daily payouts and EOD drawdowns…"
-                className={cn(
-                  selectClassName,
-                  "h-auto min-h-20 py-2",
-                )}
+                className={cn(selectClassName, "h-auto min-h-20 py-2")}
               />
             </div>
 
@@ -176,9 +225,18 @@ export function AdvisorQuestionnaire() {
         </form>
       </Card>
 
-      {state.data ? <AdvisorResults result={state.data} /> : null}
+      {state.data ? (
+        <AdvisorResults result={state.data} marketType={marketType} />
+      ) : null}
     </div>
   );
+}
+
+export function AdvisorQuestionnaireFromUrl() {
+  const searchParams = useSearchParams();
+  const marketType = parseMarketType(searchParams.get("market"));
+
+  return <AdvisorQuestionnaire initialMarketType={marketType} />;
 }
 
 function FormSelect({

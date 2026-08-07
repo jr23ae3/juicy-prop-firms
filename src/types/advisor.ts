@@ -1,6 +1,8 @@
+import type { MarketType } from "@/generated/prisma/client";
 import type { PlanSummary } from "@/types/plan";
 
 export type AdvisorInput = {
+  marketType: MarketType;
   tradingStyle: "scalper" | "day-trader" | "swing";
   experienceLevel: "beginner" | "intermediate" | "advanced";
   accountSize: "50000" | "100000" | "150000" | "flexible";
@@ -38,6 +40,7 @@ export type PlanCatalogEntry = {
   firmRank: number | null;
   planName: string;
   accountSize: number;
+  marketType: string;
   evalType: string;
   allInCost: number;
   returnMultiple: number | null;

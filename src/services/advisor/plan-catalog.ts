@@ -1,5 +1,6 @@
 import type { AdvisorInput, PlanCatalogEntry } from "@/types/advisor";
 import type { PlanSummary } from "@/types/plan";
+import { MARKET_TYPE_LABELS } from "@/lib/plans/market-type";
 
 export function toPlanCatalog(plans: PlanSummary[]): PlanCatalogEntry[] {
   return plans.map((plan) => ({
@@ -9,6 +10,7 @@ export function toPlanCatalog(plans: PlanSummary[]): PlanCatalogEntry[] {
     firmRank: plan.firm.rankPosition,
     planName: plan.name,
     accountSize: plan.accountSize,
+    marketType: plan.marketType,
     evalType: plan.evalType,
     allInCost: plan.pricing.allInCost,
     returnMultiple: plan.pricing.returnMultiple,
@@ -24,6 +26,8 @@ export function filterPlansForAdvisor(
   input: AdvisorInput,
 ): PlanSummary[] {
   return plans.filter((plan) => {
+    if (plan.marketType !== input.marketType) return false;
+
     if (plan.pricing.allInCost > input.maxBudget) return false;
 
     if (
@@ -45,10 +49,11 @@ export function filterPlansForAdvisor(
 }
 
 export function buildAdvisorSummary(input: AdvisorInput, count: number): string {
+  const marketLabel = MARKET_TYPE_LABELS[input.marketType].toLowerCase();
   const sizeLabel =
     input.accountSize === "flexible"
       ? "flexible account sizes"
       : `$${Number(input.accountSize) / 1000}K accounts`;
 
-  return `Based on your preferences as a ${input.experienceLevel} ${input.tradingStyle} prioritizing ${input.priority}, we found ${count} matching plan${count === 1 ? "" : "s"} within your $${input.maxBudget} budget for ${sizeLabel}.`;
+  return `Based on your ${marketLabel} preferences as a ${input.experienceLevel} ${input.tradingStyle} prioritizing ${input.priority}, we found ${count} matching plan${count === 1 ? "" : "s"} within your $${input.maxBudget} budget for ${sizeLabel}.`;
 }

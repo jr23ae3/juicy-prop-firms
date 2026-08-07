@@ -45,6 +45,7 @@ export type PlanSummary = {
   slug: string;
   name: string;
   accountSize: number;
+  marketType: MarketType;
   evalType: EvalType;
   profitTarget: number | null;
   resetFee: number;

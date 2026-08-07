@@ -97,6 +97,7 @@ export function serializePlan(plan: PlanRecord): PlanSummary {
     slug: plan.slug,
     name: plan.name,
     accountSize: plan.accountSize,
+    marketType: plan.marketType,
     evalType: plan.evalType,
     profitTarget: toNumberOrNull(plan.profitTarget),
     resetFee: toNumber(plan.resetFee),

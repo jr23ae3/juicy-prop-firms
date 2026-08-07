@@ -13,6 +13,7 @@ export async function getAdvisorRecommendationsAction(
   formData: FormData,
 ): Promise<AdvisorActionState> {
   const parsed = advisorInputSchema.safeParse({
+    marketType: formData.get("marketType"),
     tradingStyle: formData.get("tradingStyle"),
     experienceLevel: formData.get("experienceLevel"),
     accountSize: formData.get("accountSize"),
