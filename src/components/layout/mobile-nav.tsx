@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { SiteBrand } from "@/components/layout/site-brand";
 import { mainNav } from "@/config/navigation";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function MobileNav() {
@@ -44,7 +45,7 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="inline-flex size-9 items-center justify-center rounded-full ring-1 ring-border/70 bg-card text-foreground"
+        className="inline-flex size-9 items-center justify-center rounded-md border border-border bg-secondary/50 text-foreground"
         aria-expanded={open}
         aria-controls="mobile-nav-dialog"
         aria-label={open ? "Close menu" : "Open menu"}
@@ -61,18 +62,18 @@ export function MobileNav() {
         id="mobile-nav-dialog"
         ref={dialogRef}
         aria-label="Mobile navigation"
-        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-foreground/40 open:flex open:flex-col"
+        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-black/70 open:flex open:flex-col"
         onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setOpen(false);
         }}
       >
-        <div className="flex h-[4.25rem] items-center justify-between border-b border-border/60 px-4">
-          <SiteBrand />
+        <div className="flex h-16 items-center justify-between border-b border-border px-4">
+          <SiteBrand compact />
           <button
             type="button"
             aria-label="Close menu"
-            className="inline-flex size-9 items-center justify-center rounded-full"
+            className="inline-flex size-9 items-center justify-center rounded-md"
             onClick={() => setOpen(false)}
           >
             <X className="size-5" aria-hidden />
@@ -88,10 +89,10 @@ export function MobileNav() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "block rounded-xl px-4 py-3.5 font-heading text-lg font-medium transition-colors",
+                      "block rounded-md px-4 py-3 font-mono text-sm uppercase tracking-wider transition-colors",
                       isActive
-                        ? "bg-primary/15 text-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "bg-primary/15 text-primary"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -101,6 +102,13 @@ export function MobileNav() {
               );
             })}
           </ul>
+          <Link
+            href="/compare"
+            className={cn(buttonVariants(), "cta-arrow mt-6 w-full")}
+            onClick={() => setOpen(false)}
+          >
+            Compare now
+          </Link>
         </nav>
       </dialog>
     </div>

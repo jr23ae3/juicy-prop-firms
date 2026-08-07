@@ -68,7 +68,7 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
           href={`/firms/${ranking.firm.slug}`}
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
-            "gap-1.5 rounded-full",
+            "gap-1.5",
           )}
         >
           View firm
@@ -76,7 +76,7 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
         </Link>
         <Link
           href={`/compare?firm=${ranking.firm.slug}`}
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-full")}
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
         >
           Compare plans
         </Link>
@@ -95,7 +95,7 @@ function RankBadge({
   return (
     <span
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-full bg-foreground font-heading font-semibold text-background tabular-nums",
+        "flex shrink-0 items-center justify-center rounded-md bg-primary font-mono text-sm font-normal text-primary-foreground tabular-nums",
         large ? "size-10 text-sm" : "size-8 text-xs",
       )}
     >

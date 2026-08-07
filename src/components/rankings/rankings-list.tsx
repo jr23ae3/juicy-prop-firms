@@ -61,7 +61,7 @@ export function RankingsList({ rankings }: RankingsListProps) {
                 <div className="surface p-4">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted font-heading text-sm font-semibold tabular-nums">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-secondary font-mono text-sm tabular-nums text-accent">
                         {ranking.position}
                       </span>
                       <div>

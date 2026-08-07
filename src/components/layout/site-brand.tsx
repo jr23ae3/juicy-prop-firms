@@ -5,34 +5,22 @@ import { cn } from "@/lib/utils";
 
 type SiteBrandProps = {
   className?: string;
-  invert?: boolean;
+  compact?: boolean;
 };
 
-export function SiteBrand({ className, invert = false }: SiteBrandProps) {
+export function SiteBrand({ className, compact = false }: SiteBrandProps) {
   return (
     <Link
       href="/"
-      className={cn("group inline-flex items-center gap-2.5", className)}
+      className={cn("group inline-flex flex-col gap-0.5", className)}
     >
-      <span
-        aria-hidden
-        className={cn(
-          "relative flex size-9 shrink-0 items-center justify-center rounded-full transition-transform group-hover:scale-105",
-          invert ? "bg-primary text-primary-foreground" : "bg-foreground text-background",
-        )}
-      >
-        <span
-          className={cn(
-            "absolute size-2.5 rounded-full",
-            invert ? "bg-primary-foreground" : "bg-primary",
-          )}
-          style={{ top: "38%", left: "42%" }}
-        />
+      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+        trade research
       </span>
       <span
         className={cn(
-          "font-heading text-base font-semibold tracking-tight sm:text-lg",
-          invert && "text-background",
+          "font-sans font-light tracking-tight text-foreground transition-colors group-hover:text-primary",
+          compact ? "text-sm" : "text-base sm:text-lg",
         )}
       >
         {siteConfig.name}

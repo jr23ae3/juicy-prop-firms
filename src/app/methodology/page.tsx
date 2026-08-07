@@ -58,12 +58,12 @@ export default function MethodologyPage() {
             feed the overall Juice Index score shown on firm profiles.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/rankings" className={cn(buttonVariants(), "rounded-full")}>
+            <Link href="/rankings" className={cn(buttonVariants(), "cta-arrow")}>
               View Juice Index
             </Link>
             <Link
               href="/compare"
-              className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
+              className={cn(buttonVariants({ variant: "outline" }))}
             >
               Compare all plans
             </Link>

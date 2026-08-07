@@ -65,7 +65,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
               rel="noopener noreferrer"
               className={cn(
                 buttonVariants({ variant: "outline" }),
-                "gap-1.5 rounded-full",
+                "gap-1.5",
               )}
             >
               Visit website
@@ -74,7 +74,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
           ) : null}
           <Link
             href={`/compare?firm=${firm.slug}`}
-            className={cn(buttonVariants(), "gap-1.5 rounded-full")}
+            className={cn(buttonVariants(), "gap-1.5 cta-arrow")}
           >
             Compare plans
           </Link>

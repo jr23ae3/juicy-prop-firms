@@ -34,7 +34,7 @@ export default async function RankingsPage() {
           actions={
             <Link
               href="/methodology"
-              className={cn(buttonVariants({ variant: "outline", size: "sm" }), "rounded-full")}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
             >
               Scoring methodology
             </Link>

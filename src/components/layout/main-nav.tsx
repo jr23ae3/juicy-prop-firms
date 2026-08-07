@@ -10,7 +10,7 @@ export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Main navigation" className="hidden items-center gap-0.5 md:flex">
+    <nav aria-label="Main navigation" className="hidden items-center md:flex">
       {mainNav.map((item) => {
         const isActive =
           pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -19,7 +19,7 @@ export function MainNav() {
           return (
             <span
               key={item.href}
-              className="cursor-not-allowed px-3 py-2 text-sm font-medium text-muted-foreground/50"
+              className="cursor-not-allowed px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground/40"
               title="Coming soon"
             >
               {item.title}

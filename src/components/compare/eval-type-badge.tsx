@@ -14,7 +14,7 @@ export function EvalTypeBadge({ evalType, className }: EvalTypeBadgeProps) {
     <Badge
       variant="secondary"
       className={cn(
-        "whitespace-nowrap border-0 bg-primary/10 font-normal text-foreground",
+        "whitespace-nowrap border border-primary/25 bg-primary/10 font-mono text-[10px] uppercase tracking-wider text-primary",
         className,
       )}
     >

@@ -21,7 +21,7 @@ export function MarketTypeToggle({
       role="group"
       aria-label="Market type"
       className={cn(
-        "inline-flex rounded-full border border-border/70 bg-muted/50 p-1",
+        "inline-flex rounded-md border border-border bg-secondary/60 p-0.5 font-mono text-xs",
         className,
       )}
     >
@@ -35,9 +35,9 @@ export function MarketTypeToggle({
             aria-pressed={isActive}
             onClick={() => onChange(marketType)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+              "rounded px-3 py-1.5 uppercase tracking-wider transition-colors",
               isActive
-                ? "bg-primary text-primary-foreground shadow-sm"
+                ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
