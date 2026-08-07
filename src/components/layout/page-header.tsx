@@ -22,13 +22,13 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "flex flex-col gap-6 border-b border-border/60 pb-8",
+        "flex flex-col gap-8 border-b border-border pb-10 md:pb-12",
         centered && "items-center text-center",
-        !centered && actions && "sm:flex-row sm:items-end sm:justify-between",
+        !centered && actions && "lg:flex-row lg:items-end lg:justify-between",
         className,
       )}
     >
-      <div className={cn("space-y-3", centered && "max-w-2xl")}>
+      <div className={cn("space-y-4", centered && "max-w-3xl")}>
         {eyebrow ? <p className="page-eyebrow">{eyebrow}</p> : null}
         <h1 className="page-title">{title}</h1>
         {description ? (

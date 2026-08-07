@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -42,45 +42,43 @@ export function MobileNav() {
   }, [open]);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
-        className="inline-flex size-9 items-center justify-center rounded-md border border-border bg-secondary/50 text-foreground"
+        className="inline-flex size-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 bg-transparent"
         aria-expanded={open}
         aria-controls="mobile-nav-dialog"
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((prev) => !prev)}
       >
-        {open ? (
-          <X className="size-5" aria-hidden />
-        ) : (
-          <Menu className="size-5" aria-hidden />
-        )}
+        <span className="block h-px w-5 bg-white" />
+        <span className="block h-px w-5 bg-white" />
+        <span className="block h-px w-5 bg-white" />
       </button>
 
       <dialog
         id="mobile-nav-dialog"
         ref={dialogRef}
         aria-label="Mobile navigation"
-        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-black/70 open:flex open:flex-col"
+        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-black p-0 backdrop:bg-black/80 open:flex open:flex-col"
         onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setOpen(false);
         }}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border px-4">
+        <div className="flex items-center justify-between px-4 py-6">
           <SiteBrand compact />
           <button
             type="button"
             aria-label="Close menu"
-            className="inline-flex size-9 items-center justify-center rounded-md"
+            className="inline-flex size-10 items-center justify-center rounded-full border border-white/15"
             onClick={() => setOpen(false)}
           >
             <X className="size-5" aria-hidden />
           </button>
         </div>
-        <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
+        <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto px-6 pb-8">
+          <ul className="space-y-2">
             {mainNav.map((item) => {
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -89,10 +87,10 @@ export function MobileNav() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "block rounded-md px-4 py-3 font-mono text-sm uppercase tracking-wider transition-colors",
+                      "block py-3 text-3xl font-medium tracking-[-0.03em] transition-colors",
                       isActive
-                        ? "bg-primary/15 text-primary"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                        ? "text-primary"
+                        : "text-white/70 hover:text-white",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -104,7 +102,7 @@ export function MobileNav() {
           </ul>
           <Link
             href="/compare"
-            className={cn(buttonVariants(), "cta-arrow mt-6 w-full")}
+            className={cn(buttonVariants({ size: "lg" }), "mt-10 w-full")}
             onClick={() => setOpen(false)}
           >
             Compare now

@@ -205,10 +205,10 @@ export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
             size="lg"
           />
           <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
+            <p className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
               #{plan.firm.rankPosition ?? "—"} · {plan.firm.name}
             </p>
-            <h3 className="mt-1.5 text-xl leading-snug font-medium tracking-tight">
+            <h3 className="mt-2 text-2xl leading-none font-normal tracking-[-0.02em] uppercase">
               {plan.name}
             </h3>
             <p className="mt-0.5 text-sm text-muted-foreground">

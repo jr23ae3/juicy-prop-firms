@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 
 import { IconTile } from "@/components/ui/icon-tile";
-import { cn } from "@/lib/utils";
 
 const tools: {
   href: string;
@@ -19,7 +18,7 @@ const tools: {
   {
     href: "/compare",
     label: "Compare",
-    description: "Side-by-side plan table",
+    description: "Side-by-side plan explorer",
     icon: Table2,
   },
   {
@@ -44,26 +43,27 @@ const tools: {
 
 export function ToolsGrid() {
   return (
-    <section aria-labelledby="tools-heading" className="mt-16">
-      <p id="tools-heading" className="section-label mb-5">
-        Platform tools
-      </p>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <section aria-labelledby="tools-heading" className="mt-20 border-t border-border pt-16">
+      <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p id="tools-heading" className="section-label mb-3">
+            Platform tools
+          </p>
+          <h2 className="section-title max-w-xl">
+            Everything you need to pick a firm
+          </h2>
+        </div>
+      </div>
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {tools.map(({ href, label, description, icon }) => (
           <li key={href}>
-            <Link
-              href={href}
-              className={cn(
-                "surface group flex items-start gap-3 p-4 transition-all duration-300",
-                "hover:border-primary/30 hover:shadow-[0_20px_40px_rgb(0_0_0_/_25%)]",
-              )}
-            >
+            <Link href={href} className="bf-tool-link group">
               <IconTile icon={icon} />
               <div className="min-w-0">
-                <p className="font-medium text-foreground group-hover:text-primary">
+                <p className="text-lg font-medium tracking-[-0.02em] text-white group-hover:text-primary">
                   {label}
                 </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
+                <p className="mt-1 text-sm tracking-[-0.01em] text-muted-foreground">
                   {description}
                 </p>
               </div>
