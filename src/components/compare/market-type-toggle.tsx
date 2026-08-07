@@ -8,14 +8,22 @@ import { cn } from "@/lib/utils";
 type MarketTypeToggleProps = {
   value: MarketType;
   onChange: (marketType: MarketType) => void;
+  className?: string;
 };
 
-export function MarketTypeToggle({ value, onChange }: MarketTypeToggleProps) {
+export function MarketTypeToggle({
+  value,
+  onChange,
+  className,
+}: MarketTypeToggleProps) {
   return (
     <div
       role="group"
       aria-label="Market type"
-      className="inline-flex rounded-lg border border-border/60 bg-muted/40 p-1"
+      className={cn(
+        "inline-flex rounded-full border border-border/70 bg-muted/50 p-1",
+        className,
+      )}
     >
       {MARKET_TYPES.map((marketType) => {
         const isActive = value === marketType;
@@ -27,9 +35,9 @@ export function MarketTypeToggle({ value, onChange }: MarketTypeToggleProps) {
             aria-pressed={isActive}
             onClick={() => onChange(marketType)}
             className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+              "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
               isActive
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >

@@ -42,7 +42,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
   const hasDiscount = plan.pricing.savings > 0;
 
   return (
-    <li className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+    <li className="rounded-2xl bg-card p-4 ring-1 ring-border/60">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium text-muted-foreground">
@@ -127,9 +127,9 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
         </div>
       </dl>
 
-      <div className="compare-funded-panel mt-4 rounded-lg p-3 pt-3">
-        <p className="compare-funded-panel-label text-xs font-semibold uppercase tracking-wide">
-          Funded
+      <div className="compare-funded-panel mt-4 pt-4">
+        <p className="compare-funded-panel-label text-xs font-medium">
+          After funding
         </p>
         <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
           <div>

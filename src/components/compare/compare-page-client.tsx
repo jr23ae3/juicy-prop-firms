@@ -93,51 +93,72 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
   }
 
   return (
-    <Container size="full" className="space-y-6 py-8 md:py-12">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <header className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Compare prop firm plans
-          </h1>
-          <p className="max-w-3xl text-muted-foreground">
-            Live pricing with verified discount codes and transparent all-in
-            costs — eval price plus activation fees, surfaced upfront.
-          </p>
+    <div className="compare-workspace">
+      <Container size="full" className="py-8 md:py-12">
+        <header className="flex flex-col gap-6 border-b border-border/50 pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm font-medium tracking-wide text-primary">
+              Plan comparison
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+              Find your next eval
+            </h1>
+            <p className="max-w-2xl text-muted-foreground">
+              Live pricing with verified discount codes and transparent all-in
+              costs — eval price plus activation fees, surfaced upfront.
+            </p>
+          </div>
+          <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
         </header>
-        <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
-      </div>
 
-      <CompareFiltersBar
-        metadata={metadata}
-        filters={filters}
-        onChange={updateFilters}
-        resultCount={plans.length}
-      />
+        <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+          <aside className="compare-sidebar shrink-0 rounded-2xl p-4 ring-1 ring-border/60 lg:sticky lg:top-6 lg:w-72 lg:self-start">
+            <CompareFiltersBar
+              metadata={metadata}
+              filters={filters}
+              onChange={updateFilters}
+              resultCount={plans.length}
+              variant="sidebar"
+            />
+          </aside>
 
-      <CompareSortControls filters={filters} onChange={updateFilters} />
+          <div className="min-w-0 flex-1 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">
+                  {isLoading ? "…" : plans.length}
+                </span>{" "}
+                plan{plans.length === 1 ? "" : "s"}
+              </p>
+              <CompareSortControls filters={filters} onChange={updateFilters} />
+            </div>
 
-      {isLoading ? <CompareSkeleton /> : null}
+            {isLoading ? <CompareSkeleton /> : null}
 
-      {isError ? (
-        <p role="alert" className="text-sm text-destructive">
-          Failed to load plans. Check your database connection and try again.
-        </p>
-      ) : null}
+            {isError ? (
+              <p role="alert" className="text-sm text-destructive">
+                Failed to load plans. Check your database connection and try
+                again.
+              </p>
+            ) : null}
 
-      {!isLoading && !isError && plans.length === 0 ? (
-        <CompareEmptyState variant="no-results" />
-      ) : null}
+            {!isLoading && !isError && plans.length === 0 ? (
+              <CompareEmptyState variant="no-results" />
+            ) : null}
 
-      {!isLoading && !isError && plans.length > 0 ? (
-        <>
-          <CompareCardList plans={plans} />
-          <CompareTable
-            plans={plans}
-            filters={filters}
-            onSortChange={updateFilters}
-          />
-        </>
-      ) : null}
-    </Container>
+            {!isLoading && !isError && plans.length > 0 ? (
+              <>
+                <CompareCardList plans={plans} />
+                <CompareTable
+                  plans={plans}
+                  filters={filters}
+                  onSortChange={updateFilters}
+                />
+              </>
+            ) : null}
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 }

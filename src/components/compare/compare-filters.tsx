@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { formatAccountSize, formatPercent } from "@/lib/format";
 import { getDrawdownTypeLabel, getEvalTypeLabel } from "@/lib/plans/labels";
+import { cn } from "@/lib/utils";
 import type { CompareFilterMetadata, CompareFilters } from "@/types/compare";
 
 type CompareFiltersBarProps = {
@@ -22,6 +23,7 @@ type CompareFiltersBarProps = {
   filters: CompareFilters;
   onChange: (filters: CompareFilters) => void;
   resultCount: number;
+  variant?: "default" | "sidebar";
 };
 
 const MIN_SPLIT_OPTIONS = [0.8, 0.85, 0.9] as const;
@@ -33,8 +35,10 @@ export function CompareFiltersBar({
   filters,
   onChange,
   resultCount,
+  variant = "default",
 }: CompareFiltersBarProps) {
   const [searchInput, setSearchInput] = useState(filters.search ?? "");
+  const isSidebar = variant === "sidebar";
 
   useEffect(() => {
     setSearchInput(filters.search ?? "");
@@ -73,13 +77,21 @@ export function CompareFiltersBar({
   );
 
   return (
-    <div className="space-y-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div
+      className={cn(
+        "space-y-5",
+        !isSidebar &&
+          "rounded-xl border border-border/60 bg-card p-4 shadow-sm",
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold">Filter plans</h2>
-          <p className="text-xs text-muted-foreground">
-            {resultCount} plan{resultCount === 1 ? "" : "s"} shown
-          </p>
+          <h2 className="text-sm font-semibold">Filters</h2>
+          {!isSidebar ? (
+            <p className="text-xs text-muted-foreground">
+              {resultCount} plan{resultCount === 1 ? "" : "s"} shown
+            </p>
+          ) : null}
         </div>
         {hasActiveFilters ? (
           <Button
@@ -87,15 +99,20 @@ export function CompareFiltersBar({
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="gap-1.5 self-start sm:self-auto"
+            className="h-7 shrink-0 gap-1 px-2 text-xs"
           >
-            <X className="size-3.5" aria-hidden />
-            Clear filters
+            <X className="size-3" aria-hidden />
+            Clear
           </Button>
         ) : null}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div
+        className={cn(
+          "grid gap-4",
+          isSidebar ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-5",
+        )}
+      >
         <FilterField label="Search">
           <div className="relative">
             <Search
@@ -210,11 +227,16 @@ export function CompareFiltersBar({
         </FilterField>
       </div>
 
-      <div className="border-t border-border/60 pt-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Drawdown & funded
+      <div className={cn(isSidebar ? "space-y-4" : "border-t border-border/60 pt-4")}>
+        <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+          Funded terms
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={cn(
+            "grid gap-4",
+            isSidebar ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-4",
+          )}
+        >
           <FilterField label="Draw down type">
             <Select
               value={filters.drawdownType ?? "all"}
