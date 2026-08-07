@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck, Calculator, Table2 } from "lucide-react";
+import { BadgeCheck, Calculator, MonitorPlay, Table2 } from "lucide-react";
 
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
@@ -26,8 +26,15 @@ const levels = [
     character: true as const,
   },
   {
-    href: "/roi-calculator",
+    href: "/skills-test",
     num: "LVL 3",
+    title: "SKILLS TEST",
+    desc: "NQ · MNQ · ES · MES replay",
+    icon: MonitorPlay,
+  },
+  {
+    href: "/roi-calculator",
+    num: "LVL 4",
     title: "ROI RUN",
     desc: "Break-even calculator",
     icon: Calculator,
@@ -147,7 +154,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
           <h2 id="level-select" className="arcade-level-num mb-5 text-center">
             ★ SELECT YOUR LEVEL ★
           </h2>
-          <ul className="grid gap-4 sm:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {levels.map(({ href, num, title, desc, ...level }) => (
               <li key={href}>
                 <Link href={href} className="group arcade-level-card">

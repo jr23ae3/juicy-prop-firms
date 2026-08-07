@@ -16,12 +16,18 @@ export const mainNav: NavItem[] = [
     href: "/advisor",
     description: "Get personalized firm recommendations",
   },
+  {
+    title: "Skills Test",
+    href: "/skills-test",
+    description: "Replay today's NQ, MNQ, ES, and MES session",
+  },
 ];
 
 export const footerNav = {
   product: [
     { title: "Compare Plans", href: "/compare" },
     { title: "AI Advisor", href: "/advisor" },
+    { title: "Skills Test", href: "/skills-test" },
     { title: "ROI Calculator", href: "/roi-calculator" },
   ],
   company: [

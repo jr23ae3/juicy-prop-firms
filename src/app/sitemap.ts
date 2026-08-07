@@ -22,6 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     },
     {
+      url: `${siteConfig.url}/skills-test`,
+      lastModified,
+      changeFrequency: "daily",
+      priority: 0.85,
+    },
+    {
       url: `${siteConfig.url}/roi-calculator`,
       lastModified,
       changeFrequency: "monthly",

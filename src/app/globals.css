@@ -1304,6 +1304,323 @@
   }
 }
 
+.skills-replay-shell {
+  width: 100%;
+}
+
+.skills-replay-monitor {
+  border: 4px solid rgb(0 185 122 / 40%);
+  background: #04110a;
+  box-shadow:
+    inset 0 0 24px rgb(0 185 122 / 8%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-replay-monitor-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid rgb(0 185 122 / 25%);
+  background: #020812;
+  padding: 0.5rem 0.75rem;
+}
+
+.skills-replay-monitor-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border: 1px solid rgb(255 255 255 / 20%);
+}
+
+.skills-replay-monitor-dot--red {
+  background: #ff4d6d;
+}
+
+.skills-replay-monitor-dot--yellow {
+  background: #ffd700;
+}
+
+.skills-replay-monitor-dot--green {
+  background: #00b97a;
+}
+
+.skills-replay-monitor-title {
+  margin-left: auto;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(54 255 255 / 80%);
+}
+
+.skills-replay-hud {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  border-bottom: 2px solid rgb(0 185 122 / 20%);
+  background: rgb(2 8 18 / 90%);
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .skills-replay-hud {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.skills-replay-hud-label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 215 0 / 85%);
+}
+
+.skills-replay-hud-value {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #36ffff;
+}
+
+.skills-replay-hud-sub {
+  margin-top: 0.125rem;
+  font-size: 10px;
+  color: rgb(255 255 255 / 55%);
+}
+
+.skills-replay-canvas-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  min-height: 280px;
+  background: #020812;
+}
+
+.skills-replay-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.skills-replay-canvas-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgb(0 0 0 / 0%) 0,
+    rgb(0 0 0 / 0%) 2px,
+    rgb(0 0 0 / 18%) 3px
+  );
+  opacity: 0.35;
+}
+
+.skills-replay-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 2px solid rgb(0 185 122 / 20%);
+  padding: 0.75rem;
+}
+
+.skills-replay-controls-label {
+  width: 100%;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 215 0 / 85%);
+}
+
+@media (min-width: 640px) {
+  .skills-replay-controls-label {
+    width: auto;
+    margin-right: auto;
+  }
+}
+
+.skills-replay-transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skills-replay-btn {
+  display: inline-flex;
+  min-width: 6.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 8px;
+}
+
+.skills-replay-speed-wrap {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .skills-replay-speed-wrap {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.skills-replay-speed {
+  min-width: 12rem;
+}
+
+.skills-replay-scrubber {
+  display: block;
+  border-top: 2px solid rgb(0 185 122 / 15%);
+  padding: 0.75rem 1rem 1rem;
+}
+
+.skills-replay-scrubber input[type="range"] {
+  width: 100%;
+  height: 0.5rem;
+  appearance: none;
+  border: 2px solid rgb(0 185 122 / 35%);
+  cursor: pointer;
+}
+
+.skills-replay-scrubber input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #36ffff;
+  background: #00b97a;
+  cursor: pointer;
+}
+
+.skills-replay-scrubber input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #36ffff;
+  border-radius: 0;
+  background: #00b97a;
+  cursor: pointer;
+}
+
+.skills-replay-footnote {
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 55%);
+}
+
+.arcade-toggle-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 2px solid rgb(0 185 122 / 30%);
+  background: #020812;
+  padding: 0 0.5rem;
+}
+
+.arcade-toggle-tabs--compact {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  border: 2px solid rgb(0 185 122 / 35%);
+  border-radius: 0;
+  padding: 0.125rem;
+  background: #04110a;
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 35%);
+}
+
+.arcade-toggle-tabs__tab {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  border: 2px solid transparent;
+  border-bottom: none;
+  margin-bottom: -2px;
+  padding: 0.625rem 0.75rem;
+  background: transparent;
+  color: rgb(255 255 255 / 45%);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.arcade-toggle-tabs--compact .arcade-toggle-tabs__tab {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  border: 2px solid transparent;
+  padding: 0.375rem 0.625rem;
+}
+
+.arcade-toggle-tabs__tab:hover {
+  color: rgb(54 255 255 / 85%);
+}
+
+.arcade-toggle-tabs__tab--active {
+  border-color: rgb(0 185 122 / 40%);
+  border-bottom-color: #04110a;
+  background: #04110a;
+  color: #36ffff;
+  box-shadow: inset 0 -2px 0 #00b97a;
+}
+
+.arcade-toggle-tabs--compact .arcade-toggle-tabs__tab--active {
+  border-color: #00b97a;
+  border-bottom-color: #00b97a;
+  background: #00b97a;
+  color: #04110a;
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 35%);
+}
+
+.arcade-toggle-tabs__label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.arcade-toggle-tabs--compact .arcade-toggle-tabs__label {
+  font-size: 8px;
+}
+
+.arcade-toggle-tabs__desc {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgb(255 255 255 / 35%);
+}
+
+.arcade-toggle-tabs__tab--active .arcade-toggle-tabs__desc {
+  color: rgb(4 17 10 / 70%);
+}
+
+.arcade-toggle-tabs--compact .arcade-toggle-tabs__tab--active .arcade-toggle-tabs__desc {
+  color: rgb(4 17 10 / 70%);
+}
+
+.skills-replay-symbol-tabs {
+  padding: 0;
+}
+
+.skills-replay-speed-tabs {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .skills-replay-speed-tabs {
+    width: auto;
+    min-width: 14rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
