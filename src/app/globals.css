@@ -431,6 +431,20 @@
     animation-name: arcade-pacman-run-reverse;
   }
 
+  .arcade-pacman-ghost {
+    @apply absolute top-1/2 -translate-y-1/2;
+    animation: arcade-pacman-run linear infinite;
+    filter: drop-shadow(0 0 4px rgb(255 255 255 / 12%));
+  }
+
+  .arcade-pacman-ghost--reverse {
+    animation-name: arcade-pacman-run-reverse;
+  }
+
+  .arcade-pacman-ghost-body {
+    animation: arcade-ghost-wiggle 0.45s ease-in-out infinite alternate;
+  }
+
   .arcade-pacman-mouth {
     transform-box: fill-box;
     transform-origin: center;
@@ -771,6 +785,15 @@
   }
 }
 
+@keyframes arcade-ghost-wiggle {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1.5px);
+  }
+}
+
 @keyframes arcade-pacman-power-pulse {
   0%,
   100% {
@@ -870,6 +893,8 @@
   .arcade-advisor-core,
   .arcade-advisor-bubble--pulse,
   .arcade-pacman-runner,
+  .arcade-pacman-ghost,
+  .arcade-pacman-ghost-body,
   .arcade-pacman-mouth,
   .arcade-pacman-dot--power {
     animation: none !important;
