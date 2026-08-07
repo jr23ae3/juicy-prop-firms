@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { MARKET_TYPES } from "@/lib/plans/market-type";
+
 const evalTypeSchema = z.enum([
   "CHALLENGE",
   "DIRECT_TO_FUNDED",
@@ -32,7 +34,7 @@ export const updateFirmSchema = createFirmSchema.partial().extend({
   platformQuality: z.coerce.number().min(0).max(100).optional(),
 });
 
-const marketTypeSchema = z.enum(["FUTURES", "FOREX", "STOCKS"]);
+const marketTypeSchema = z.enum(MARKET_TYPES);
 
 export const createPlanSchema = z.object({
   propFirmId: z.string().cuid(),

@@ -4,6 +4,7 @@ export const MARKET_TYPES = [
   "FUTURES",
   "FOREX",
   "STOCKS",
+  "CRYPTO",
 ] as const satisfies readonly MarketType[];
 
 export const DEFAULT_MARKET_TYPE: MarketType = "FUTURES";
@@ -12,6 +13,7 @@ export const MARKET_TYPE_LABELS: Record<MarketType, string> = {
   FUTURES: "Futures",
   FOREX: "Forex",
   STOCKS: "Stocks",
+  CRYPTO: "Crypto",
 };
 
 const MARKET_TYPE_SET = new Set<string>(MARKET_TYPES);

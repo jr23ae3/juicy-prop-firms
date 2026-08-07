@@ -200,12 +200,14 @@ export function FirmAdminPanel({ firm }: { firm: FirmForAdmin }) {
                 <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium">
-                        {plan.name}{" "}
-                        {!plan.isActive ? (
-                          <span className="text-muted-foreground">(inactive)</span>
-                        ) : null}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-medium">
+                          {plan.name}{" "}
+                          {!plan.isActive ? (
+                            <span className="text-muted-foreground">(inactive)</span>
+                          ) : null}
+                        </p>
+                      </div>
                       <PlanSummaryLine plan={plan} />
                     </div>
                     <div className="flex flex-wrap items-center gap-2">

@@ -118,6 +118,7 @@ enum MarketType {
   FUTURES
   FOREX
   STOCKS
+  CRYPTO
 }
 
 model Plan {

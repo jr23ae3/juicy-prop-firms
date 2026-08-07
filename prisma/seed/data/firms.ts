@@ -11,7 +11,7 @@ export type SeedPlan = {
   slug: string;
   name: string;
   accountSize: number;
-  marketType?: "FUTURES" | "FOREX" | "STOCKS";
+  marketType?: "FUTURES" | "FOREX" | "STOCKS" | "CRYPTO";
   evalType: EvalType;
   evalPrice: number;
   activationFee?: number;

@@ -480,13 +480,13 @@
   }
 
   .compare-arcade-toggle {
-    @apply border-4 border-primary/40 bg-[#04110a] p-1 font-mono;
+    @apply flex max-w-full flex-wrap border-4 border-primary/40 bg-[#04110a] p-1 font-mono;
     box-shadow: 4px 4px 0 rgb(0 0 0 / 40%);
   }
 
   .compare-arcade-toggle button {
     font-family: var(--font-arcade), var(--font-mono);
-    @apply rounded-none border-2 border-transparent text-[9px] tracking-wide sm:text-[10px];
+    @apply min-w-0 flex-1 rounded-none border-2 border-transparent px-2 py-1.5 text-[8px] tracking-wide sm:px-3 sm:text-[9px];
   }
 
   .compare-arcade-toggle button[aria-pressed="true"] {

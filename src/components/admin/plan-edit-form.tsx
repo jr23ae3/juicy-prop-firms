@@ -12,12 +12,15 @@ import {
   PlanFormFields,
   type PlanFormValues,
 } from "@/components/admin/plan-form-fields";
+import { MarketTypeBadge } from "@/components/admin/market-type-select";
 import {
   PlanFieldHistory,
   type PlanFieldHistoryEntry,
 } from "@/components/admin/plan-field-history";
 import { Button } from "@/components/ui/button";
 import { formatAccountSize, formatCurrency } from "@/lib/format";
+import { MARKET_TYPE_LABELS } from "@/lib/plans/market-type";
+import type { MarketType } from "@/generated/prisma/client";
 
 type PlanForAdmin = PlanFormValues & {
   id: string;
@@ -107,13 +110,20 @@ function DeletePlanButton({
 }
 
 export function PlanSummaryLine({ plan }: { plan: PlanForAdmin }) {
+  const marketLabel =
+    plan.marketType in MARKET_TYPE_LABELS
+      ? MARKET_TYPE_LABELS[plan.marketType as MarketType]
+      : plan.marketType;
+
   return (
     <p className="text-muted-foreground">
+      <MarketTypeBadge marketType={plan.marketType} className="mr-2 align-middle" />
       {formatAccountSize(plan.accountSize)} · {plan.evalType} · Eval{" "}
       {formatCurrency(plan.evalPrice)} + {formatCurrency(plan.activationFee)}{" "}
       activation
       {plan.resetFee > 0 ? ` · Reset ${formatCurrency(plan.resetFee)}` : ""}
       {plan.discount?.code ? ` · Code: ${plan.discount.code}` : ""}
+      <span className="sr-only"> · Market: {marketLabel}</span>
     </p>
   );
 }

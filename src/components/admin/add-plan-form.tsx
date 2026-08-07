@@ -10,6 +10,8 @@ import {
 } from "@/components/admin/plan-form-fields";
 import { Button } from "@/components/ui/button";
 import { planToDuplicateTemplate } from "@/lib/admin/plan-duplicate";
+import { MARKET_TYPE_LABELS } from "@/lib/plans/market-type";
+import type { MarketType } from "@/generated/prisma/client";
 
 type PlanForDuplicate = PlanFormValues & {
   id: string;
@@ -72,6 +74,7 @@ export function AddPlanForm({
               <option value="">Start blank</option>
               {plans.map((plan) => (
                 <option key={plan.id} value={plan.id}>
+                  [{MARKET_TYPE_LABELS[plan.marketType as MarketType] ?? plan.marketType}]{" "}
                   {plan.name}
                   {!plan.isActive ? " (inactive)" : ""}
                 </option>
