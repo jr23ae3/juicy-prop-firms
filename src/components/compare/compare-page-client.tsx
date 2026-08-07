@@ -3,12 +3,11 @@
 import { useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { CompareCardList } from "@/components/compare/compare-card-list";
 import { CompareEmptyState } from "@/components/compare/compare-empty-state";
 import { CompareFiltersBar } from "@/components/compare/compare-filters";
+import { ComparePlanGrid } from "@/components/compare/compare-plan-grid";
 import { CompareSkeleton } from "@/components/compare/compare-skeleton";
 import { CompareSortControls } from "@/components/compare/compare-sort-controls";
-import { CompareTable } from "@/components/compare/compare-table";
 import { MarketTypeToggle } from "@/components/compare/market-type-toggle";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
@@ -99,7 +98,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
         <PageHeader
           eyebrow="Plan comparison"
           title="Every plan, one view"
-          description="Live pricing with verified discount codes and transparent all-in costs — eval price plus activation fees, surfaced upfront."
+          description="Browse plans at a glance — click any card for a radial reveal of the full breakdown, fees, funded terms, and discount codes."
           actions={
             <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
           }
@@ -141,14 +140,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
             ) : null}
 
             {!isLoading && !isError && plans.length > 0 ? (
-              <>
-                <CompareCardList plans={plans} />
-                <CompareTable
-                  plans={plans}
-                  filters={filters}
-                  onSortChange={updateFilters}
-                />
-              </>
+              <ComparePlanGrid plans={plans} />
             ) : null}
           </div>
         </div>

@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { CompareCardList } from "@/components/compare/compare-card-list";
-import { CompareTable } from "@/components/compare/compare-table";
+import { ComparePlanGrid } from "@/components/compare/compare-plan-grid";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { PlanSummary } from "@/types/plan";
@@ -36,19 +35,18 @@ export function FirmPlansSection({
             Plans & pricing
           </h2>
           <p className="text-sm text-muted-foreground">
-            Verified pricing with discount codes and all-in costs.
+            Click a plan to reveal the full breakdown with a radial transition.
           </p>
         </div>
         <Link
           href={`/compare?firm=${firmSlug}`}
           className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
         >
-          Open in compare table
+          Compare all firms
         </Link>
       </div>
 
-      <CompareCardList plans={plans} />
-      <CompareTable plans={plans} />
+      <ComparePlanGrid plans={plans} />
     </section>
   );
 }

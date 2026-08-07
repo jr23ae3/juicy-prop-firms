@@ -48,7 +48,7 @@ export function CompareSortControls({
   const sort = filters.sort ?? "allInCost";
 
   return (
-    <div className="flex flex-wrap items-center gap-2 lg:hidden">
+    <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs font-medium text-muted-foreground">Sort by</span>
       <Select
         value={sort}
