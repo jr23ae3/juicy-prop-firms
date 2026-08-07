@@ -51,7 +51,7 @@ export function ComparePlanDetails({ plan }: ComparePlanDetailsProps) {
 
   return (
     <div className="p-5 sm:p-6">
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="mb-5 flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <FirmLogo
             name={plan.firm.name}
@@ -60,7 +60,7 @@ export function ComparePlanDetails({ plan }: ComparePlanDetailsProps) {
             size="md"
           />
           <div>
-            <p className="font-mono text-[10px] tracking-wider text-accent uppercase">
+            <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
               Full breakdown
             </p>
             <p className="font-medium">{plan.firm.name}</p>
@@ -195,7 +195,7 @@ export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
   const hasDiscount = plan.pricing.savings > 0;
 
   return (
-    <div className="flex min-h-[220px] flex-col p-5 sm:min-h-[240px] sm:p-6">
+    <div className="flex min-h-[260px] flex-col p-5 sm:p-6">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
           <FirmLogo
@@ -205,11 +205,13 @@ export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
             size="lg"
           />
           <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
+            <p className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
               #{plan.firm.rankPosition ?? "—"} · {plan.firm.name}
             </p>
-            <h3 className="mt-1 text-lg leading-snug font-light">{plan.name}</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className="mt-1.5 text-xl leading-snug font-medium tracking-tight">
+              {plan.name}
+            </h3>
+            <p className="mt-0.5 text-sm text-muted-foreground">
               {formatAccountSize(plan.accountSize)}
             </p>
           </div>
@@ -217,36 +219,34 @@ export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
         <EvalTypeBadge evalType={plan.evalType} />
       </div>
 
-      <div className="mt-auto space-y-3 pt-6">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[11px] tracking-wider text-muted-foreground uppercase">
-              All-in cost
+      <div className="mt-auto grid grid-cols-2 gap-3 pt-8">
+        <div className="plan-card-metric">
+          <p className="text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+            All-in cost
+          </p>
+          <p className="mt-1 text-2xl font-medium text-primary tabular-nums">
+            <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
+              {formatCurrency(plan.pricing.allInCost)}
+            </CalculatedValue>
+          </p>
+          {hasDiscount ? (
+            <p className="mt-1 text-xs text-muted-foreground">
+              <span className="line-through">
+                {formatCurrency(plan.pricing.evalPrice)}
+              </span>{" "}
+              after discount
             </p>
-            <p className="text-2xl font-light text-primary tabular-nums">
-              <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
-                {formatCurrency(plan.pricing.allInCost)}
-              </CalculatedValue>
-            </p>
-            {hasDiscount ? (
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                <span className="line-through">
-                  {formatCurrency(plan.pricing.evalPrice)}
-                </span>{" "}
-                after discount
-              </p>
-            ) : null}
-          </div>
-          <div className="text-right">
-            <p className="text-[11px] tracking-wider text-muted-foreground uppercase">
-              Return
-            </p>
-            <p className="text-lg tabular-nums">
-              <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
-                {formatReturnMultiple(plan.pricing.returnMultiple)}
-              </CalculatedValue>
-            </p>
-          </div>
+          ) : null}
+        </div>
+        <div className="plan-card-metric text-right">
+          <p className="text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+            Return
+          </p>
+          <p className="mt-1 text-xl font-medium tabular-nums">
+            <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
+              {formatReturnMultiple(plan.pricing.returnMultiple)}
+            </CalculatedValue>
+          </p>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,42 +49,46 @@
 }
 
 :root {
-  --background: #050505;
-  --foreground: #f2f2f2;
-  --card: #0b3135;
-  --card-foreground: #f2f2f2;
-  --popover: #0a232c;
-  --popover-foreground: #f2f2f2;
-  --primary: #00b97a;
+  --background: #080809;
+  --foreground: #ececee;
+  --card: rgb(255 255 255 / 4%);
+  --card-solid: #131316;
+  --card-foreground: #ececee;
+  --popover: #131316;
+  --popover-foreground: #ececee;
+  --primary: #00d492;
   --primary-foreground: #04110a;
-  --secondary: #0a232c;
-  --secondary-foreground: #e8e8e8;
-  --muted: #0b3135;
-  --muted-foreground: #7a9691;
-  --accent: #36ffff;
+  --secondary: rgb(255 255 255 / 6%);
+  --secondary-foreground: #e4e4e7;
+  --muted: rgb(255 255 255 / 4%);
+  --muted-foreground: #8b8b95;
+  --accent: #38bdf8;
   --accent-foreground: #04110a;
   --destructive: #ff5c5c;
-  --border: rgb(255 255 255 / 10%);
-  --input: rgb(255 255 255 / 12%);
-  --ring: rgb(0 185 122 / 45%);
-  --chart-1: #00b97a;
-  --chart-2: #36ffff;
+  --border: rgb(255 255 255 / 8%);
+  --input: rgb(255 255 255 / 10%);
+  --ring: rgb(0 212 146 / 40%);
+  --chart-1: #00d492;
+  --chart-2: #38bdf8;
   --chart-3: #28c840;
-  --chart-4: #2e7a8c;
+  --chart-4: #6366f1;
   --chart-5: #5bbf85;
-  --radius: 0.5rem;
-  --sidebar: #04110a;
-  --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: #00b97a;
+  --radius: 0.875rem;
+  --sidebar: #0a0a0c;
+  --sidebar-foreground: #ececee;
+  --sidebar-primary: #00d492;
   --sidebar-primary-foreground: #04110a;
-  --sidebar-accent: #0a232c;
-  --sidebar-accent-foreground: #f2f2f2;
-  --sidebar-border: rgb(255 255 255 / 10%);
-  --sidebar-ring: rgb(0 185 122 / 45%);
-  --compare-funded-accent: rgb(54 255 255 / 25%);
-  --compare-row-hover: rgb(0 185 122 / 8%);
-  --terminal-bg: #04110a;
-  --terminal-chrome: rgb(11 49 53 / 70%);
+  --sidebar-accent: rgb(255 255 255 / 6%);
+  --sidebar-accent-foreground: #ececee;
+  --sidebar-border: rgb(255 255 255 / 8%);
+  --sidebar-ring: rgb(0 212 146 / 40%);
+  --compare-funded-accent: rgb(56 189 248 / 22%);
+  --compare-row-hover: rgb(0 212 146 / 6%);
+  --terminal-bg: rgb(255 255 255 / 3%);
+  --terminal-chrome: rgb(255 255 255 / 5%);
+  --glow-primary: rgb(0 212 146 / 30%);
+  --glow-accent: rgb(56 189 248 / 20%);
+  --glass-blur: 16px;
 }
 
 @layer base {
@@ -101,7 +105,8 @@
   h2,
   h3,
   h4 {
-    @apply font-light tracking-tight;
+    font-family: var(--font-display), var(--font-sans);
+    @apply font-medium tracking-tight;
   }
 }
 
@@ -110,19 +115,25 @@
     background-color: var(--background);
     background-image:
       radial-gradient(
-        ellipse 120% 80% at 50% -30%,
-        rgb(0 185 122 / 12%),
+        ellipse 90% 60% at 50% -25%,
+        rgb(0 212 146 / 9%),
         transparent 55%
       ),
-      linear-gradient(180deg, rgb(4 17 10 / 80%) 0%, var(--background) 40%);
+      radial-gradient(
+        ellipse 50% 40% at 100% 0%,
+        rgb(56 189 248 / 6%),
+        transparent 50%
+      ),
+      linear-gradient(180deg, #0c0c0e 0%, var(--background) 45%);
   }
 
   .page-eyebrow {
-    @apply font-mono text-xs font-normal uppercase tracking-[0.22em] text-accent;
+    @apply font-mono text-xs font-normal uppercase tracking-[0.2em] text-accent;
   }
 
   .page-title {
-    @apply text-balance text-3xl font-light tracking-tight md:text-4xl lg:text-[2.85rem] lg:leading-[1.08];
+    font-family: var(--font-display), var(--font-sans);
+    @apply text-balance text-3xl font-medium tracking-tight md:text-4xl lg:text-[3rem] lg:leading-[1.06];
   }
 
   .page-lead {
@@ -134,11 +145,18 @@
   }
 
   .surface {
-    @apply rounded-lg border border-border bg-card;
+    @apply rounded-xl border border-border;
+    background: linear-gradient(
+      145deg,
+      rgb(255 255 255 / 5%) 0%,
+      rgb(255 255 255 / 2%) 100%
+    );
+    backdrop-filter: blur(var(--glass-blur));
   }
 
   .surface-muted {
-    @apply rounded-lg border border-dashed border-border bg-secondary/40;
+    @apply rounded-xl border border-dashed border-border;
+    background: rgb(255 255 255 / 2%);
   }
 
   .nav-link {
@@ -150,7 +168,8 @@
   }
 
   .terminal {
-    @apply overflow-hidden rounded-lg border border-primary/25 bg-[var(--terminal-bg)] shadow-[0_0_40px_rgb(0_185_122_/_8%)];
+    @apply overflow-hidden rounded-xl border border-border bg-[var(--terminal-bg)] shadow-[0_24px_80px_rgb(0_0_0_/_35%)];
+    backdrop-filter: blur(var(--glass-blur));
   }
 
   .terminal-chrome {
@@ -207,7 +226,7 @@
   }
 
   .compare-sticky-cell {
-    background-color: var(--card);
+    background-color: var(--card-solid);
   }
 
   .compare-sticky-cell--header {
@@ -238,13 +257,119 @@
   .compare-workspace {
     background: linear-gradient(
       180deg,
-      rgb(0 185 122 / 6%) 0%,
-      transparent 16rem
+      rgb(0 212 146 / 5%) 0%,
+      transparent 18rem
     );
   }
 
   .compare-sidebar {
-    background-color: var(--card);
+    background: linear-gradient(
+      145deg,
+      rgb(255 255 255 / 5%) 0%,
+      rgb(255 255 255 / 2%) 100%
+    );
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  .plan-card-scene {
+    perspective: 1200px;
+  }
+
+  .plan-card-shell {
+    position: relative;
+    transform-style: preserve-3d;
+    transition:
+      transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 0.35s ease;
+    will-change: transform;
+  }
+
+  .plan-card-content {
+    position: relative;
+    z-index: 10;
+    transform: translateZ(0);
+  }
+
+  .plan-card-spotlight {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: radial-gradient(
+      520px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+      rgb(0 212 146 / 14%),
+      transparent 42%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .plan-card-shell:hover .plan-card-spotlight {
+    opacity: 1;
+  }
+
+  .plan-card-rim {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      420px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+      rgb(255 255 255 / 22%),
+      rgb(255 255 255 / 4%) 35%,
+      transparent 55%
+    );
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .plan-card-shell:hover .plan-card-rim {
+    opacity: 1;
+  }
+
+  .plan-card-face {
+    @apply relative overflow-hidden rounded-xl border border-border outline-none;
+    background: linear-gradient(
+      160deg,
+      rgb(255 255 255 / 6%) 0%,
+      rgb(255 255 255 / 2%) 48%,
+      rgb(0 0 0 / 20%) 100%
+    );
+    backdrop-filter: blur(var(--glass-blur));
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 6%) inset,
+      0 24px 48px rgb(0 0 0 / 28%);
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .plan-card-face--open {
+    border-color: rgb(0 212 146 / 35%);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 8%) inset,
+      0 0 0 1px rgb(0 212 146 / 12%),
+      0 32px 64px rgb(0 0 0 / 35%),
+      0 0 80px var(--glow-primary);
+  }
+
+  .plan-card-face--animating {
+    @apply ring-1 ring-accent/25;
+  }
+
+  .plan-card-metric {
+    @apply rounded-lg border border-border/80 bg-black/20 px-3 py-2.5;
+  }
+
+  .plan-card-hint {
+    @apply font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase;
   }
 
   .compare-funded-panel {
@@ -264,5 +389,14 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .plan-card-shell {
+    transform: none !important;
+  }
+
+  .plan-card-shell:hover .plan-card-spotlight,
+  .plan-card-shell:hover .plan-card-rim {
+    opacity: 0;
   }
 }

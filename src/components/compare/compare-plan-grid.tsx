@@ -7,6 +7,7 @@ import {
   ComparePlanSummary,
 } from "@/components/compare/compare-plan-details";
 import { RadialNoiseReveal } from "@/components/compare/radial-noise-reveal";
+import { PlanCardShell } from "@/components/ui/plan-card-shell";
 import type { PlanSummary } from "@/types/plan";
 
 type ComparePlanExplorerCardProps = {
@@ -21,13 +22,15 @@ function ComparePlanExplorerCard({
   onOpenChange,
 }: ComparePlanExplorerCardProps) {
   return (
-    <RadialNoiseReveal
-      open={open}
-      onOpenChange={(nextOpen) => onOpenChange(nextOpen ? plan.id : null)}
-      ariaLabel={`${plan.firm.name} ${plan.name}, ${open ? "expanded" : "collapsed"}`}
-      front={<ComparePlanSummary plan={plan} />}
-      back={<ComparePlanDetails plan={plan} />}
-    />
+    <PlanCardShell interactive={!open}>
+      <RadialNoiseReveal
+        open={open}
+        onOpenChange={(nextOpen) => onOpenChange(nextOpen ? plan.id : null)}
+        ariaLabel={`${plan.firm.name} ${plan.name}, ${open ? "expanded" : "collapsed"}`}
+        front={<ComparePlanSummary plan={plan} />}
+        back={<ComparePlanDetails plan={plan} />}
+      />
+    </PlanCardShell>
   );
 }
 
@@ -39,9 +42,9 @@ export function ComparePlanGrid({ plans }: ComparePlanGridProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {plans.map((plan) => (
-        <li key={plan.id}>
+        <li key={plan.id} className="min-h-[260px]">
           <ComparePlanExplorerCard
             plan={plan}
             open={expandedId === plan.id}

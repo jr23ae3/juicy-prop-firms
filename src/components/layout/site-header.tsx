@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/70 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between gap-4">
         <div className="flex items-center gap-8 lg:gap-12">
           <SiteBrand compact />

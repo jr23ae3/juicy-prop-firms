@@ -54,8 +54,8 @@ export function ToolsGrid() {
             <Link
               href={href}
               className={cn(
-                "surface group flex items-start gap-3 p-4 transition-colors",
-                "hover:border-primary/40 hover:bg-primary/5",
+                "surface group flex items-start gap-3 p-4 transition-all duration-300",
+                "hover:border-primary/30 hover:shadow-[0_20px_40px_rgb(0_0_0_/_25%)]",
               )}
             >
               <IconTile icon={icon} />

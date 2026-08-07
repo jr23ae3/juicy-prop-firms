@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fragment_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Fragment_Mono, IBM_Plex_Sans, Syne } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -19,6 +19,13 @@ const fragmentMono = Fragment_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   weight: ["400"],
+  display: "swap",
+});
+
+const syne = Syne({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -70,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#080809",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -84,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${ibmPlexSans.variable} ${fragmentMono.variable} h-full antialiased`}
+      className={`${ibmPlexSans.variable} ${fragmentMono.variable} ${syne.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-background font-sans font-light">

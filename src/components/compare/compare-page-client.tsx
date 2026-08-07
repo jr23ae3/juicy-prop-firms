@@ -98,7 +98,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
         <PageHeader
           eyebrow="Plan comparison"
           title="Every plan, one view"
-          description="Browse plans at a glance — click any card for a radial reveal of the full breakdown, fees, funded terms, and discount codes."
+          description="Browse plans at a glance — hover for depth, click any card for a radial reveal of the full breakdown."
           actions={
             <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
           }

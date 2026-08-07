@@ -149,9 +149,9 @@ export function RadialNoiseReveal({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative cursor-pointer overflow-hidden rounded-lg border border-border bg-card outline-none transition-[border-color,box-shadow] focus-visible:ring-2 focus-visible:ring-primary/50",
-        open && "border-primary/40 shadow-[0_0_40px_rgb(0_185_122_/_12%)]",
-        isAnimating && "ring-1 ring-accent/30",
+        "plan-card-face relative h-full cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/50",
+        open && "plan-card-face--open",
+        isAnimating && "plan-card-face--animating",
         className,
       )}
     >
@@ -161,7 +161,7 @@ export function RadialNoiseReveal({
 
       <div
         className={cn(
-          "absolute inset-0 z-10 min-h-full bg-card",
+          "absolute inset-0 z-10 min-h-full",
           !showFront && "pointer-events-none opacity-0",
         )}
         style={
@@ -172,6 +172,8 @@ export function RadialNoiseReveal({
                 WebkitMaskSize: "100% 100%",
                 maskSize: "100% 100%",
                 imageRendering: "pixelated",
+                background:
+                  "linear-gradient(160deg, rgb(255 255 255 / 6%) 0%, rgb(255 255 255 / 2%) 100%)",
               }
             : undefined
         }
@@ -180,8 +182,8 @@ export function RadialNoiseReveal({
       </div>
 
       {!open && !maskUrl && !isAnimating ? (
-        <p className="pointer-events-none absolute right-3 bottom-3 z-20 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-          Click to reveal
+        <p className="plan-card-hint pointer-events-none absolute right-4 bottom-4 z-20">
+          Hover me
         </p>
       ) : null}
     </div>
