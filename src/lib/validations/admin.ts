@@ -32,7 +32,7 @@ export const updateFirmSchema = createFirmSchema.partial().extend({
   platformQuality: z.coerce.number().min(0).max(100).optional(),
 });
 
-const marketTypeSchema = z.enum(["FUTURES", "FOREX"]);
+const marketTypeSchema = z.enum(["FUTURES", "FOREX", "STOCKS"]);
 
 export const createPlanSchema = z.object({
   propFirmId: z.string().cuid(),

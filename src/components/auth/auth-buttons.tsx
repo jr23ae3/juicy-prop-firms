@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 
+import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { SignOutButton } from "@/components/auth/sign-out-button";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { isSupabaseConfigured } from "@/lib/env";
 import { getAuthUser } from "@/server/auth";
@@ -11,11 +10,13 @@ export async function AuthButtons() {
   const aiMatchLink = (
     <Link
       href="/advisor"
-      className={cn(buttonVariants({ size: "sm" }), "gap-1.5")}
+      className={cn(
+        "arcade-btn arcade-btn--p2 hidden min-w-0 gap-1.5 text-[8px] sm:inline-flex sm:text-[9px]",
+      )}
     >
-      <Sparkles className="size-3.5" aria-hidden />
-      <span className="hidden sm:inline">Get AI Match</span>
-      <span className="sm:hidden">AI Match</span>
+      <ArcadeAdvisorCharacter size="xs" animate={false} />
+      <span className="hidden sm:inline">ORACLE OJ</span>
+      <span className="sm:hidden">OJ</span>
     </Link>
   );
 
@@ -24,12 +25,9 @@ export async function AuthButtons() {
       <>
         <Link
           href="/login"
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "hidden sm:inline-flex",
-          )}
+          className="arcade-btn arcade-btn--p2 hidden min-w-0 text-[8px] sm:inline-flex sm:text-[9px]"
         >
-          Sign in
+          SIGN IN
         </Link>
         {aiMatchLink}
       </>
@@ -44,9 +42,9 @@ export async function AuthButtons() {
         {aiMatchLink}
         <Link
           href="/account"
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+          className="arcade-btn arcade-btn--p2 min-w-0 text-[8px] sm:text-[9px]"
         >
-          Account
+          ACCOUNT
         </Link>
         <SignOutButton />
       </>
@@ -57,12 +55,9 @@ export async function AuthButtons() {
     <>
       <Link
         href="/login"
-        className={cn(
-          buttonVariants({ variant: "ghost", size: "sm" }),
-          "hidden sm:inline-flex",
-        )}
+        className="arcade-btn arcade-btn--p2 hidden min-w-0 text-[8px] sm:inline-flex sm:text-[9px]"
       >
-        Sign in
+        SIGN IN
       </Link>
       {aiMatchLink}
     </>

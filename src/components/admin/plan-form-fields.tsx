@@ -119,6 +119,7 @@ export function PlanFormFields({
           >
             <option value="FUTURES">Futures</option>
             <option value="FOREX">Forex</option>
+            <option value="STOCKS">Stocks</option>
           </select>
         </div>
         <div className="space-y-2">

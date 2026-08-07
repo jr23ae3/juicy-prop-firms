@@ -190,6 +190,163 @@
     @apply text-primary;
   }
 
+  /* ── Site header / footer arcade chrome ── */
+  .site-header-arcade {
+    @apply sticky top-0 z-50 border-b-4 border-[#4c1d95]/90 bg-[#0a0520]/95 backdrop-blur-sm;
+    box-shadow:
+      0 4px 0 rgb(0 0 0 / 45%),
+      0 0 30px rgb(107 33 168 / 20%);
+  }
+
+  .site-header-arcade-ticker {
+    @apply overflow-hidden border-b-2 border-primary/25 bg-[#04110a] py-1;
+  }
+
+  .site-header-arcade-ticker-track {
+    @apply flex w-max gap-8;
+    animation: arcade-marquee 22s linear infinite;
+  }
+
+  .site-header-arcade-ticker-text {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply whitespace-nowrap text-[8px] tracking-wider text-[#ffd700] sm:text-[9px];
+  }
+
+  .site-header-arcade-inner {
+    @apply flex h-[4.25rem] items-center justify-between gap-4;
+  }
+
+  .site-header-arcade-dots {
+    @apply hidden items-center gap-1 sm:flex;
+  }
+
+  .site-header-arcade-dots span:nth-child(1) {
+    @apply size-2 rounded-full bg-[#ff5c5c];
+  }
+
+  .site-header-arcade-dots span:nth-child(2) {
+    @apply size-2 rounded-full bg-[#ffd700];
+  }
+
+  .site-header-arcade-dots span:nth-child(3) {
+    @apply size-2 rounded-full bg-[#00b97a];
+  }
+
+  .site-header-arcade .nav-link {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply rounded-none border-2 border-transparent px-3 py-1.5 text-[9px] tracking-wide;
+  }
+
+  .site-header-arcade .nav-link:hover {
+    @apply border-primary/30 bg-primary/10 text-accent;
+  }
+
+  .site-header-arcade .nav-link--active {
+    @apply border-primary/50 bg-primary/15 text-primary;
+    box-shadow: inset 0 0 10px rgb(0 185 122 / 12%);
+  }
+
+  .site-brand-arcade-tag {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply text-[8px] tracking-wide text-[#ffd700];
+  }
+
+  .site-brand-arcade-name {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply text-[10px] leading-snug text-accent sm:text-[11px];
+    text-shadow: 0 0 8px rgb(54 255 255 / 30%);
+  }
+
+  .site-footer-arcade {
+    @apply relative mt-auto overflow-hidden border-t-4 border-[#4c1d95]/80 bg-[#0a0520];
+    box-shadow: inset 0 8px 24px rgb(107 33 168 / 12%);
+  }
+
+  .site-footer-arcade::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgb(0 0 0 / 0%) 0,
+      rgb(0 0 0 / 0%) 2px,
+      rgb(0 0 0 / 14%) 3px
+    );
+    opacity: 0.25;
+  }
+
+  .site-footer-arcade-inner {
+    @apply relative z-[1];
+  }
+
+  .site-footer-arcade-marquee {
+    @apply overflow-hidden border-b-2 border-primary/20 bg-[#04110a]/90 py-2;
+  }
+
+  .site-footer-arcade-marquee-track {
+    @apply flex w-max gap-10;
+    animation: arcade-marquee 30s linear infinite;
+  }
+
+  .site-footer-arcade-marquee-text {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply whitespace-nowrap text-[8px] text-primary sm:text-[9px];
+  }
+
+  .site-footer-arcade-section-title {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply text-[9px] text-[#ffd700];
+  }
+
+  .site-footer-arcade-link {
+    @apply inline-block border-b border-transparent font-mono text-sm text-foreground/75 transition-colors;
+  }
+
+  .site-footer-arcade-link:hover {
+    @apply border-accent text-accent;
+  }
+
+  .site-footer-arcade-bottom {
+    @apply border-t-2 border-primary/25 pt-8 font-mono text-xs text-muted-foreground;
+  }
+
+  .site-footer-arcade-credits {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply text-[8px] text-primary;
+  }
+
+  .site-footer-arcade-dot-trail {
+    @apply flex gap-1;
+  }
+
+  .site-footer-arcade-dot-trail span {
+    @apply size-1.5 rounded-sm bg-primary/70;
+    animation: arcade-dot-pulse 1.2s ease-in-out infinite;
+  }
+
+  .site-mobile-nav-arcade {
+    @apply rounded-none border-2 border-primary/40 bg-[#04110a];
+    box-shadow: 2px 2px 0 rgb(0 0 0 / 40%);
+  }
+
+  .site-mobile-nav-dialog {
+    @apply border-4 border-[#4c1d95] bg-[#0a0520];
+  }
+
+  .site-mobile-nav-dialog .nav-link-mobile {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply block rounded-none border-2 border-transparent px-4 py-3 text-[10px] tracking-wide;
+  }
+
+  .site-mobile-nav-dialog .nav-link-mobile--active {
+    @apply border-primary/50 bg-primary/10 text-primary;
+  }
+
+  .site-mobile-nav-dialog .nav-link-mobile:not(.nav-link-mobile--active):hover {
+    @apply border-primary/25 bg-[#04110a] text-accent;
+  }
+
   .terminal {
     @apply overflow-hidden rounded-lg border border-primary/25 bg-[var(--terminal-bg)] shadow-[0_0_40px_rgb(0_185_122_/_8%)];
   }
@@ -1166,6 +1323,9 @@
     opacity: 0;
   }
 
+  .site-header-arcade-ticker-track,
+  .site-footer-arcade-marquee-track,
+  .site-footer-arcade-dot-trail span,
   .arcade-marquee-track,
   .arcade-coin,
   .arcade-star,

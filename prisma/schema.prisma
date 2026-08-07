@@ -117,6 +117,7 @@ enum DrawdownType {
 enum MarketType {
   FUTURES
   FOREX
+  STOCKS
 }
 
 model Plan {

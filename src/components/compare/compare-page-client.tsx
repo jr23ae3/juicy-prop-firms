@@ -87,7 +87,7 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
     });
   }
 
-  const hasSeedData = metadata.firms.length > 0 || marketType === "FOREX";
+  const hasSeedData = metadata.firms.length > 0 || marketType !== DEFAULT_MARKET_TYPE;
 
   if (!hasSeedData && !isLoading && marketType === DEFAULT_MARKET_TYPE) {
     return <CompareEmptyState variant="no-data" />;

@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { SiteBrand } from "@/components/layout/site-brand";
 import { mainNav } from "@/config/navigation";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function MobileNav() {
@@ -45,7 +44,7 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="inline-flex size-9 items-center justify-center rounded-md border border-border bg-secondary/50 text-foreground"
+        className="site-mobile-nav-arcade inline-flex size-9 items-center justify-center text-foreground"
         aria-expanded={open}
         aria-controls="mobile-nav-dialog"
         aria-label={open ? "Close menu" : "Open menu"}
@@ -62,25 +61,31 @@ export function MobileNav() {
         id="mobile-nav-dialog"
         ref={dialogRef}
         aria-label="Mobile navigation"
-        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-black/70 open:flex open:flex-col"
+        className="site-mobile-nav-dialog fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 p-0 backdrop:bg-black/80 open:flex open:flex-col"
         onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setOpen(false);
         }}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border px-4">
-          <SiteBrand compact />
+        <div className="flex h-16 items-center justify-between border-b-2 border-primary/30 bg-[#04110a] px-4">
+          <SiteBrand compact variant="arcade" />
           <button
             type="button"
             aria-label="Close menu"
-            className="inline-flex size-9 items-center justify-center rounded-md"
+            className="site-mobile-nav-arcade inline-flex size-9 items-center justify-center"
             onClick={() => setOpen(false)}
           >
             <X className="size-5" aria-hidden />
           </button>
         </div>
-        <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
+        <nav
+          aria-label="Mobile navigation"
+          className="flex-1 overflow-y-auto bg-[#0a0520] p-4"
+        >
+          <p className="arcade-level-num mb-4 text-[9px] text-[#ffd700]">
+            ★ SELECT STAGE ★
+          </p>
+          <ul className="space-y-2">
             {mainNav.map((item) => {
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -89,14 +94,12 @@ export function MobileNav() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "block rounded-md px-4 py-3 font-mono text-sm uppercase tracking-wider transition-colors",
-                      isActive
-                        ? "bg-primary/15 text-primary"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                      "nav-link-mobile",
+                      isActive && "nav-link-mobile--active",
                     )}
                     onClick={() => setOpen(false)}
                   >
-                    {item.title}
+                    {item.title.toUpperCase()}
                   </Link>
                 </li>
               );
@@ -104,10 +107,10 @@ export function MobileNav() {
           </ul>
           <Link
             href="/compare"
-            className={cn(buttonVariants(), "cta-arrow mt-6 w-full")}
+            className="arcade-btn arcade-btn--p1 mt-6 w-full text-[9px]"
             onClick={() => setOpen(false)}
           >
-            Compare now
+            P1 · COMPARE
           </Link>
         </nav>
       </dialog>

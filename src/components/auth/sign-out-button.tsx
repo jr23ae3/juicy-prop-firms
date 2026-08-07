@@ -1,12 +1,14 @@
 import { signOutAction } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
 
 export function SignOutButton() {
   return (
     <form action={signOutAction}>
-      <Button type="submit" variant="ghost" size="sm">
-        Sign out
-      </Button>
+      <button
+        type="submit"
+        className="arcade-btn arcade-btn--p2 min-w-0 px-3 text-[8px] sm:text-[9px]"
+      >
+        QUIT
+      </button>
     </form>
   );
 }
