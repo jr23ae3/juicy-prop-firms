@@ -1,35 +1,52 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BadgeCheck, Calculator, Sparkles } from "lucide-react";
+import { BadgeCheck, Calculator, Sparkles, Table2 } from "lucide-react";
 
-import { FirmLogoStrip } from "@/components/marketing/firm-logo-strip";
-import { ToolsGrid } from "@/components/marketing/tools-grid";
+import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
+import { ArcadeScoreHud } from "@/components/marketing/arcade-score-hud";
+import { ArcadeStarfield } from "@/components/marketing/arcade-starfield";
 import { Container } from "@/components/layout/container";
-import { TerminalPanel } from "@/components/layout/terminal-panel";
-import { IconTile } from "@/components/ui/icon-tile";
-import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import type { FeaturedFirm } from "@/server/data/plans";
-import { cn } from "@/lib/utils";
 
-const highlights = [
+const levels = [
+  {
+    href: "/compare",
+    num: "LVL 1",
+    title: "COMPARE",
+    desc: "Side-by-side plan showdown",
+    icon: Table2,
+  },
+  {
+    href: "/advisor",
+    num: "LVL 2",
+    title: "AI BOSS",
+    desc: "Personalized firm matches",
+    icon: Sparkles,
+  },
+  {
+    href: "/roi-calculator",
+    num: "LVL 3",
+    title: "ROI RUN",
+    desc: "Break-even calculator",
+    icon: Calculator,
+  },
+] as const;
+
+const powerUps = [
   {
     icon: BadgeCheck,
-    label: "Verified pricing",
-    description:
-      "Pulled directly from each firm — never scraped from aggregators.",
+    title: "VERIFIED",
+    desc: "Pricing pulled direct from each firm.",
   },
   {
     icon: Calculator,
-    label: "True all-in cost",
-    description:
-      "Eval price plus activation fees, shown before you click out.",
+    title: "ALL-IN",
+    desc: "Eval + activation fees upfront.",
   },
   {
     icon: Sparkles,
-    label: "AI matching",
-    description:
-      "Plan recommendations shaped to how you actually trade.",
+    title: "AI MATCH",
+    desc: "Plans shaped to how you trade.",
   },
 ] as const;
 
@@ -52,121 +69,124 @@ function formatCurrency(amount: number) {
 
 export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
   const hasStats = stats && stats.plans > 0;
+  const lowestLabel =
+    hasStats && stats.lowestAllIn != null
+      ? formatCurrency(stats.lowestAllIn)
+      : null;
 
   return (
-    <section className="site-canvas relative overflow-hidden border-b border-border">
-      <Image
-        src="/illustrations/chart-terminal.svg"
-        alt=""
-        width={400}
-        height={280}
-        aria-hidden
-        className="pointer-events-none absolute -right-8 top-24 hidden w-[min(42vw,400px)] opacity-40 lg:block xl:right-[8%]"
-      />
+    <section className="arcade-landing">
+      <ArcadeStarfield />
 
-      <Container className="relative py-16 sm:py-20 lg:py-28">
-        <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <p className="page-eyebrow">Independent prop firm research</p>
-            <h1 className="page-title mt-5 max-w-3xl">
-              No affiliate noise.
-              <br />
-              Just the highest-signal prop firm data you&apos;ll find.
-            </h1>
-            <p className="page-lead mt-6 max-w-xl">{siteConfig.description}</p>
+      {/* floating coins */}
+      <span className="arcade-coin left-[8%] top-[18%]" style={{ animationDelay: "0s" }} aria-hidden />
+      <span className="arcade-coin right-[12%] top-[28%]" style={{ animationDelay: "1s" }} aria-hidden />
+      <span className="arcade-coin left-[85%] top-[62%]" style={{ animationDelay: "0.5s" }} aria-hidden />
 
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/compare"
-                className={cn(buttonVariants({ size: "lg" }), "cta-arrow w-full sm:w-auto")}
-              >
-                Compare now
-              </Link>
-              <Link
-                href="/advisor"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "w-full sm:w-auto",
+      <Container className="relative py-10 sm:py-14 lg:py-16">
+        <div className="arcade-cabinet">
+          <div className="arcade-cabinet-shell">
+            <div className="arcade-screen">
+              <div className="arcade-screen-inner">
+                <p className="arcade-coin-text">◆ INSERT COIN TO CONTINUE ◆</p>
+
+                <h1 className="arcade-title">
+                  JUICY TRADE
+                  <br />
+                  FIRMS
+                </h1>
+                <p className="arcade-subtitle">PROP FIRM QUEST · 1UP EDITION</p>
+
+                <p className="arcade-press-start" aria-hidden>
+                  ▶ PRESS START
+                </p>
+
+                {hasStats ? (
+                  <ArcadeScoreHud
+                    firms={stats.firms}
+                    plans={stats.plans}
+                    lowestAllIn={lowestLabel}
+                  />
+                ) : (
+                  <p className="mt-8 font-mono text-xs text-muted-foreground">
+                    RUN npm run db:seed TO LOAD THE CATALOG
+                  </p>
                 )}
-              >
-                Try AI advisor
-              </Link>
-            </div>
-          </div>
 
-          <div className="lg:col-span-5 lg:col-start-8">
-            <TerminalPanel>
-              {hasStats ? (
-                <>
-                  <p>
-                    <span className="terminal-prompt">$</span>{" "}
-                    <span className="terminal-cmd">firms --count</span>
-                  </p>
-                  <p className="terminal-output pl-4">
-                    → {stats.firms} firms indexed
-                  </p>
-                  <p className="pt-2">
-                    <span className="terminal-prompt">$</span>{" "}
-                    <span className="terminal-cmd">plans --list</span>
-                  </p>
-                  <p className="terminal-output pl-4">
-                    → {stats.plans} plans tracked
-                  </p>
-                  {stats.lowestAllIn != null ? (
-                    <>
-                      <p className="pt-2">
-                        <span className="terminal-prompt">$</span>{" "}
-                        <span className="terminal-cmd">pricing --min --all-in</span>
-                      </p>
-                      <p className="terminal-output pl-4">
-                        → {formatCurrency(stats.lowestAllIn)}
-                      </p>
-                    </>
-                  ) : null}
-                  <p className="terminal-muted pt-4 text-xs">
-                    try:{" "}
-                    <span className="text-foreground/80">compare</span>{" "}
-                    <span className="text-foreground/80">advisor</span>{" "}
-                    <span className="text-foreground/80">roi-calculator</span>
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <span className="terminal-prompt">$</span>{" "}
-                    <span className="terminal-cmd">db --seed</span>
-                  </p>
-                  <p className="terminal-muted pl-4">
-                    → run npm run db:seed to load catalog
-                  </p>
-                </>
-              )}
-            </TerminalPanel>
+                <p className="mx-auto mt-6 max-w-md font-mono text-[11px] leading-relaxed text-muted-foreground sm:text-xs">
+                  {siteConfig.description}
+                </p>
+
+                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Link href="/compare" className="arcade-btn arcade-btn--p1">
+                    P1 · COMPARE
+                  </Link>
+                  <Link href="/advisor" className="arcade-btn arcade-btn--p2">
+                    P2 · ADVISOR
+                  </Link>
+                </div>
+
+                <div className="arcade-dot-trail mx-auto mt-8 w-fit" aria-hidden>
+                  {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                    <span
+                      key={i}
+                      className="arcade-dot"
+                      style={{ animationDelay: `${i * 0.15}s` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <ToolsGrid />
-        <FirmLogoStrip firms={featuredFirms} />
+        <section aria-labelledby="level-select" className="mt-16">
+          <h2 id="level-select" className="arcade-level-num mb-5 text-center">
+            ★ SELECT YOUR LEVEL ★
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {levels.map(({ href, num, title, desc, icon: Icon }) => (
+              <li key={href}>
+                <Link href={href} className="group arcade-level-card">
+                  <p className="arcade-level-num">{num}</p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <Icon className="size-4 text-primary" aria-hidden />
+                    <p className="arcade-level-title">{title}</p>
+                  </div>
+                  <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                    {desc}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-        <div className="mt-20 border-t border-border pt-12">
-          <p className="section-label mb-8">What you get</p>
-          <ul className="grid gap-8 sm:grid-cols-3">
-            {highlights.map(({ icon, label, description }) => (
-              <li key={label} className="flex gap-4">
-                <IconTile icon={icon} />
-                <div className="space-y-1">
-                  <h2 className="text-lg font-normal text-foreground">{label}</h2>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {description}
+        <ArcadeFirmMarquee firms={featuredFirms} />
+
+        <section aria-labelledby="power-ups" className="mt-16">
+          <h2 id="power-ups" className="arcade-level-num mb-5 text-center">
+            ★ POWER-UPS UNLOCKED ★
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {powerUps.map(({ icon: Icon, title, desc }) => (
+              <li key={title} className="arcade-powerup">
+                <div className="flex size-10 shrink-0 items-center justify-center border-2 border-primary/40 bg-primary/10">
+                  <Icon className="size-5 text-primary" aria-hidden />
+                </div>
+                <div>
+                  <p className="arcade-level-title">{title}</p>
+                  <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                    {desc}
                   </p>
                 </div>
               </li>
             ))}
           </ul>
-        </div>
+        </section>
 
-        <p className="mt-12 font-mono text-xs text-muted-foreground">
-          Built for futures traders.
+        <p className="mt-12 text-center font-mono text-[10px] text-muted-foreground">
+          © HIGH SCORE RESEARCH · BUILT FOR FUTURES TRADERS
         </p>
       </Container>
     </section>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fragment_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Fragment_Mono, IBM_Plex_Sans, Press_Start_2P } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -17,6 +17,13 @@ const ibmPlexSans = IBM_Plex_Sans({
 
 const fragmentMono = Fragment_Mono({
   variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const pressStart2P = Press_Start_2P({
+  variable: "--font-arcade",
   subsets: ["latin"],
   weight: ["400"],
   display: "swap",
@@ -84,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${ibmPlexSans.variable} ${fragmentMono.variable} h-full antialiased`}
+      className={`${ibmPlexSans.variable} ${fragmentMono.variable} ${pressStart2P.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="retro-canvas flex min-h-full flex-col bg-background font-sans font-light">
