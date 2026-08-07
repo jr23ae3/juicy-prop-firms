@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -12,21 +11,15 @@ type CompareEmptyStateProps = {
 export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
   if (variant === "no-data") {
     return (
-      <Container className="site-canvas py-16">
-        <div className="surface mx-auto max-w-lg p-8 text-center">
-          <Image
-            src="/illustrations/no-data.svg"
-            alt=""
-            width={120}
-            height={120}
-            className="mx-auto mb-6"
-          />
-          <h2 className="text-xl font-semibold">No plan data yet</h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+      <Container className="site-canvas compare-workspace py-16">
+        <div className="compare-arcade-empty mx-auto max-w-lg">
+          <p className="arcade-level-num text-[#ffd700]">★ NO CARTRIDGE ★</p>
+          <h2 className="compare-arcade-empty-title mt-4">INSERT PLAN DATA</h2>
+          <p className="mt-3 font-mono text-sm leading-relaxed text-muted-foreground">
             Connect your database and run the seed script to load sample prop
             firm plans.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-md bg-muted p-3 text-left text-xs">
+          <pre className="mt-4 overflow-x-auto border-2 border-primary/25 bg-[#020812] p-3 text-left font-mono text-xs text-primary">
             npm run db:migrate{"\n"}npm run db:seed
           </pre>
         </div>
@@ -35,23 +28,21 @@ export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
   }
 
   return (
-    <div className="surface-muted border-dashed px-6 py-12 text-center">
-      <Image
-        src="/illustrations/no-results.svg"
-        alt=""
-        width={120}
-        height={120}
-        className="mx-auto mb-6 opacity-90"
-      />
-      <h2 className="text-lg font-semibold">No plans match your filters</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Try adjusting account size, eval type, or max budget.
+    <div className="compare-arcade-empty">
+      <p className="arcade-level-num text-[#ffd700]">★ GAME OVER ★</p>
+      <h2 className="compare-arcade-empty-title mt-4">NO PLANS MATCH</h2>
+      <p className="mt-3 font-mono text-sm text-muted-foreground">
+        Try adjusting account size, eval type, or max budget — then press start
+        again.
       </p>
       <Link
         href="/compare"
-        className={cn(buttonVariants({ variant: "outline", size: "sm" }), "mt-4")}
+        className={cn(
+          buttonVariants({ size: "sm" }),
+          "arcade-btn arcade-btn--p1 mt-6 min-w-0 text-[9px]",
+        )}
       >
-        Clear filters
+        RESET FILTERS
       </Link>
     </div>
   );

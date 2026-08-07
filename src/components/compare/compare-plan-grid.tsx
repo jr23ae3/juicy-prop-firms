@@ -44,7 +44,7 @@ export function ComparePlanGrid({ plans }: ComparePlanGridProps) {
   return (
     <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {plans.map((plan) => (
-        <li key={plan.id} className="min-h-[260px]">
+        <li key={plan.id} className="min-h-[280px]">
           <ComparePlanExplorerCard
             plan={plan}
             open={expandedId === plan.id}

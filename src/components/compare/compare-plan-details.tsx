@@ -24,24 +24,52 @@ import {
   getRewardRatioTooltip,
 } from "@/lib/plans/calculation-tooltips";
 import { getAllInTarget, getRiskRatio, getRewardRatio } from "@/lib/plans/metrics";
+import { cn } from "@/lib/utils";
 
 type ComparePlanDetailsProps = {
   plan: PlanSummary;
 };
 
+function ArcadeChrome({
+  title,
+  badge,
+}: {
+  title: string;
+  badge?: React.ReactNode;
+}) {
+  return (
+    <div className="plan-card-arcade-chrome">
+      <div className="flex min-w-0 items-center gap-2">
+        <div className="plan-card-arcade-dots" aria-hidden>
+          <span />
+          <span />
+          <span />
+        </div>
+        <span className="plan-card-arcade-chrome-title truncate">{title}</span>
+      </div>
+      {badge}
+    </div>
+  );
+}
+
 function Stat({
   label,
   children,
+  highlight,
 }: {
   label: string;
   children: React.ReactNode;
+  highlight?: boolean;
 }) {
   return (
-    <div>
-      <dt className="text-[11px] tracking-wider text-muted-foreground uppercase">
-        {label}
-      </dt>
-      <dd className="mt-0.5 text-sm tabular-nums">{children}</dd>
+    <div
+      className={cn(
+        "plan-card-arcade-stat",
+        highlight && "plan-card-arcade-stat--highlight",
+      )}
+    >
+      <dt className="plan-card-arcade-stat-label">{label}</dt>
+      <dd className="plan-card-arcade-stat-value">{children}</dd>
     </div>
   );
 }
@@ -50,201 +78,219 @@ export function ComparePlanDetails({ plan }: ComparePlanDetailsProps) {
   const hasDiscount = plan.pricing.savings > 0;
 
   return (
-    <div className="p-5 sm:p-6">
-      <div className="mb-5 flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <FirmLogo
-            name={plan.firm.name}
-            slug={plan.firm.slug}
-            logoUrl={plan.firm.logoUrl}
-            size="md"
-          />
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
-              Full breakdown
-            </p>
-            <p className="font-medium">{plan.firm.name}</p>
-            <p className="text-sm text-muted-foreground">
-              {plan.name} · {formatAccountSize(plan.accountSize)}
-            </p>
+    <div className="plan-card-arcade">
+      <ArcadeChrome
+        title="STAGE 2 · FULL STATS"
+        badge={<EvalTypeBadge evalType={plan.evalType} variant="arcade" />}
+      />
+
+      <div className="plan-card-arcade-body p-4 sm:p-5">
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="plan-card-arcade-logo-wrap">
+              <FirmLogo
+                name={plan.firm.name}
+                slug={plan.firm.slug}
+                logoUrl={plan.firm.logoUrl}
+                size="md"
+              />
+            </div>
+            <div>
+              <p className="plan-card-arcade-rank">
+                RANK #{plan.firm.rankPosition ?? "—"}
+              </p>
+              <p className="font-mono text-sm font-medium">{plan.firm.name}</p>
+              <p className="font-mono text-xs text-muted-foreground">
+                {plan.name} · {formatAccountSize(plan.accountSize)}
+              </p>
+            </div>
+          </div>
+          <div
+            className="shrink-0"
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            <SavePlanButton planId={plan.id} />
           </div>
         </div>
-        <div
-          className="shrink-0"
-          onClick={(event) => event.stopPropagation()}
-          onKeyDown={(event) => event.stopPropagation()}
-        >
-          <SavePlanButton planId={plan.id} />
-        </div>
-      </div>
 
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
-        <Stat label="Draw down type">
-          {getDrawdownTypeLabel(plan.drawdownType) ?? "—"}
-        </Stat>
-        <Stat label="Target goal">
-          {formatOptionalCurrency(plan.profitTarget)}
-        </Stat>
-        <Stat label="Daily draw down">
-          {formatOptionalCurrency(plan.dailyDrawdown)}
-        </Stat>
-        <Stat label="Max draw down">
-          {formatOptionalCurrency(plan.maxDrawdown)}
-        </Stat>
-        <Stat label="Minimum days">
-          {formatMinimumDays(plan.minimumDays)}
-        </Stat>
-        <Stat label="Eval price">
-          {hasDiscount ? (
-            <>
-              <span className="mr-1.5 text-muted-foreground line-through">
-                {formatCurrency(plan.pricing.evalPrice)}
-              </span>
-              {formatCurrency(plan.pricing.discountedPrice)}
-            </>
-          ) : (
-            formatCurrency(plan.pricing.evalPrice)
-          )}
-        </Stat>
-        <Stat label="Activation">
-          <ActivationFeeDisplay plan={plan} />
-        </Stat>
-        <Stat label="All-in cost">
-          <span className="font-semibold text-primary">
+        <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <Stat label="Draw down">
+            {getDrawdownTypeLabel(plan.drawdownType) ?? "—"}
+          </Stat>
+          <Stat label="Target">
+            {formatOptionalCurrency(plan.profitTarget)}
+          </Stat>
+          <Stat label="Daily DD">
+            {formatOptionalCurrency(plan.dailyDrawdown)}
+          </Stat>
+          <Stat label="Max DD">
+            {formatOptionalCurrency(plan.maxDrawdown)}
+          </Stat>
+          <Stat label="Min days">
+            {formatMinimumDays(plan.minimumDays)}
+          </Stat>
+          <Stat label="Eval $">
+            {hasDiscount ? (
+              <>
+                <span className="mr-1 text-muted-foreground line-through">
+                  {formatCurrency(plan.pricing.evalPrice)}
+                </span>
+                {formatCurrency(plan.pricing.discountedPrice)}
+              </>
+            ) : (
+              formatCurrency(plan.pricing.evalPrice)
+            )}
+          </Stat>
+          <Stat label="Activation">
+            <ActivationFeeDisplay plan={plan} />
+          </Stat>
+          <Stat label="All-in" highlight>
             <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
               {formatCurrency(plan.pricing.allInCost)}
             </CalculatedValue>
-          </span>
-        </Stat>
-        <Stat label="Return multiple">
-          <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
-            {formatReturnMultiple(plan.pricing.returnMultiple)}
-          </CalculatedValue>
-        </Stat>
-      </dl>
-
-      <div className="compare-funded-panel mt-5 pt-5">
-        <p className="compare-funded-panel-label">After funding</p>
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
-          <Stat label="Min days to payout">
-            {formatMinimumDays(plan.minimumDaysToPayout)}
           </Stat>
-          <Stat label="Min target buffer">
-            {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
-          </Stat>
-          <Stat label="All-in target">
-            <CalculatedValue tooltip={getAllInTargetTooltip(plan)}>
-              {formatOptionalCurrency(
-                getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
-              )}
+          <Stat label="Return">
+            <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
+              {formatReturnMultiple(plan.pricing.returnMultiple)}
             </CalculatedValue>
-          </Stat>
-          <Stat label="Max payout">
-            {formatOptionalCurrency(plan.maxPayout)}
-          </Stat>
-          <Stat label="Risk ratio">
-            <CalculatedValue tooltip={getRiskRatioTooltip(plan)}>
-              {formatReturnMultiple(
-                getRiskRatio(
-                  plan.maxDrawdown,
-                  plan.profitTarget,
-                  plan.minimumTargetGoalCushion,
-                ),
-              )}
-            </CalculatedValue>
-          </Stat>
-          <Stat label="Reward ratio">
-            <CalculatedValue tooltip={getRewardRatioTooltip(plan)}>
-              {formatReturnMultiple(
-                getRewardRatio(
-                  plan.maxPayout,
-                  plan.profitTarget,
-                  plan.minimumTargetGoalCushion,
-                ),
-              )}
-            </CalculatedValue>
-          </Stat>
-          <Stat label="Max funded">
-            {formatOptionalCount(plan.maxFundedAccounts)}
-          </Stat>
-          <Stat label="Split %">{formatProfitSplit(plan.profitSplit)}</Stat>
-          <Stat label="Funded draw down">
-            {getDrawdownTypeLabel(plan.fundedDrawdownType) ?? "—"}
           </Stat>
         </dl>
-      </div>
 
-      {plan.discount ? (
-        <div
-          className="mt-4 border-t border-border pt-4"
-          onClick={(event) => event.stopPropagation()}
-          onKeyDown={(event) => event.stopPropagation()}
-        >
-          <DiscountBadge discount={plan.discount} />
+        <div className="compare-funded-panel mt-5 pt-4">
+          <p className="compare-funded-panel-label">★ BONUS ROUND ★</p>
+          <dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <Stat label="Payout days">
+              {formatMinimumDays(plan.minimumDaysToPayout)}
+            </Stat>
+            <Stat label="Target buf">
+              {formatOptionalCurrency(plan.minimumTargetGoalCushion)}
+            </Stat>
+            <Stat label="All-in tgt">
+              <CalculatedValue tooltip={getAllInTargetTooltip(plan)}>
+                {formatOptionalCurrency(
+                  getAllInTarget(plan.profitTarget, plan.minimumTargetGoalCushion),
+                )}
+              </CalculatedValue>
+            </Stat>
+            <Stat label="Max pay">
+              {formatOptionalCurrency(plan.maxPayout)}
+            </Stat>
+            <Stat label="Risk x">
+              <CalculatedValue tooltip={getRiskRatioTooltip(plan)}>
+                {formatReturnMultiple(
+                  getRiskRatio(
+                    plan.maxDrawdown,
+                    plan.profitTarget,
+                    plan.minimumTargetGoalCushion,
+                  ),
+                )}
+              </CalculatedValue>
+            </Stat>
+            <Stat label="Reward x">
+              <CalculatedValue tooltip={getRewardRatioTooltip(plan)}>
+                {formatReturnMultiple(
+                  getRewardRatio(
+                    plan.maxPayout,
+                    plan.profitTarget,
+                    plan.minimumTargetGoalCushion,
+                  ),
+                )}
+              </CalculatedValue>
+            </Stat>
+            <Stat label="Max accts">
+              {formatOptionalCount(plan.maxFundedAccounts)}
+            </Stat>
+            <Stat label="Split">
+              {formatProfitSplit(plan.profitSplit)}
+            </Stat>
+            <Stat label="Funded DD">
+              {getDrawdownTypeLabel(plan.fundedDrawdownType) ?? "—"}
+            </Stat>
+          </dl>
         </div>
-      ) : null}
 
-      <p className="mt-4 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-        Click anywhere to collapse
-      </p>
+        {plan.discount ? (
+          <div
+            className="plan-card-arcade-promo mt-4"
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            <p className="plan-card-arcade-stat-label mb-2">POWER-UP CODE</p>
+            <DiscountBadge discount={plan.discount} />
+          </div>
+        ) : null}
+
+        <p className="plan-card-arcade-footer mt-4">▼ PRESS TO CLOSE</p>
+      </div>
     </div>
   );
 }
 
 export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
   const hasDiscount = plan.pricing.savings > 0;
+  const rankLabel = plan.firm.rankPosition
+    ? String(plan.firm.rankPosition).padStart(2, "0")
+    : "—";
 
   return (
-    <div className="flex min-h-[260px] flex-col p-5 sm:p-6">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-start gap-3">
-          <FirmLogo
-            name={plan.firm.name}
-            slug={plan.firm.slug}
-            logoUrl={plan.firm.logoUrl}
-            size="lg"
-          />
-          <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-              #{plan.firm.rankPosition ?? "—"} · {plan.firm.name}
-            </p>
-            <h3 className="mt-1 text-lg leading-snug font-light">{plan.name}</h3>
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              {formatAccountSize(plan.accountSize)}
+    <div className="plan-card-arcade flex min-h-[280px] flex-col">
+      <ArcadeChrome
+        title={`HIGH SCORE · #${rankLabel}`}
+        badge={<EvalTypeBadge evalType={plan.evalType} variant="arcade" />}
+      />
+
+      <div className="plan-card-arcade-body flex flex-1 flex-col p-4 sm:p-5">
+        <div className="flex items-start gap-3">
+          <div className="plan-card-arcade-logo-wrap">
+            <FirmLogo
+              name={plan.firm.name}
+              slug={plan.firm.slug}
+              logoUrl={plan.firm.logoUrl}
+              size="lg"
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="plan-card-arcade-rank">{plan.firm.name}</p>
+            <h3 className="plan-card-arcade-name">{plan.name}</h3>
+            <p className="mt-1 font-mono text-xs text-accent">
+              {formatAccountSize(plan.accountSize)} ACCOUNT
             </p>
           </div>
         </div>
-        <EvalTypeBadge evalType={plan.evalType} />
-      </div>
 
-      <div className="mt-auto grid grid-cols-2 gap-3 pt-8">
-        <div className="plan-card-metric">
-          <p className="text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-            All-in cost
-          </p>
-          <p className="mt-1 text-2xl font-medium text-primary tabular-nums">
-            <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
-              {formatCurrency(plan.pricing.allInCost)}
-            </CalculatedValue>
-          </p>
-          {hasDiscount ? (
-            <p className="mt-1 text-xs text-muted-foreground">
-              <span className="line-through">
-                {formatCurrency(plan.pricing.evalPrice)}
-              </span>{" "}
-              after discount
+        {hasDiscount ? (
+          <p className="plan-card-arcade-promo-tag mt-3">★ DISCOUNT ACTIVE ★</p>
+        ) : null}
+
+        <div className="mt-auto grid grid-cols-2 gap-2 pt-6">
+          <div className="plan-card-metric plan-card-metric--coins">
+            <p className="plan-card-arcade-metric-label">COINS</p>
+            <p className="plan-card-arcade-metric-value plan-card-arcade-metric-value--primary">
+              <CalculatedValue tooltip={getAllInCostTooltip(plan)}>
+                {formatCurrency(plan.pricing.allInCost)}
+              </CalculatedValue>
             </p>
-          ) : null}
+            {hasDiscount ? (
+              <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                <span className="line-through">
+                  {formatCurrency(plan.pricing.evalPrice)}
+                </span>
+              </p>
+            ) : null}
+          </div>
+          <div className="plan-card-metric plan-card-metric--score text-right">
+            <p className="plan-card-arcade-metric-label">MULT</p>
+            <p className="plan-card-arcade-metric-value plan-card-arcade-metric-value--accent">
+              <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
+                {formatReturnMultiple(plan.pricing.returnMultiple)}
+              </CalculatedValue>
+            </p>
+          </div>
         </div>
-        <div className="plan-card-metric text-right">
-          <p className="text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-            Return
-          </p>
-          <p className="mt-1 text-xl font-medium tabular-nums">
-            <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
-              {formatReturnMultiple(plan.pricing.returnMultiple)}
-            </CalculatedValue>
-          </p>
+
+        <div className="plan-card-arcade-life mt-3" aria-hidden>
+          <span style={{ width: "72%" }} />
         </div>
       </div>
     </div>

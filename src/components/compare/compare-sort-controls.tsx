@@ -48,8 +48,8 @@ export function CompareSortControls({
   const sort = filters.sort ?? "allInCost";
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-medium text-muted-foreground">Sort by</span>
+    <div className="compare-arcade-sort flex flex-wrap items-center gap-2">
+      <span className="arcade-hud-label">SORT</span>
       <Select
         value={sort}
         onValueChange={(value) => {
@@ -62,7 +62,7 @@ export function CompareSortControls({
           });
         }}
       >
-        <SelectTrigger size="sm" className="min-w-40">
+        <SelectTrigger size="sm" className="compare-arcade-select min-w-40">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

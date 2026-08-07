@@ -85,12 +85,24 @@ export function CompareFiltersBar({
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold">Filters</h2>
+          <h2
+            className={
+              isSidebar
+                ? "arcade-level-num text-[9px] text-[#ffd700]"
+                : "text-sm font-semibold"
+            }
+          >
+            {isSidebar ? "◆ FILTERS ◆" : "Filters"}
+          </h2>
           {!isSidebar ? (
             <p className="text-xs text-muted-foreground">
               {resultCount} plan{resultCount === 1 ? "" : "s"} shown
             </p>
-          ) : null}
+          ) : (
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              {resultCount} plan{resultCount === 1 ? "" : "s"} in play
+            </p>
+          )}
         </div>
         {hasActiveFilters ? (
           <Button
@@ -227,8 +239,14 @@ export function CompareFiltersBar({
       </div>
 
       <div className={cn(isSidebar ? "space-y-4" : "border-t border-border/60 pt-4")}>
-        <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-          Funded terms
+        <p
+          className={
+            isSidebar
+              ? "arcade-level-num text-[8px] text-primary"
+              : "text-[11px] font-medium tracking-wider text-muted-foreground uppercase"
+          }
+        >
+          {isSidebar ? "★ FUNDED TERMS ★" : "Funded terms"}
         </p>
         <div
           className={cn(

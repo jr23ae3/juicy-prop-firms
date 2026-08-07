@@ -59,7 +59,7 @@ export function PlanCardShell({
     <div className={cn("plan-card-scene h-full", className)}>
       <div
         ref={shellRef}
-        className="plan-card-shell h-full rounded-xl"
+        className="plan-card-shell compare-plan-card-shell h-full rounded-xl"
         style={{ transform }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setHovered(true)}
