@@ -127,8 +127,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
                     try:{" "}
                     <span className="text-foreground/80">compare</span>{" "}
                     <span className="text-foreground/80">advisor</span>{" "}
-                    <span className="text-foreground/80">rankings</span>{" "}
-                    <span className="text-foreground/80">methodology</span>
+                    <span className="text-foreground/80">roi-calculator</span>
                   </p>
                 </>
               ) : (
@@ -167,10 +166,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
         </div>
 
         <p className="mt-12 font-mono text-xs text-muted-foreground">
-          Built for futures traders.{" "}
-          <Link href="/methodology" className="text-accent hover:underline">
-            How we verify data
-          </Link>
+          Built for futures traders.
         </p>
       </Container>
     </section>

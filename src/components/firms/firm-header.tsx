@@ -38,7 +38,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
           <div className="flex flex-wrap items-center gap-2">
             {firm.rankPosition ? (
               <Badge variant="secondary" className="rounded-full">
-                Juice Index #{firm.rankPosition}
+                Rank #{firm.rankPosition}
               </Badge>
             ) : null}
             {ranking ? (
@@ -113,19 +113,13 @@ export function FirmRankingSection({ ranking }: FirmRankingSectionProps) {
       aria-labelledby="ranking-breakdown-heading"
       className="surface p-6"
     >
-      <div className="mb-4 flex items-center justify-between gap-4">
+      <div className="mb-4">
         <h2
           id="ranking-breakdown-heading"
           className="font-heading text-lg font-semibold"
         >
           Score breakdown
         </h2>
-        <Link
-          href="/methodology"
-          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
-        >
-          How we score
-        </Link>
       </div>
       <RankingFactorBars factors={ranking.factors} />
     </section>

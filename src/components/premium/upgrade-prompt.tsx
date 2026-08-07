@@ -37,8 +37,8 @@ export function UpgradePrompt({
           <Crown className="size-4 text-primary" aria-hidden />
           {feature ? `${feature} is a Juicy Pro feature` : "Upgrade to Juicy Pro"}
         </span>
-        <Link href="/pricing" className={cn(buttonVariants({ size: "sm" }))}>
-          Upgrade
+        <Link href="/contact" className={cn(buttonVariants({ size: "sm" }))}>
+          Contact us
         </Link>
       </div>
     );
@@ -58,9 +58,9 @@ export function UpgradePrompt({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Link href="/pricing" className={cn(buttonVariants(), "gap-2")}>
+        <Link href="/contact" className={cn(buttonVariants(), "gap-2")}>
           <Crown className="size-4" aria-hidden />
-          View pricing — ${premiumPlan.priceMonthly}/mo
+          Contact for Pro access
         </Link>
       </CardContent>
     </Card>

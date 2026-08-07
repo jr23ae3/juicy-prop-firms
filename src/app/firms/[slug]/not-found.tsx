@@ -13,13 +13,7 @@ export default function FirmNotFound() {
         Firms.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <Link href="/rankings" className={cn(buttonVariants())}>
-          View rankings
-        </Link>
-        <Link
-          href="/compare"
-          className={cn(buttonVariants({ variant: "outline" }))}
-        >
+        <Link href="/compare" className={cn(buttonVariants(), "cta-arrow")}>
           Compare plans
         </Link>
       </div>

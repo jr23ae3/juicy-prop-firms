@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import {
-  Calculator,
-  ShieldCheck,
   Sparkles,
   Table2,
-  Trophy,
   type LucideIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -16,10 +13,7 @@ import { cn } from "@/lib/utils";
 
 const navIcons: Record<string, LucideIcon> = {
   "/compare": Table2,
-  "/rankings": Trophy,
   "/advisor": Sparkles,
-  "/pricing": Calculator,
-  "/methodology": ShieldCheck,
 };
 
 export function MainNav() {

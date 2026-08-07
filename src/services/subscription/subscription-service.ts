@@ -132,7 +132,7 @@ export async function createCheckoutSession(
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${returnUrl}/account?checkout=success`,
-    cancel_url: `${returnUrl}/pricing?checkout=canceled`,
+    cancel_url: `${returnUrl}/compare?checkout=canceled`,
     allow_promotion_codes: true,
     metadata: { userId: user.id },
     subscription_data: {

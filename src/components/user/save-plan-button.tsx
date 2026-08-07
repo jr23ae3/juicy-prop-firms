@@ -61,7 +61,7 @@ export function SavePlanButton({
             return;
           }
           if (err.message === "PREMIUM_REQUIRED") {
-            window.location.href = "/pricing";
+            window.location.href = "/contact";
           }
         },
           },

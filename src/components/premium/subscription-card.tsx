@@ -136,10 +136,10 @@ export function SubscriptionCard() {
                 Upgrade to Pro
               </Button>
               <Link
-                href="/pricing"
+                href="/contact"
                 className={cn(buttonVariants({ variant: "outline" }))}
               >
-                Compare plans
+                Contact us
               </Link>
             </div>
             {checkout.isError ? (

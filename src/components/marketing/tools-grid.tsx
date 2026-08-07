@@ -3,7 +3,6 @@ import {
   Calculator,
   Sparkles,
   Table2,
-  Trophy,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,12 +20,6 @@ const tools: {
     label: "Compare",
     description: "Side-by-side plan table",
     icon: Table2,
-  },
-  {
-    href: "/rankings",
-    label: "Juice Index",
-    description: "Independent firm scores",
-    icon: Trophy,
   },
   {
     href: "/advisor",
@@ -48,7 +41,7 @@ export function ToolsGrid() {
       <p id="tools-heading" className="section-label mb-5">
         Platform tools
       </p>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map(({ href, label, description, icon }) => (
           <li key={href}>
             <Link
