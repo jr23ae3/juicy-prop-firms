@@ -1,11 +1,27 @@
 import Link from "next/link";
+import {
+  BadgeCheck,
+  Ban,
+  HandCoins,
+  ShieldCheck,
+  Wallet,
+} from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
+import { IconTile } from "@/components/ui/icon-tile";
 import { buttonVariants } from "@/components/ui/button";
 import { RANKING_METHODOLOGY_POINTS } from "@/config/ranking-factors";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+
+const methodologyIcons = [
+  ShieldCheck,
+  Wallet,
+  HandCoins,
+  BadgeCheck,
+  Ban,
+] as const;
 
 export const metadata: Metadata = {
   title: "How We Rank",
@@ -30,24 +46,22 @@ export default function MethodologyPage() {
         />
 
         <ol className="mx-auto grid max-w-3xl gap-4">
-          {RANKING_METHODOLOGY_POINTS.map((point, index) => (
+          {RANKING_METHODOLOGY_POINTS.map((point, index) => {
+            const Icon = methodologyIcons[index] ?? ShieldCheck;
+            return (
             <li key={point.title} className="surface p-5">
               <div className="flex gap-4">
-                <span
-                  aria-hidden
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/15 font-heading text-sm font-semibold text-primary"
-                >
-                  {index + 1}
-                </span>
+                <IconTile icon={Icon} />
                 <div>
-                  <h2 className="font-heading font-semibold">{point.title}</h2>
+                  <h2 className="font-semibold">{point.title}</h2>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                     {point.description}
                   </p>
                 </div>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ol>
 
         <section className="surface-muted mx-auto max-w-3xl p-6">

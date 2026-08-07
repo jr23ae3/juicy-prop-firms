@@ -4,19 +4,20 @@ import {
   createWebsiteJsonLd,
   JsonLdScript,
 } from "@/lib/seo/metadata";
-import { loadPlatformStats } from "@/server/data/plans";
+import { loadHomepageData } from "@/server/data/plans";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const statsResult = await loadPlatformStats();
-  const stats = statsResult.success ? statsResult.data : undefined;
+  const result = await loadHomepageData();
+  const stats = result.success ? result.data.stats : undefined;
+  const featuredFirms = result.success ? result.data.featuredFirms : [];
 
   return (
     <>
       <JsonLdScript data={createWebsiteJsonLd()} />
       <JsonLdScript data={createOrganizationJsonLd()} />
-      <HeroSection stats={stats} />
+      <HeroSection stats={stats} featuredFirms={featuredFirms} />
     </>
   );
 }

@@ -79,3 +79,58 @@ export async function loadPlatformStats(): Promise<
     };
   }
 }
+
+export type FeaturedFirm = {
+  slug: string;
+  name: string;
+  logoUrl: string | null;
+  rankPosition: number | null;
+};
+
+export async function loadHomepageData(): Promise<
+  ApiResponse<{
+    stats: { firms: number; plans: number; lowestAllIn: number | null };
+    featuredFirms: FeaturedFirm[];
+  }>
+> {
+  try {
+    const firms = await getActiveFirms();
+    const plans = await loadPlansWithPricing();
+
+    const lowestAllIn =
+      plans.length > 0
+        ? Math.min(...plans.map((p) => p.pricing.allInCost))
+        : null;
+
+    const featuredFirms = [...firms]
+      .sort(
+        (a, b) =>
+          (a.rankPosition ?? Number.MAX_SAFE_INTEGER) -
+          (b.rankPosition ?? Number.MAX_SAFE_INTEGER),
+      )
+      .slice(0, 10)
+      .map((firm) => ({
+        slug: firm.slug,
+        name: firm.name,
+        logoUrl: firm.logoUrl,
+        rankPosition: firm.rankPosition,
+      }));
+
+    return {
+      success: true,
+      data: {
+        stats: {
+          firms: firms.length,
+          plans: plans.length,
+          lowestAllIn,
+        },
+        featuredFirms,
+      },
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Unable to load homepage data",
+    };
+  }
+}

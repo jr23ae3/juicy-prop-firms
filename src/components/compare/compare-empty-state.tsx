@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -13,6 +14,13 @@ export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
     return (
       <Container className="site-canvas py-16">
         <div className="surface mx-auto max-w-lg p-8 text-center">
+          <Image
+            src="/illustrations/no-data.svg"
+            alt=""
+            width={120}
+            height={120}
+            className="mx-auto mb-6"
+          />
           <h2 className="text-xl font-semibold">No plan data yet</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Connect your database and run the seed script to load sample prop
@@ -28,6 +36,13 @@ export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
 
   return (
     <div className="surface-muted border-dashed px-6 py-12 text-center">
+      <Image
+        src="/illustrations/no-results.svg"
+        alt=""
+        width={120}
+        height={120}
+        className="mx-auto mb-6 opacity-90"
+      />
       <h2 className="text-lg font-semibold">No plans match your filters</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Try adjusting account size, eval type, or max budget.

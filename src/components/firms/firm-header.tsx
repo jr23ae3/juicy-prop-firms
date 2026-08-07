@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 
 import { RankingFactorBars } from "@/components/rankings/ranking-factor-bars";
 import { Badge } from "@/components/ui/badge";
+import { FirmLogo } from "@/components/ui/firm-logo";
 import { buttonVariants } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,22 @@ export function FirmHeader({ data }: FirmHeaderProps) {
   return (
     <header className="surface p-6 md:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div className="space-y-4">
+        <div className="flex gap-5">
+          <FirmLogo
+            name={firm.name}
+            slug={firm.slug}
+            logoUrl={firm.logoUrl}
+            size="xl"
+            className="hidden sm:flex"
+          />
+          <FirmLogo
+            name={firm.name}
+            slug={firm.slug}
+            logoUrl={firm.logoUrl}
+            size="lg"
+            className="sm:hidden"
+          />
+          <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             {firm.rankPosition ? (
               <Badge variant="secondary" className="rounded-full">
@@ -54,6 +70,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
                 {data.plans.length === 1 ? "" : "s"}
               </p>
             ) : null}
+          </div>
           </div>
         </div>
 

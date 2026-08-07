@@ -5,6 +5,7 @@ import { DiscountBadge } from "@/components/compare/discount-badge";
 import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
+import { FirmLogo } from "@/components/ui/firm-logo";
 import {
   formatAccountSize,
   formatCurrency,
@@ -44,17 +45,27 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
   return (
     <li className="surface p-4">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium text-muted-foreground">
-            #{plan.firm.rankPosition ?? "—"} · {plan.firm.name}
-          </p>
-          <h3 className="mt-0.5 font-semibold">{plan.name}</h3>
-          <p className="text-sm text-muted-foreground">
-            {formatAccountSize(plan.accountSize)}
-          </p>
+        <div className="flex min-w-0 items-start gap-3">
+          <FirmLogo
+            name={plan.firm.name}
+            slug={plan.firm.slug}
+            logoUrl={plan.firm.logoUrl}
+            size="md"
+          />
+          <div className="min-w-0">
+            <p className="text-xs font-medium text-muted-foreground">
+              #{plan.firm.rankPosition ?? "—"} · {plan.firm.name}
+            </p>
+            <h3 className="mt-0.5 font-semibold">{plan.name}</h3>
+            <p className="text-sm text-muted-foreground">
+              {formatAccountSize(plan.accountSize)}
+            </p>
+          </div>
         </div>
-        <EvalTypeBadge evalType={plan.evalType} />
-        <SavePlanButton planId={plan.id} />
+        <div className="flex shrink-0 flex-col items-end gap-2">
+          <EvalTypeBadge evalType={plan.evalType} />
+          <SavePlanButton planId={plan.id} />
+        </div>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">

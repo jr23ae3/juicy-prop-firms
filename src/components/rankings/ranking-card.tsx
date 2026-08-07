@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { RankingFactorGate } from "@/components/rankings/ranking-factor-gate";
+import { FirmLogo } from "@/components/ui/firm-logo";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RankingSummary } from "@/types/plan";
@@ -25,8 +26,13 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
-          <RankBadge position={ranking.position} large={isPodium} />
-          <div>
+          <FirmLogo
+            name={ranking.firm.name}
+            slug={ranking.firm.slug}
+            logoUrl={ranking.firm.logoUrl}
+            size={isPodium ? "lg" : "md"}
+          />
+          <div className="min-w-0">
             <h3 className={cn("font-heading font-semibold", isPodium && "text-lg")}>
               <Link
                 href={`/firms/${ranking.firm.slug}`}
@@ -47,7 +53,8 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
             ) : null}
           </div>
         </div>
-        <div className="text-right">
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <RankBadge position={ranking.position} large={isPodium} />
           <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
             Score
           </p>

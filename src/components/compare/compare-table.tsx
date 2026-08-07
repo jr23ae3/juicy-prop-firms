@@ -9,6 +9,7 @@ import { CalculatedValue } from "@/components/compare/calculated-value";
 import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
+import { FirmLogo } from "@/components/ui/firm-logo";
 import {
   formatAccountSize,
   formatCurrency,
@@ -296,14 +297,25 @@ function CompareTableRow({ plan }: { plan: PlanSummary }) {
   return (
     <tr className="group compare-table-row last:border-0">
       <td className={cn(CELL, stickyBodyClass())}>
-        <div className="font-medium leading-snug">
-          <span className="text-muted-foreground">
-            #{plan.firm.rankPosition ?? "—"}{" "}
-          </span>
-          {plan.firm.name}
-        </div>
-        <div className="mt-0.5 text-xs leading-snug text-muted-foreground">
-          {plan.name} · {formatAccountSize(plan.accountSize)}
+        <div className="flex items-start gap-2.5">
+          <FirmLogo
+            name={plan.firm.name}
+            slug={plan.firm.slug}
+            logoUrl={plan.firm.logoUrl}
+            size="sm"
+            className="mt-0.5"
+          />
+          <div className="min-w-0">
+            <div className="font-medium leading-snug">
+              <span className="text-muted-foreground">
+                #{plan.firm.rankPosition ?? "—"}{" "}
+              </span>
+              {plan.firm.name}
+            </div>
+            <div className="mt-0.5 text-xs leading-snug text-muted-foreground">
+              {plan.name} · {formatAccountSize(plan.accountSize)}
+            </div>
+          </div>
         </div>
       </td>
       <td className={CELL}>

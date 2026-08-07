@@ -1,23 +1,32 @@
+import Image from "next/image";
 import Link from "next/link";
+import { BadgeCheck, Calculator, Sparkles } from "lucide-react";
 
+import { FirmLogoStrip } from "@/components/marketing/firm-logo-strip";
+import { ToolsGrid } from "@/components/marketing/tools-grid";
 import { Container } from "@/components/layout/container";
 import { TerminalPanel } from "@/components/layout/terminal-panel";
+import { IconTile } from "@/components/ui/icon-tile";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import type { FeaturedFirm } from "@/server/data/plans";
 import { cn } from "@/lib/utils";
 
 const highlights = [
   {
+    icon: BadgeCheck,
     label: "Verified pricing",
     description:
       "Pulled directly from each firm — never scraped from aggregators.",
   },
   {
+    icon: Calculator,
     label: "True all-in cost",
     description:
       "Eval price plus activation fees, shown before you click out.",
   },
   {
+    icon: Sparkles,
     label: "AI matching",
     description:
       "Plan recommendations shaped to how you actually trade.",
@@ -30,6 +39,7 @@ type HeroSectionProps = {
     plans: number;
     lowestAllIn: number | null;
   };
+  featuredFirms?: FeaturedFirm[];
 };
 
 function formatCurrency(amount: number) {
@@ -40,12 +50,21 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
-export function HeroSection({ stats }: HeroSectionProps) {
+export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
   const hasStats = stats && stats.plans > 0;
 
   return (
-    <section className="site-canvas border-b border-border">
-      <Container className="py-16 sm:py-20 lg:py-28">
+    <section className="site-canvas relative overflow-hidden border-b border-border">
+      <Image
+        src="/illustrations/chart-terminal.svg"
+        alt=""
+        width={400}
+        height={280}
+        aria-hidden
+        className="pointer-events-none absolute -right-8 top-24 hidden w-[min(42vw,400px)] opacity-40 lg:block xl:right-[8%]"
+      />
+
+      <Container className="relative py-16 sm:py-20 lg:py-28">
         <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
             <p className="page-eyebrow">Independent prop firm research</p>
@@ -127,15 +146,21 @@ export function HeroSection({ stats }: HeroSectionProps) {
           </div>
         </div>
 
+        <ToolsGrid />
+        <FirmLogoStrip firms={featuredFirms} />
+
         <div className="mt-20 border-t border-border pt-12">
           <p className="section-label mb-8">What you get</p>
-          <ul className="grid gap-10 sm:grid-cols-3">
-            {highlights.map(({ label, description }) => (
-              <li key={label} className="space-y-2">
-                <h2 className="text-lg font-normal text-foreground">{label}</h2>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {description}
-                </p>
+          <ul className="grid gap-8 sm:grid-cols-3">
+            {highlights.map(({ icon, label, description }) => (
+              <li key={label} className="flex gap-4">
+                <IconTile icon={icon} />
+                <div className="space-y-1">
+                  <h2 className="text-lg font-normal text-foreground">{label}</h2>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {description}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
