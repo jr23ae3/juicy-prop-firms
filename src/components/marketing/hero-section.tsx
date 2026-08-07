@@ -3,6 +3,7 @@ import { BadgeCheck, Calculator, Table2 } from "lucide-react";
 
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
+import { ArcadePacmanBackground } from "@/components/marketing/arcade-pacman-background";
 import { ArcadeScoreHud } from "@/components/marketing/arcade-score-hud";
 import { ArcadeStarfield } from "@/components/marketing/arcade-starfield";
 import { Container } from "@/components/layout/container";
@@ -77,6 +78,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
 
   return (
     <section className="arcade-landing">
+      <ArcadePacmanBackground />
       <ArcadeStarfield />
 
       {/* floating coins */}
@@ -84,7 +86,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
       <span className="arcade-coin right-[12%] top-[28%]" style={{ animationDelay: "1s" }} aria-hidden />
       <span className="arcade-coin left-[85%] top-[62%]" style={{ animationDelay: "0.5s" }} aria-hidden />
 
-      <Container className="relative py-10 sm:py-14 lg:py-16">
+      <Container className="relative z-[1] py-10 sm:py-14 lg:py-16">
         <div className="arcade-cabinet">
           <div className="arcade-cabinet-shell">
             <div className="arcade-screen">
