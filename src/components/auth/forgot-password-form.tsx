@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
-import { signInAction } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
+import { requestPasswordResetAction } from "@/actions/auth";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,32 +15,46 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import type { AuthActionState } from "@/lib/validations/auth";
 
 const initialState: AuthActionState = {};
 
-type LoginFormProps = {
-  redirectTo?: string;
-};
-
-export function LoginForm({ redirectTo }: LoginFormProps) {
+export function ForgotPasswordForm() {
   const [state, formAction, isPending] = useActionState(
-    signInAction,
+    requestPasswordResetAction,
     initialState,
   );
+
+  if (state.success) {
+    return (
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Check your email</CardTitle>
+          <CardDescription>
+            {state.message ??
+              "If an account exists for that email, we sent a link to reset your password."}
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="flex flex-col gap-3">
+          <Link href="/login" className={cn(buttonVariants(), "w-full")}>
+            Back to sign in
+          </Link>
+        </CardFooter>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Sign in</CardTitle>
+        <CardTitle className="text-2xl">Forgot password</CardTitle>
         <CardDescription>
-          Access your saved plans, alerts, and AI recommendations.
+          Enter your email and we&apos;ll send you a link to choose a new
+          password.
         </CardDescription>
       </CardHeader>
       <form action={formAction}>
-        {redirectTo ? (
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-        ) : null}
         <CardContent className="space-y-4">
           {state.error ? (
             <p
@@ -62,35 +76,15 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
               placeholder="you@example.com"
             />
           </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="/forgot-password"
-                className="text-xs font-medium text-primary hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              minLength={8}
-            />
-          </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Signing in…" : "Sign in"}
+            {isPending ? "Sending link…" : "Send reset link"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="font-medium text-primary hover:underline">
-              Sign up
+            Remember your password?{" "}
+            <Link href="/login" className="font-medium text-primary hover:underline">
+              Sign in
             </Link>
           </p>
         </CardFooter>
