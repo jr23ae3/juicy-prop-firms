@@ -6,7 +6,6 @@ import type { CompareFilters, CompareSortField } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
 
 import { CalculatedValue } from "@/components/compare/calculated-value";
-import { DiscountBadge } from "@/components/compare/discount-badge";
 import { ActivationFeeDisplay } from "@/components/compare/activation-fee-display";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { SavePlanButton } from "@/components/user/save-plan-button";
@@ -96,8 +95,8 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1180px] border-collapse text-sm">
           <caption className="sr-only">
-            Prop firm plan comparison with all-in costs, funded terms, and
-            discount codes. Click column headers to sort.
+            Prop firm plan comparison with all-in costs and funded terms.
+            Click column headers to sort.
           </caption>
           <thead>
             <tr className="border-b border-border/60 bg-muted/40 text-left text-xs">
@@ -174,9 +173,6 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
                 rowSpan={2}
                 align="right"
               />
-              <th scope="col" rowSpan={2} className={cn(CELL, "font-medium")}>
-                Code
-              </th>
               <th
                 scope="col"
                 rowSpan={2}
@@ -405,13 +401,6 @@ function CompareTableRow({
         <CalculatedValue tooltip={getReturnMultipleTooltip(plan)}>
           {formatReturnMultiple(plan.pricing.returnMultiple)}
         </CalculatedValue>
-      </td>
-      <td className={CELL}>
-        {plan.discount ? (
-          <DiscountBadge discount={plan.discount} />
-        ) : (
-          <span className="text-muted-foreground">—</span>
-        )}
       </td>
       <td className={cn(CELL, "text-center")}>
         <SavePlanButton planId={plan.id} />
