@@ -581,6 +581,48 @@
     @apply size-2 rounded-sm bg-primary;
     animation: arcade-dot-pulse 1.2s ease-in-out infinite;
   }
+
+  .arcade-advisor-idle {
+    animation: arcade-advisor-bob 2.4s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .arcade-advisor-eye {
+    animation: arcade-advisor-blink 4s step-end infinite;
+  }
+
+  .arcade-advisor-antenna {
+    animation: arcade-advisor-antenna 1.5s ease-in-out infinite;
+  }
+
+  .arcade-advisor-core {
+    animation: arcade-advisor-core 1.8s ease-in-out infinite;
+  }
+
+  .arcade-advisor-bubble {
+    font-family: var(--font-arcade), var(--font-mono);
+    @apply border-4 border-primary/50 bg-[#04110a] text-[8px] text-accent sm:text-[9px];
+    box-shadow:
+      inset 0 0 0 2px rgb(0 0 0 / 50%),
+      4px 4px 0 rgb(0 0 0 / 45%);
+  }
+
+  .arcade-advisor-bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    translate: -50% 0;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgb(0 185 122 / 50%);
+  }
+
+  .arcade-advisor-bubble--pulse {
+    animation: arcade-advisor-bubble-pop 2.8s ease-in-out infinite;
+  }
 }
 
 @keyframes arcade-blink {
@@ -665,6 +707,60 @@
   }
 }
 
+@keyframes arcade-advisor-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes arcade-advisor-blink {
+  0%,
+  92%,
+  100% {
+    opacity: 1;
+  }
+  93%,
+  96% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes arcade-advisor-antenna {
+  0%,
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 2px #36ffff);
+  }
+  50% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 6px #36ffff);
+  }
+}
+
+@keyframes arcade-advisor-core {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes arcade-advisor-bubble-pop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -691,7 +787,12 @@
   .arcade-title,
   .arcade-coin-text,
   .arcade-press-start,
-  .arcade-screen::after {
+  .arcade-screen::after,
+  .arcade-advisor-idle,
+  .arcade-advisor-eye,
+  .arcade-advisor-antenna,
+  .arcade-advisor-core,
+  .arcade-advisor-bubble--pulse {
     animation: none !important;
   }
 }

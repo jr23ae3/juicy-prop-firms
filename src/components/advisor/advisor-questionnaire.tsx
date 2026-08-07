@@ -1,10 +1,10 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
 import { useActionState } from "react";
 
 import { getAdvisorRecommendationsAction } from "@/actions/advisor";
 import { AdvisorResults } from "@/components/advisor/advisor-results";
+import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -58,9 +58,9 @@ export function AdvisorQuestionnaire() {
       ) : null}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="size-5 text-primary" aria-hidden />
-            Tell us about your trading
+          <CardTitle className="flex items-center gap-3">
+            <ArcadeAdvisorCharacter size="sm" animate={false} />
+            Tell Oracle OJ about your trading
           </CardTitle>
           <CardDescription>
             Answer a few questions and we&apos;ll match you with the best prop
@@ -169,8 +169,8 @@ export function AdvisorQuestionnaire() {
             </div>
 
             <Button type="submit" disabled={isPending} className="gap-2">
-              <Sparkles className="size-4" aria-hidden />
-              {isPending ? "Finding matches…" : "Get AI recommendations"}
+              <ArcadeAdvisorCharacter size="xs" animate={false} />
+              {isPending ? "Oracle thinking…" : "Get AI recommendations"}
             </Button>
           </CardContent>
         </form>

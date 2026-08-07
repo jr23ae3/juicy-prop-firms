@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 import { DiscountBadge } from "@/components/compare/discount-badge";
 import { EvalTypeBadge } from "@/components/compare/eval-type-badge";
 import { UpgradePrompt } from "@/components/premium/upgrade-prompt";
+import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -39,9 +40,9 @@ export function AdvisorResults({ result }: AdvisorResultsProps) {
     <div className="space-y-6">
       <Card className="border-primary/20 bg-primary/5">
         <CardHeader>
-          <div className="flex flex-wrap items-center gap-2">
-            <Sparkles className="size-5 text-primary" aria-hidden />
-            <CardTitle>Your personalized matches</CardTitle>
+          <div className="flex flex-wrap items-center gap-3">
+            <ArcadeAdvisorCharacter size="sm" animate={false} />
+            <CardTitle>Oracle OJ&apos;s picks</CardTitle>
             <Badge variant="secondary">
               {result.poweredBy === "openai" ? "AI powered" : "Smart match"}
             </Badge>

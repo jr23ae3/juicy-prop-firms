@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { BadgeCheck, Calculator, Sparkles, Table2 } from "lucide-react";
+import { BadgeCheck, Calculator, Table2 } from "lucide-react";
 
+import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
 import { ArcadeScoreHud } from "@/components/marketing/arcade-score-hud";
 import { ArcadeStarfield } from "@/components/marketing/arcade-starfield";
@@ -20,8 +21,8 @@ const levels = [
     href: "/advisor",
     num: "LVL 2",
     title: "AI BOSS",
-    desc: "Personalized firm matches",
-    icon: Sparkles,
+    desc: "Oracle OJ — firm matches",
+    character: true as const,
   },
   {
     href: "/roi-calculator",
@@ -44,9 +45,9 @@ const powerUps = [
     desc: "Eval + activation fees upfront.",
   },
   {
-    icon: Sparkles,
+    character: true as const,
     title: "AI MATCH",
-    desc: "Plans shaped to how you trade.",
+    desc: "Oracle OJ picks your plans.",
   },
 ] as const;
 
@@ -145,12 +146,16 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
             ★ SELECT YOUR LEVEL ★
           </h2>
           <ul className="grid gap-4 sm:grid-cols-3">
-            {levels.map(({ href, num, title, desc, icon: Icon }) => (
+            {levels.map(({ href, num, title, desc, ...level }) => (
               <li key={href}>
                 <Link href={href} className="group arcade-level-card">
                   <p className="arcade-level-num">{num}</p>
                   <div className="mt-3 flex items-center gap-2">
-                    <Icon className="size-4 text-primary" aria-hidden />
+                    {"icon" in level ? (
+                      <level.icon className="size-4 text-primary" aria-hidden />
+                    ) : (
+                      <ArcadeAdvisorCharacter size="sm" animate={false} />
+                    )}
                     <p className="arcade-level-title">{title}</p>
                   </div>
                   <p className="mt-2 font-mono text-[11px] text-muted-foreground">
@@ -169,10 +174,14 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
             ★ POWER-UPS UNLOCKED ★
           </h2>
           <ul className="grid gap-4 sm:grid-cols-3">
-            {powerUps.map(({ icon: Icon, title, desc }) => (
+            {powerUps.map(({ title, desc, ...powerUp }) => (
               <li key={title} className="arcade-powerup">
                 <div className="flex size-10 shrink-0 items-center justify-center border-2 border-primary/40 bg-primary/10">
-                  <Icon className="size-5 text-primary" aria-hidden />
+                  {"icon" in powerUp ? (
+                    <powerUp.icon className="size-5 text-primary" aria-hidden />
+                  ) : (
+                    <ArcadeAdvisorCharacter size="xs" animate={false} />
+                  )}
                 </div>
                 <div>
                   <p className="arcade-level-title">{title}</p>

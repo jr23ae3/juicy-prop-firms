@@ -1,19 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Sparkles,
-  Table2,
-  type LucideIcon,
-} from "lucide-react";
+import { Table2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { mainNav } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
-const navIcons: Record<string, LucideIcon> = {
+const navIcons: Record<string, typeof Table2 | "advisor"> = {
   "/compare": Table2,
-  "/advisor": Sparkles,
+  "/advisor": "advisor",
 };
 
 export function MainNav() {
@@ -47,7 +44,11 @@ export function MainNav() {
               isActive && "nav-link--active",
             )}
           >
-            {Icon ? <Icon className="size-4 shrink-0 opacity-60" aria-hidden /> : null}
+            {Icon === "advisor" ? (
+              <ArcadeAdvisorCharacter size="xs" animate={false} />
+            ) : Icon ? (
+              <Icon className="size-4 shrink-0 opacity-60" aria-hidden />
+            ) : null}
             {item.title}
           </Link>
         );
