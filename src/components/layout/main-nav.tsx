@@ -1,19 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { MonitorPlay, Table2 } from "lucide-react";
+import { Calculator, MonitorPlay, Table2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { mainNav } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
-const navIcons: Record<string, typeof Table2 | typeof MonitorPlay | "advisor"> =
-  {
-    "/compare": Table2,
-    "/advisor": "advisor",
-    "/skills-test": MonitorPlay,
-  };
+const navIcons: Record<
+  string,
+  typeof Table2 | typeof MonitorPlay | typeof Calculator | "advisor"
+> = {
+  "/compare": Table2,
+  "/advisor": "advisor",
+  "/skills-test": MonitorPlay,
+  "/roi-calculator": Calculator,
+};
 
 export function MainNav() {
   const pathname = usePathname();

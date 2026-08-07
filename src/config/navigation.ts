@@ -21,6 +21,11 @@ export const mainNav: NavItem[] = [
     href: "/skills-test",
     description: "Replay today's NQ, MNQ, ES, and MES session",
   },
+  {
+    title: "ROI Calculator",
+    href: "/roi-calculator",
+    description: "Estimate break-even and ROI on prop firm plans",
+  },
 ];
 
 export const footerNav = {

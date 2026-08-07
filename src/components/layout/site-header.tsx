@@ -11,7 +11,7 @@ const TICKER_ITEMS = [
   "◆ INSERT COIN TO CONTINUE ◆",
   "★ JUICY TRADE FIRMS ★",
   "1UP EDITION",
-  "◆ COMPARE · ADVISE · WIN ◆",
+  "◆ COMPARE · ADVISE · REPLAY · ROI ◆",
 ] as const;
 
 export function SiteHeader() {
