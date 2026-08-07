@@ -65,6 +65,7 @@ export default async function AdminFirmPage({ params }: PageProps) {
         slug: plan.slug,
         name: plan.name,
         accountSize: plan.accountSize,
+        marketType: plan.marketType,
         evalType: plan.evalType,
         evalPrice: toNumber(plan.evalPrice),
         activationFee: toNumber(plan.activationFee),

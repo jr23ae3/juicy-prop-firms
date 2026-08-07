@@ -68,9 +68,10 @@ async function main() {
     for (const planData of firmData.plans) {
       const plan = await prisma.plan.upsert({
         where: {
-          propFirmId_slug: {
+          propFirmId_slug_marketType: {
             propFirmId: firm.id,
             slug: planData.slug,
+            marketType: planData.marketType ?? "FUTURES",
           },
         },
         create: {
@@ -78,6 +79,7 @@ async function main() {
           slug: planData.slug,
           name: planData.name,
           accountSize: planData.accountSize,
+          marketType: planData.marketType ?? "FUTURES",
           evalType: planData.evalType,
           evalPrice: planData.evalPrice,
           activationFee: planData.activationFee ?? 0,

@@ -1,6 +1,23 @@
-import type { Prisma } from "@/generated/prisma/client";
+import type { MarketType, Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
 import { isDatabaseConfigured } from "@/lib/env";
+
+export async function getActiveFirmsForMarket(marketType: MarketType = "FUTURES") {
+  if (!isDatabaseConfigured()) return [];
+
+  return db.propFirm.findMany({
+    where: {
+      isActive: true,
+      plans: { some: { isActive: true, marketType } },
+    },
+    orderBy: { rankPosition: "asc" },
+    select: {
+      slug: true,
+      name: true,
+      rankPosition: true,
+    },
+  });
+}
 
 const firmInclude = {
   plans: {

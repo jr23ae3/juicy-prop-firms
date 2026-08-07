@@ -1,9 +1,13 @@
 import type { DrawdownType } from "@/generated/prisma/client";
 
+import { isCompareSortField } from "@/lib/plans/compare-sort-config";
+import {
+  DEFAULT_MARKET_TYPE,
+  marketTypeToParam,
+  parseMarketType,
+} from "@/lib/plans/market-type";
 import type { CompareFilters } from "@/types/compare";
 import type { PlanSummary } from "@/types/plan";
-
-import { isCompareSortField } from "@/lib/plans/compare-sort-config";
 
 export function filterPlansByBudget(
   plans: PlanSummary[],
@@ -80,6 +84,7 @@ export function parseCompareFiltersFromSearchParams(
   const drawdownType = params.get("drawdownType");
 
   return {
+    marketType: parseMarketType(params.get("market") ?? DEFAULT_MARKET_TYPE),
     firm: params.get("firm") || undefined,
     evalType: (params.get("evalType") as CompareFilters["evalType"]) || undefined,
     accountSize: params.get("accountSize")
@@ -112,6 +117,9 @@ export function parseCompareFiltersFromSearchParams(
 export function buildPlansQueryString(filters: CompareFilters): string {
   const params = new URLSearchParams();
 
+  if (filters.marketType && filters.marketType !== DEFAULT_MARKET_TYPE) {
+    params.set("market", marketTypeToParam(filters.marketType));
+  }
   if (filters.firm) params.set("firm", filters.firm);
   if (filters.evalType) params.set("evalType", filters.evalType);
   if (filters.accountSize) params.set("accountSize", String(filters.accountSize));

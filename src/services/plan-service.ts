@@ -15,6 +15,10 @@ const planInclude = {
 function buildPlanWhere(filters?: PlanFilters): Prisma.PlanWhereInput {
   const where: Prisma.PlanWhereInput = { isActive: true };
 
+  if (filters?.marketType) {
+    where.marketType = filters.marketType;
+  }
+
   if (filters?.firmSlug) {
     where.propFirm = { slug: filters.firmSlug };
   }
@@ -84,11 +88,14 @@ export async function getLowestAllInCostPlan(
   );
 }
 
-export async function getDistinctAccountSizes() {
+export async function getDistinctAccountSizes(marketType?: PlanFilters["marketType"]) {
   if (!isDatabaseConfigured()) return [];
 
   const results = await db.plan.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      ...(marketType ? { marketType } : {}),
+    },
     select: { accountSize: true },
     distinct: ["accountSize"],
     orderBy: { accountSize: "asc" },

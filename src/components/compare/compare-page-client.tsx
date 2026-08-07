@@ -9,18 +9,29 @@ import { CompareFiltersBar } from "@/components/compare/compare-filters";
 import { CompareSkeleton } from "@/components/compare/compare-skeleton";
 import { CompareSortControls } from "@/components/compare/compare-sort-controls";
 import { CompareTable } from "@/components/compare/compare-table";
+import { MarketTypeToggle } from "@/components/compare/market-type-toggle";
 import { Container } from "@/components/layout/container";
+import { useCompareMetadata } from "@/hooks/use-compare-metadata";
 import { usePlans } from "@/hooks/use-plans";
 import { parseCompareFiltersFromSearchParams } from "@/lib/plans/filter-plans";
+import {
+  DEFAULT_MARKET_TYPE,
+  marketTypeToParam,
+} from "@/lib/plans/market-type";
 import type { CompareFilterMetadata, CompareFilters } from "@/types/compare";
+import type { MarketType } from "@/generated/prisma/client";
 
 type ComparePageClientProps = {
-  metadata: CompareFilterMetadata;
+  initialMetadata: CompareFilterMetadata;
 };
 
 function filtersToSearchParams(filters: CompareFilters): URLSearchParams {
   const params = new URLSearchParams();
 
+  const marketType = filters.marketType ?? DEFAULT_MARKET_TYPE;
+  if (marketType !== DEFAULT_MARKET_TYPE) {
+    params.set("market", marketTypeToParam(marketType));
+  }
   if (filters.firm) params.set("firm", filters.firm);
   if (filters.evalType) params.set("evalType", filters.evalType);
   if (filters.accountSize) params.set("accountSize", String(filters.accountSize));
@@ -42,7 +53,7 @@ function filtersToSearchParams(filters: CompareFilters): URLSearchParams {
   return params;
 }
 
-export function ComparePageClient({ metadata }: ComparePageClientProps) {
+export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -51,6 +62,8 @@ export function ComparePageClient({ metadata }: ComparePageClientProps) {
     [searchParams],
   );
 
+  const marketType = filters.marketType ?? DEFAULT_MARKET_TYPE;
+  const { data: metadata = initialMetadata } = useCompareMetadata(marketType);
   const { data: plans = [], isLoading, isError } = usePlans(filters);
 
   const updateFilters = useCallback(
@@ -64,23 +77,35 @@ export function ComparePageClient({ metadata }: ComparePageClientProps) {
     [router],
   );
 
-  const hasSeedData = metadata.firms.length > 0;
+  function handleMarketChange(nextMarketType: MarketType) {
+    updateFilters({
+      ...filters,
+      marketType: nextMarketType,
+      firm: undefined,
+      accountSize: undefined,
+    });
+  }
 
-  if (!hasSeedData && !isLoading) {
+  const hasSeedData = metadata.firms.length > 0 || marketType === "FOREX";
+
+  if (!hasSeedData && !isLoading && marketType === DEFAULT_MARKET_TYPE) {
     return <CompareEmptyState variant="no-data" />;
   }
 
   return (
     <Container size="full" className="space-y-6 py-8 md:py-12">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Compare prop firm plans
-        </h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Live pricing with verified discount codes and transparent all-in costs
-          — eval price plus activation fees, surfaced upfront.
-        </p>
-      </header>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <header className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Compare prop firm plans
+          </h1>
+          <p className="max-w-3xl text-muted-foreground">
+            Live pricing with verified discount codes and transparent all-in
+            costs — eval price plus activation fees, surfaced upfront.
+          </p>
+        </header>
+        <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
+      </div>
 
       <CompareFiltersBar
         metadata={metadata}

@@ -3,7 +3,8 @@ import { Suspense } from "react";
 
 import { ComparePageClient } from "@/components/compare/compare-page-client";
 import { CompareSkeleton } from "@/components/compare/compare-skeleton";
-import { getActiveFirms } from "@/services/firm-service";
+import { DEFAULT_MARKET_TYPE } from "@/lib/plans/market-type";
+import { getActiveFirmsForMarket } from "@/services/firm-service";
 import { getDistinctAccountSizes } from "@/services/plan-service";
 import type { CompareFilterMetadata } from "@/types/compare";
 
@@ -23,8 +24,8 @@ export const revalidate = 3600;
 async function getFilterMetadata(): Promise<CompareFilterMetadata> {
   try {
     const [firms, accountSizes] = await Promise.all([
-      getActiveFirms(),
-      getDistinctAccountSizes(),
+      getActiveFirmsForMarket(DEFAULT_MARKET_TYPE),
+      getDistinctAccountSizes(DEFAULT_MARKET_TYPE),
     ]);
 
     return {
@@ -52,7 +53,7 @@ export default async function ComparePage() {
 
   return (
     <Suspense fallback={<CompareSkeleton />}>
-      <ComparePageClient metadata={metadata} />
+      <ComparePageClient initialMetadata={metadata} />
     </Suspense>
   );
 }

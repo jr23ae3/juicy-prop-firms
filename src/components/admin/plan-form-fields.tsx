@@ -7,6 +7,7 @@ export type PlanFormValues = {
   slug: string;
   name: string;
   accountSize: number;
+  marketType: string;
   evalType: string;
   evalPrice: number;
   activationFee: number;
@@ -105,6 +106,21 @@ export function PlanFormFields({
           required
           defaultValue={formatNumber(values?.accountSize)}
         />
+        <div className="space-y-2">
+          <label htmlFor={`${prefix}marketType`} className="text-sm font-medium">
+            Market
+          </label>
+          <select
+            id={`${prefix}marketType`}
+            name="marketType"
+            className={adminSelectClassName}
+            required
+            defaultValue={values?.marketType ?? "FUTURES"}
+          >
+            <option value="FUTURES">Futures</option>
+            <option value="FOREX">Forex</option>
+          </select>
+        </div>
         <div className="space-y-2">
           <label htmlFor={`${prefix}evalType`} className="text-sm font-medium">
             Eval type

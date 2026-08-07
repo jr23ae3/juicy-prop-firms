@@ -114,6 +114,11 @@ enum DrawdownType {
   STATIC
 }
 
+enum MarketType {
+  FUTURES
+  FOREX
+}
+
 model Plan {
   id              String        @id @default(cuid())
   propFirmId      String        @map("prop_firm_id")
@@ -121,6 +126,7 @@ model Plan {
   slug            String
   name            String
   accountSize     Int           @map("account_size")
+  marketType      MarketType    @default(FUTURES) @map("market_type")
   evalType        EvalType      @map("eval_type")
   evalPrice       Decimal       @map("eval_price") @db.Decimal(10, 2)
   activationFee   Decimal       @default(0) @map("activation_fee") @db.Decimal(10, 2)
@@ -147,8 +153,8 @@ model Plan {
   evalPriceHistory PlanEvalPriceHistory[]
   resetFeeHistory  PlanResetFeeHistory[]
 
-  @@unique([propFirmId, slug])
-  @@index([isActive, accountSize])
+  @@unique([propFirmId, slug, marketType])
+  @@index([isActive, marketType, accountSize])
   @@map("plans")
 }
 

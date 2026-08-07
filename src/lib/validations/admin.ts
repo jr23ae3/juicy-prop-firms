@@ -32,11 +32,14 @@ export const updateFirmSchema = createFirmSchema.partial().extend({
   platformQuality: z.coerce.number().min(0).max(100).optional(),
 });
 
+const marketTypeSchema = z.enum(["FUTURES", "FOREX"]);
+
 export const createPlanSchema = z.object({
   propFirmId: z.string().cuid(),
   slug: slugSchema,
   name: z.string().min(2).max(120),
   accountSize: z.coerce.number().int().positive(),
+  marketType: marketTypeSchema.default("FUTURES"),
   evalType: evalTypeSchema,
   evalPrice: z.coerce.number().positive(),
   activationFee: z.coerce.number().min(0).default(0),
@@ -89,6 +92,7 @@ export const updatePlanSchema = z.object({
   slug: slugSchema,
   name: z.string().min(2).max(120),
   accountSize: z.coerce.number().int().positive(),
+  marketType: marketTypeSchema,
   evalType: evalTypeSchema,
   evalPrice: z.coerce.number().positive(),
   activationFee: z.coerce.number().min(0).default(0),

@@ -1,15 +1,21 @@
 import { NextResponse } from "next/server";
 
 import { withPublicCache } from "@/lib/api/cache-headers";
-import { getActiveFirms } from "@/services/firm-service";
+import { DEFAULT_MARKET_TYPE, parseMarketType } from "@/lib/plans/market-type";
+import { getActiveFirmsForMarket } from "@/services/firm-service";
 import { getDistinctAccountSizes } from "@/services/plan-service";
 import type { CompareFilterMetadata } from "@/types/compare";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const marketType = parseMarketType(
+    searchParams.get("market") ?? DEFAULT_MARKET_TYPE,
+  );
+
   try {
     const [firms, accountSizes] = await Promise.all([
-      getActiveFirms(),
-      getDistinctAccountSizes(),
+      getActiveFirmsForMarket(marketType),
+      getDistinctAccountSizes(marketType),
     ]);
 
     const metadata: CompareFilterMetadata = {

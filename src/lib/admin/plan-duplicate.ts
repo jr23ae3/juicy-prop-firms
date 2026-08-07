@@ -10,6 +10,7 @@ export function planToDuplicateTemplate(plan: PlanToDuplicate): PlanFormValues {
     slug: `${plan.slug}-copy`,
     name: `${plan.name} (copy)`,
     accountSize: plan.accountSize,
+    marketType: plan.marketType,
     evalType: plan.evalType,
     evalPrice: plan.evalPrice,
     activationFee: plan.activationFee,

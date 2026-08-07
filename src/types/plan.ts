@@ -2,6 +2,7 @@ import type {
   Discount,
   DrawdownType,
   EvalType,
+  MarketType,
   Plan,
   PropFirm,
 } from "@/generated/prisma/client";
@@ -72,6 +73,7 @@ export type RankingSummary = {
 };
 
 export type PlanFilters = {
+  marketType?: MarketType;
   firmSlug?: string;
   evalType?: EvalType;
   accountSize?: number;

@@ -1,4 +1,4 @@
-import type { DrawdownType, EvalType } from "@/generated/prisma/client";
+import type { DrawdownType, EvalType, MarketType } from "@/generated/prisma/client";
 
 export type CompareSortField =
   | "firmRank"
@@ -27,6 +27,7 @@ export type CompareSortField =
 export type CompareSortDirection = "asc" | "desc";
 
 export type CompareFilters = {
+  marketType?: MarketType;
   firm?: string;
   evalType?: EvalType;
   accountSize?: number;
