@@ -20,7 +20,7 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log("🌱 Seeding Juicy Prop Firms database…");
+  console.log("🌱 Seeding Juicy Trade Firms database…");
 
   for (const firmData of SEED_FIRMS) {
     const firm = await prisma.propFirm.upsert({

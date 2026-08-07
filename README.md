@@ -1,4 +1,4 @@
-# Juicy Prop Firms
+# Juicy Trade Firms
 
 Production-ready SaaS platform for comparing futures prop firms — with AI-powered recommendations, verified pricing, and transparent all-in cost comparisons.
 
@@ -131,7 +131,7 @@ Transactional email via [Resend](https://resend.com):
 2. Add to `.env.local`:
    ```
    RESEND_API_KEY=re_...
-   RESEND_FROM_EMAIL=Juicy Prop Firms <notifications@yourdomain.com>
+   RESEND_FROM_EMAIL=Juicy Trade Firms <notifications@yourdomain.com>
    CRON_SECRET=your-random-secret
    ```
 3. Deal alert cron: `GET /api/cron/deal-alerts` (daily on Vercel Hobby; hourly locally with `curl`)

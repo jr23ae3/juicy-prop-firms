@@ -21,5 +21,5 @@ export function getResend(): Resend {
 }
 
 export function getFromEmail(): string {
-  return env.RESEND_FROM_EMAIL ?? "Juicy Prop Firms <onboarding@resend.dev>";
+  return env.RESEND_FROM_EMAIL ?? "Juicy Trade Firms <onboarding@resend.dev>";
 }

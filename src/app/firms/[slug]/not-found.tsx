@@ -9,7 +9,7 @@ export default function FirmNotFound() {
     <Container className="flex min-h-[50vh] flex-col items-center justify-center py-16 text-center">
       <h1 className="text-2xl font-bold">Firm not found</h1>
       <p className="mt-2 max-w-md text-muted-foreground">
-        This prop firm doesn&apos;t exist or is no longer listed on Juicy Prop
+        This prop firm doesn&apos;t exist or is no longer listed on Juicy Trade
         Firms.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">

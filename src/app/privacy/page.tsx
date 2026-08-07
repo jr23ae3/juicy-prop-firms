@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
   title: "Privacy Policy",
-  description: "How Juicy Prop Firms collects, uses, and protects your data.",
+  description: "How Juicy Trade Firms collects, uses, and protects your data.",
   path: "/privacy",
 });
 
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
   return (
     <ContentPage title="Privacy Policy" description="Last updated: August 2026">
       <p>
-        Juicy Prop Firms (&quot;we&quot;, &quot;us&quot;) respects your privacy. This policy
+        Juicy Trade Firms (&quot;we&quot;, &quot;us&quot;) respects your privacy. This policy
         explains what data we collect and how we use it when you use our website
         and services.
       </p>

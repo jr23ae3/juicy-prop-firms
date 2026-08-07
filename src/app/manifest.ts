@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
-    short_name: "Juicy Prop",
+    short_name: "Juicy Trade",
     description: siteConfig.description,
     start_url: "/",
     display: "standalone",

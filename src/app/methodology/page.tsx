@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "How We Rank",
   description:
-    "How Juicy Prop Firms verifies pricing, calculates all-in costs, and ranks futures prop firms without pay-for-placement.",
+    "How Juicy Trade Firms verifies pricing, calculates all-in costs, and ranks futures prop firms without pay-for-placement.",
   openGraph: {
     title: "How We Rank Prop Firms",
     description:
@@ -25,7 +25,7 @@ export default function MethodologyPage() {
         <PageHeader
           eyebrow="Methodology"
           title="How we rank & verify"
-          description="Every price, rule, and discount on Juicy Prop Firms is checked against one source: the prop firm itself. Scores are independent — no pay-for-placement, ever."
+          description="Every price, rule, and discount on Juicy Trade Firms is checked against one source: the prop firm itself. Scores are independent — no pay-for-placement, ever."
           align="center"
         />
 
