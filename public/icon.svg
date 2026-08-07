@@ -1,7 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="orangeGradSm" x1="10" y1="8" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB347"/>
+      <stop offset="1" stop-color="#FF6B1A"/>
+    </linearGradient>
+    <linearGradient id="juiceGradSm" x1="14" y1="20" x2="18" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#36FFFF"/>
+      <stop offset="1" stop-color="#00B97A"/>
+    </linearGradient>
+  </defs>
   <rect width="32" height="32" rx="6" fill="#04110A"/>
   <rect x="1" y="1" width="30" height="30" rx="5" stroke="#00B97A" stroke-opacity="0.45"/>
-  <circle cx="16" cy="14" r="5" fill="#00B97A"/>
-  <circle cx="18" cy="12" r="1.5" fill="#36FFFF"/>
-  <path d="M8 24c2.5-4 5.5-6 8-6s5.5 2 8 6" stroke="#36FFFF" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M2 17C4.5 10.5 8 9 10.5 13C9 16 5.5 17.5 2 17Z" fill="#0B3135" stroke="#00B97A" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M30 17C27.5 10.5 24 9 21.5 13C23 16 26.5 17.5 30 17Z" fill="#0B3135" stroke="#00B97A" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M10.5 13C10.5 8.5 13 6.5 16 6.5C19 6.5 21.5 8.5 21.5 13C21.5 15.5 20.5 19.5 16 20.5C11.5 19.5 10.5 15.5 10.5 13Z" fill="url(#orangeGradSm)"/>
+  <ellipse cx="13.5" cy="11" rx="1.6" ry="1" fill="#FFD08A" opacity="0.55"/>
+  <path d="M16 6.5V4.5" stroke="#00B97A" stroke-width="1.1" stroke-linecap="round"/>
+  <path d="M16 20.5C16 22.8 15.2 25.2 16 27.5C16.8 25.2 16 22.8 16 20.5Z" fill="url(#juiceGradSm)"/>
+  <circle cx="13.5" cy="25" r="1.1" fill="#36FFFF"/>
+  <circle cx="18.5" cy="25" r="1.1" fill="#36FFFF"/>
+  <circle cx="16" cy="28" r="1.4" fill="#00B97A"/>
 </svg>

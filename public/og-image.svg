@@ -1,10 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="orangeGradLg" x1="120" y1="120" x2="280" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB347"/>
+      <stop offset="1" stop-color="#FF6B1A"/>
+    </linearGradient>
+    <linearGradient id="juiceGradLg" x1="180" y1="300" x2="220" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#36FFFF"/>
+      <stop offset="1" stop-color="#00B97A"/>
+    </linearGradient>
+  </defs>
   <rect width="1200" height="630" fill="#050505"/>
   <rect x="80" y="80" width="1040" height="470" rx="12" fill="#04110A" stroke="#00B97A" stroke-opacity="0.3"/>
-  <circle cx="200" cy="200" r="48" fill="#00B97A"/>
-  <circle cx="215" cy="185" r="14" fill="#36FFFF"/>
+  <!-- logo mark large -->
+  <g transform="translate(120 130)">
+    <rect width="120" height="120" rx="24" fill="#04110A" stroke="#00B97A" stroke-opacity="0.45" stroke-width="3"/>
+    <path d="M10 62C18 38 30 32 42 48C36 58 24 66 10 62Z" fill="#0B3135" stroke="#00B97A" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M110 62C102 38 90 32 78 48C84 58 96 66 110 62Z" fill="#0B3135" stroke="#00B97A" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M42 48C42 32 52 22 60 22C68 22 78 32 78 48C78 56 74 72 60 76C46 72 42 56 42 48Z" fill="url(#orangeGradLg)"/>
+    <ellipse cx="50" cy="38" rx="8" ry="5" fill="#FFD08A" opacity="0.55"/>
+    <path d="M60 22V14" stroke="#00B97A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M60 14C64 8 70 9 72 14" stroke="#00B97A" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M60 76C60 86 56 96 60 108C64 96 60 86 60 76Z" fill="url(#juiceGradLg)"/>
+    <circle cx="48" cy="92" r="6" fill="#36FFFF" opacity="0.9"/>
+    <circle cx="72" cy="92" r="6" fill="#36FFFF" opacity="0.9"/>
+    <circle cx="60" cy="108" r="7" fill="#00B97A"/>
+  </g>
   <text x="280" y="175" fill="#F2F2F2" font-family="system-ui,sans-serif" font-size="28" font-weight="300">Juicy Trade Firms</text>
   <text x="280" y="220" fill="#7A9691" font-family="system-ui,sans-serif" font-size="22">Independent prop firm research</text>
   <path d="M120 380V300L220 340L320 260L420 310L520 230L620 280L720 240" stroke="#00B97A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="280" y="420" fill="#36FFFF" font-family="ui-monospace,monospace" font-size="18">compare · advisor · juice index</text>
+  <text x="280" y="420" fill="#36FFFF" font-family="ui-monospace,monospace" font-size="18">compare · advisor · roi calculator</text>
 </svg>
