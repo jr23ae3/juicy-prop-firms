@@ -11,6 +11,7 @@ import { CompareSortControls } from "@/components/compare/compare-sort-controls"
 import { CompareTable } from "@/components/compare/compare-table";
 import { MarketTypeToggle } from "@/components/compare/market-type-toggle";
 import { Container } from "@/components/layout/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { useCompareMetadata } from "@/hooks/use-compare-metadata";
 import { usePlans } from "@/hooks/use-plans";
 import { parseCompareFiltersFromSearchParams } from "@/lib/plans/filter-plans";
@@ -93,26 +94,19 @@ export function ComparePageClient({ initialMetadata }: ComparePageClientProps) {
   }
 
   return (
-    <div className="compare-workspace">
+    <div className="site-canvas compare-workspace">
       <Container size="full" className="py-8 md:py-12">
-        <header className="flex flex-col gap-6 border-b border-border/50 pb-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
-            <p className="text-sm font-medium tracking-wide text-primary">
-              Plan comparison
-            </p>
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Find your next eval
-            </h1>
-            <p className="max-w-2xl text-muted-foreground">
-              Live pricing with verified discount codes and transparent all-in
-              costs — eval price plus activation fees, surfaced upfront.
-            </p>
-          </div>
-          <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
-        </header>
+        <PageHeader
+          eyebrow="Plan comparison"
+          title="Every plan, one view"
+          description="Live pricing with verified discount codes and transparent all-in costs — eval price plus activation fees, surfaced upfront."
+          actions={
+            <MarketTypeToggle value={marketType} onChange={handleMarketChange} />
+          }
+        />
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-          <aside className="compare-sidebar shrink-0 rounded-2xl p-4 ring-1 ring-border/60 lg:sticky lg:top-6 lg:w-72 lg:self-start">
+          <aside className="compare-sidebar surface shrink-0 p-4 lg:sticky lg:top-24 lg:w-72 lg:self-start">
             <CompareFiltersBar
               metadata={metadata}
               filters={filters}

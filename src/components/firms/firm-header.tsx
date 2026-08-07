@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Trophy } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 import { RankingFactorBars } from "@/components/rankings/ranking-factor-bars";
 import { Badge } from "@/components/ui/badge";
@@ -16,35 +16,30 @@ export function FirmHeader({ data }: FirmHeaderProps) {
   const { firm, ranking, lowestAllIn } = data;
 
   return (
-    <header className="rounded-xl border border-border/60 bg-card p-6 shadow-sm md:p-8">
+    <header className="surface p-6 md:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             {firm.rankPosition ? (
-              <Badge className="gap-1">
-                <Trophy className="size-3.5" aria-hidden />#{firm.rankPosition}{" "}
-                Ranked
+              <Badge variant="secondary" className="rounded-full">
+                Juice Index #{firm.rankPosition}
               </Badge>
             ) : null}
             {ranking ? (
-              <Badge variant="secondary">
+              <Badge className="rounded-full">
                 Score {ranking.score.toFixed(1)}
               </Badge>
             ) : null}
           </div>
 
           <div>
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              {firm.name}
-            </h1>
+            <h1 className="page-title">{firm.name}</h1>
             {firm.description ? (
-              <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
-                {firm.description}
-              </p>
+              <p className="page-lead mt-4">{firm.description}</p>
             ) : null}
           </div>
 
-          <div className="flex flex-wrap gap-3 text-sm">
+          <div className="flex flex-wrap gap-4 text-sm">
             {lowestAllIn != null ? (
               <p>
                 Lowest all-in:{" "}
@@ -70,7 +65,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
               rel="noopener noreferrer"
               className={cn(
                 buttonVariants({ variant: "outline" }),
-                "gap-1.5",
+                "gap-1.5 rounded-full",
               )}
             >
               Visit website
@@ -79,7 +74,7 @@ export function FirmHeader({ data }: FirmHeaderProps) {
           ) : null}
           <Link
             href={`/compare?firm=${firm.slug}`}
-            className={cn(buttonVariants(), "gap-1.5")}
+            className={cn(buttonVariants(), "gap-1.5 rounded-full")}
           >
             Compare plans
           </Link>
@@ -99,17 +94,20 @@ export function FirmRankingSection({ ranking }: FirmRankingSectionProps) {
   return (
     <section
       aria-labelledby="ranking-breakdown-heading"
-      className="rounded-xl border border-border/60 bg-card p-6 shadow-sm"
+      className="surface p-6"
     >
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 id="ranking-breakdown-heading" className="text-lg font-semibold">
-          Ranking breakdown
+        <h2
+          id="ranking-breakdown-heading"
+          className="font-heading text-lg font-semibold"
+        >
+          Score breakdown
         </h2>
         <Link
           href="/methodology"
-          className="text-sm text-primary hover:underline underline-offset-4"
+          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
         >
-          How we rank
+          How we score
         </Link>
       </div>
       <RankingFactorBars factors={ranking.factors} />

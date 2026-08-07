@@ -42,7 +42,7 @@ function ComparePlanCard({ plan }: { plan: PlanSummary }) {
   const hasDiscount = plan.pricing.savings > 0;
 
   return (
-    <li className="rounded-2xl bg-card p-4 ring-1 ring-border/60">
+    <li className="surface p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium text-muted-foreground">

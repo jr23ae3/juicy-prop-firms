@@ -21,7 +21,7 @@ export default function AffiliateDisclosurePage() {
       </p>
       <h2>Rankings are independent</h2>
       <p>
-        Affiliate relationships never influence our power rankings, AI advisor
+        Affiliate relationships never influence our Juice Index scores, AI advisor
         recommendations, or compare table sort order. Firms cannot pay for
         placement. Our methodology is published openly on the{" "}
         <a href="/methodology" className="text-primary hover:underline">

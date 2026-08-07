@@ -72,7 +72,7 @@ export default async function FirmPage({ params }: FirmPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Container className="space-y-8 py-8 md:py-12">
+      <Container className="site-canvas space-y-8 py-8 md:py-12">
         <FirmHeader data={data} />
         <FirmRankingSection ranking={data.ranking} />
         <FirmPlansSection

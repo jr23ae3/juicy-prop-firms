@@ -19,8 +19,8 @@ export function FirmPlansSection({
 }: FirmPlansSectionProps) {
   if (plans.length === 0) {
     return (
-      <section className="rounded-xl border border-dashed border-border/60 px-6 py-10 text-center">
-        <h2 className="text-lg font-semibold">No active plans</h2>
+      <section className="surface-muted border-dashed px-6 py-10 text-center">
+        <h2 className="font-heading text-lg font-semibold">No active plans</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Plans for {firmName} are not currently listed.
         </p>
@@ -32,7 +32,7 @@ export function FirmPlansSection({
     <section aria-labelledby="firm-plans-heading" className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 id="firm-plans-heading" className="text-xl font-semibold">
+          <h2 id="firm-plans-heading" className="font-heading text-xl font-semibold">
             Plans & pricing
           </h2>
           <p className="text-sm text-muted-foreground">

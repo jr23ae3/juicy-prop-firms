@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { RankingFactorGate } from "@/components/rankings/ranking-factor-gate";
 import { buttonVariants } from "@/components/ui/button";
@@ -18,16 +18,16 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
   return (
     <article
       className={cn(
-        "rounded-xl border border-border/60 bg-card shadow-sm transition-colors hover:border-primary/30",
+        "surface transition-colors hover:ring-primary/30",
         isPodium ? "p-5" : "p-4",
-        isTopThree && isPodium && "border-primary/20 bg-primary/5",
+        isTopThree && isPodium && "ring-primary/25 bg-primary/5",
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <RankBadge position={ranking.position} large={isPodium} />
           <div>
-            <h3 className={cn("font-semibold", isPodium && "text-lg")}>
+            <h3 className={cn("font-heading font-semibold", isPodium && "text-lg")}>
               <Link
                 href={`/firms/${ranking.firm.slug}`}
                 className="hover:text-primary hover:underline underline-offset-4"
@@ -48,8 +48,10 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
           </div>
         </div>
         <div className="text-right">
-          <p className="text-xs text-muted-foreground">Score</p>
-          <p className="text-lg font-bold tabular-nums text-primary">
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            Score
+          </p>
+          <p className="font-heading text-2xl font-semibold tabular-nums text-primary">
             {ranking.score.toFixed(1)}
           </p>
         </div>
@@ -64,14 +66,17 @@ export function RankingCard({ ranking, variant = "default" }: RankingCardProps) 
       <div className="mt-4 flex flex-wrap gap-2">
         <Link
           href={`/firms/${ranking.firm.slug}`}
-          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-1.5")}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "gap-1.5 rounded-full",
+          )}
         >
           View firm
           <ArrowRight className="size-3.5" aria-hidden />
         </Link>
         <Link
           href={`/compare?firm=${ranking.firm.slug}`}
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-full")}
         >
           Compare plans
         </Link>
@@ -90,14 +95,11 @@ function RankBadge({
   return (
     <span
       className={cn(
-        "flex shrink-0 items-center justify-center gap-1 rounded-full bg-primary font-bold text-primary-foreground tabular-nums",
+        "flex shrink-0 items-center justify-center rounded-full bg-foreground font-heading font-semibold text-background tabular-nums",
         large ? "size-10 text-sm" : "size-8 text-xs",
       )}
     >
-      {position === 1 ? (
-        <Trophy className={cn("size-3.5", large && "size-4")} aria-hidden />
-      ) : null}
-      #{position}
+      {position}
     </span>
   );
 }

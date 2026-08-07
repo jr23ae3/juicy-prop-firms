@@ -11,8 +11,8 @@ type CompareEmptyStateProps = {
 export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
   if (variant === "no-data") {
     return (
-      <Container className="py-16">
-        <div className="mx-auto max-w-lg rounded-xl border border-border/60 bg-card p-8 text-center">
+      <Container className="site-canvas py-16">
+        <div className="surface mx-auto max-w-lg p-8 text-center">
           <h2 className="text-xl font-semibold">No plan data yet</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Connect your database and run the seed script to load sample prop
@@ -27,7 +27,7 @@ export function CompareEmptyState({ variant }: CompareEmptyStateProps) {
   }
 
   return (
-    <div className="rounded-xl border border-dashed border-border/60 bg-muted/20 px-6 py-12 text-center">
+    <div className="surface-muted border-dashed px-6 py-12 text-center">
       <h2 className="text-lg font-semibold">No plans match your filters</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Try adjusting account size, eval type, or max budget.

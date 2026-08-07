@@ -11,6 +11,7 @@ export const metadata = createPageMetadata({
 export default function AboutPage() {
   return (
     <ContentPage
+      eyebrow="About"
       title="About Juicy Prop Firms"
       description="Independent prop firm research built for futures traders."
     >

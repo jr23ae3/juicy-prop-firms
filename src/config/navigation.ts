@@ -12,9 +12,9 @@ export const mainNav: NavItem[] = [
     description: "Side-by-side plan comparison with live pricing",
   },
   {
-    title: "Rankings",
+    title: "Juice Index",
     href: "/rankings",
-    description: "Power rankings based on verified data",
+    description: "Independent firm scores based on verified data",
   },
   {
     title: "AI Advisor",
@@ -36,7 +36,7 @@ export const mainNav: NavItem[] = [
 export const footerNav = {
   product: [
     { title: "Compare Plans", href: "/compare" },
-    { title: "Rankings", href: "/rankings" },
+    { title: "Juice Index", href: "/rankings" },
     { title: "AI Advisor", href: "/advisor" },
     { title: "ROI Calculator", href: "/roi-calculator" },
   ],

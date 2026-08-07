@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { SiteBrand } from "@/components/layout/site-brand";
 import { mainNav } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +44,7 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="inline-flex size-9 items-center justify-center rounded-md border border-border/60 bg-background text-foreground"
+        className="inline-flex size-9 items-center justify-center rounded-full ring-1 ring-border/70 bg-card text-foreground"
         aria-expanded={open}
         aria-controls="mobile-nav-dialog"
         aria-label={open ? "Close menu" : "Open menu"}
@@ -60,18 +61,18 @@ export function MobileNav() {
         id="mobile-nav-dialog"
         ref={dialogRef}
         aria-label="Mobile navigation"
-        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-black/50 open:flex open:flex-col"
+        className="fixed inset-0 z-[60] m-0 h-full max-h-none w-full max-w-none border-0 bg-background p-0 backdrop:bg-foreground/40 open:flex open:flex-col"
         onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setOpen(false);
         }}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
-          <span className="font-semibold">Menu</span>
+        <div className="flex h-[4.25rem] items-center justify-between border-b border-border/60 px-4">
+          <SiteBrand />
           <button
             type="button"
             aria-label="Close menu"
-            className="inline-flex size-9 items-center justify-center rounded-md"
+            className="inline-flex size-9 items-center justify-center rounded-full"
             onClick={() => setOpen(false)}
           >
             <X className="size-5" aria-hidden />
@@ -80,15 +81,16 @@ export function MobileNav() {
         <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto p-4">
           <ul className="space-y-1">
             {mainNav.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     className={cn(
-                      "block rounded-lg px-4 py-3 text-base font-medium transition-colors",
+                      "block rounded-xl px-4 py-3.5 font-heading text-lg font-medium transition-colors",
                       isActive
-                        ? "bg-muted text-foreground"
+                        ? "bg-primary/15 text-foreground"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground",
                     )}
                     onClick={() => setOpen(false)}

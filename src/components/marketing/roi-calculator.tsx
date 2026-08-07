@@ -83,7 +83,7 @@ export function RoiCalculator() {
         </div>
 
         {result ? (
-          <dl className="grid gap-4 rounded-xl border border-border/60 bg-muted/30 p-4 sm:grid-cols-3">
+          <dl className="surface-muted grid gap-4 p-4 sm:grid-cols-3">
             <div>
               <dt className="text-xs text-muted-foreground">Net monthly payout</dt>
               <dd className="mt-1 text-xl font-bold tabular-nums text-primary">

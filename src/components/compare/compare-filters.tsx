@@ -80,8 +80,7 @@ export function CompareFiltersBar({
     <div
       className={cn(
         "space-y-5",
-        !isSidebar &&
-          "rounded-xl border border-border/60 bg-card p-4 shadow-sm",
+        !isSidebar && "surface p-4",
       )}
     >
       <div className="flex items-start justify-between gap-3">

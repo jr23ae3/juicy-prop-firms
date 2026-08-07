@@ -59,7 +59,7 @@ function buildReasoning(plan: PlanSummary, input: AdvisorInput): string {
 
   if (plan.firm.rankPosition && plan.firm.rankPosition <= 3) {
     parts.push(
-      `Ranked #${plan.firm.rankPosition} in our power rankings for overall firm quality.`,
+      `Ranked #${plan.firm.rankPosition} on the Juice Index for overall firm quality.`,
     );
   }
 

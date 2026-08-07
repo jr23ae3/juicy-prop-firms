@@ -13,10 +13,10 @@ type RankingsListProps = {
 export function RankingsList({ rankings }: RankingsListProps) {
   if (rankings.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-border/60 px-6 py-12 text-center">
-        <h2 className="text-lg font-semibold">No rankings available</h2>
+      <div className="surface-muted border-dashed px-6 py-12 text-center">
+        <h2 className="font-heading text-lg font-semibold">No rankings yet</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Run migrations and seed the database to load power rankings.
+          Run migrations and seed the database to load the Juice Index.
         </p>
         <pre className="mx-auto mt-4 max-w-xs overflow-x-auto rounded-md bg-muted p-3 text-left text-xs">
           npm run db:migrate{"\n"}npm run db:seed
@@ -51,18 +51,18 @@ export function RankingsList({ rankings }: RankingsListProps) {
         <section aria-labelledby="full-rankings-heading">
           <h2
             id="full-rankings-heading"
-            className="mb-4 text-lg font-semibold"
+            className="mb-4 font-heading text-lg font-semibold"
           >
-            Full rankings
+            Rest of the index
           </h2>
           <ol className="space-y-3">
             {rest.map((ranking) => (
               <li key={ranking.firm.id}>
-                <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+                <div className="surface p-4">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-bold tabular-nums">
-                        #{ranking.position}
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted font-heading text-sm font-semibold tabular-nums">
+                        {ranking.position}
                       </span>
                       <div>
                         <Link

@@ -41,7 +41,7 @@ export function PricingCards() {
         <CardContent>
           <ul className="space-y-2 text-sm">
             <PricingFeature>Full plan comparison table</PricingFeature>
-            <PricingFeature>Top 3 rankings podium</PricingFeature>
+            <PricingFeature>Top 3 on the Juice Index</PricingFeature>
             <PricingFeature>
               {freeTierLimits.advisorRecommendations} AI advisor match
             </PricingFeature>

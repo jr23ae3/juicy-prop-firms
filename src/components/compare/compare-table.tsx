@@ -75,7 +75,7 @@ export function CompareTable({ plans, filters, onSortChange }: CompareTableProps
   }
 
   return (
-    <div className="hidden overflow-hidden rounded-2xl bg-card ring-1 ring-border/60 lg:block">
+    <div className="surface hidden overflow-hidden lg:block">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1180px] border-collapse text-sm">
           <caption className="sr-only">
