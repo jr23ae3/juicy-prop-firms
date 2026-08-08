@@ -11,9 +11,11 @@ import { MonitorPlay, Pause, Play, RotateCcw } from "lucide-react";
 
 import { ArcadeToggleTabs } from "@/components/skills-test/arcade-toggle-tabs";
 import { SkillsGuideDialogue } from "@/components/skills-test/skills-guide-dialogue";
+import { SkillsEvalHud } from "@/components/skills-test/skills-eval-hud";
 import { SkillsGameCopilot } from "@/components/skills-test/skills-game-copilot";
 import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
 import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
+import { SkillsPlanSelector } from "@/components/skills-test/skills-plan-selector";
 import { SkillsScoreboard } from "@/components/skills-test/skills-scoreboard";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
 import {
@@ -71,11 +73,29 @@ import {
   getCopilotState,
   type CopilotActionId,
 } from "@/lib/skills-test/game-copilot";
+import {
+  applyTradeToEval,
+  createEvalSession,
+  createPlanEvalProfile,
+  getEvalLivesFromDrawdown,
+  getEvalProgress,
+  getPlanContractMultiplier,
+  scaleTradeOutcomeForPlan,
+  formatEvalMoney,
+  type EvalSessionState,
+} from "@/lib/skills-test/plan-eval-engine";
+import {
+  getSelectedPlanId,
+  saveSelectedPlanId,
+} from "@/lib/skills-test/plan-persistence";
 import { cn } from "@/lib/utils";
+import { usePlans } from "@/hooks/use-plans";
 import { useSkillsGuide } from "@/hooks/use-skills-guide";
+import type { PlanSummary } from "@/types/plan";
 
 type MarketReplayScreenProps = {
   sessionDate: string;
+  initialPlanId?: string | null;
 };
 
 const SYMBOL_TAB_OPTIONS = FUTURES_REPLAY_SYMBOLS.map((ticker) => ({
@@ -102,7 +122,10 @@ function formatSignedChange(value: number, symbol: FuturesReplaySymbol) {
   return `${prefix}${formatReplayPrice(symbol, value)}`;
 }
 
-export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
+export function MarketReplayScreen({
+  sessionDate,
+  initialPlanId = null,
+}: MarketReplayScreenProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -148,6 +171,39 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   );
   const [playerInitials, setPlayerInitials] = useState("");
   const [bossSecondsLeft, setBossSecondsLeft] = useState<number | null>(null);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(
+    initialPlanId,
+  );
+  const [evalSession, setEvalSession] = useState<EvalSessionState>(() =>
+    createEvalSession(),
+  );
+
+  const { data: futuresPlans = [] } = usePlans({ marketType: "FUTURES" });
+
+  useEffect(() => {
+    if (initialPlanId) {
+      saveSelectedPlanId(initialPlanId);
+      return;
+    }
+    const stored = getSelectedPlanId();
+    if (stored) setSelectedPlanId(stored);
+  }, [initialPlanId]);
+
+  const selectedPlan = useMemo(
+    () => futuresPlans.find((plan) => plan.id === selectedPlanId) ?? null,
+    [futuresPlans, selectedPlanId],
+  );
+  const evalProfile = useMemo(
+    () => (selectedPlan ? createPlanEvalProfile(selectedPlan) : null),
+    [selectedPlan],
+  );
+  const evalProgress = useMemo(
+    () =>
+      evalProfile && selectedPlan
+        ? getEvalProgress(evalSession, evalProfile, symbol, selectedPlan)
+        : null,
+    [evalProfile, evalSession, selectedPlan, symbol],
+  );
 
   const isArcadePlaying = playMode === "arcade" && gamePhase === "playing";
   const isArcadeLocked = playMode === "arcade" && gamePhase !== "ready";
@@ -248,6 +304,39 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     setOutcome(null);
   }, []);
 
+  const resetEvalSession = useCallback(() => {
+    setEvalSession(createEvalSession());
+  }, []);
+
+  const handlePlanChange = useCallback(
+    (plan: PlanSummary | null) => {
+      setSelectedPlanId(plan?.id ?? null);
+      saveSelectedPlanId(plan?.id ?? null);
+      resetEvalSession();
+      clearTradeState();
+    },
+    [clearTradeState, resetEvalSession],
+  );
+
+  const applyPlanToTrade = useCallback(
+    (result: TradeOutcome) => {
+      if (!selectedPlan || !evalProfile) {
+        return { outcome: result, nextEval: evalSession };
+      }
+
+      const contracts = getPlanContractMultiplier(selectedPlan, symbol);
+      const scaled = scaleTradeOutcomeForPlan(result, contracts);
+      const nextEval = applyTradeToEval(
+        evalSession,
+        evalProfile,
+        scaled.dollarPnl,
+      );
+      setEvalSession(nextEval);
+      return { outcome: scaled, nextEval };
+    },
+    [evalProfile, evalSession, selectedPlan, symbol],
+  );
+
   const finalizeGame = useCallback(
     async (score: number, wonRun: boolean, livesRemaining: number) => {
       const currentHigh = getHighScore();
@@ -328,8 +417,9 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       bossRoundPassed: false,
       bestEntryLeadBars: 0,
     };
+    resetEvalSession();
     beginRound(1);
-  }, [beginRound]);
+  }, [beginRound, resetEvalSession]);
 
   const exitArcadeMode = useCallback(() => {
     setPlayMode("practice");
@@ -376,6 +466,97 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     },
     [challenge, entryBarIndex],
   );
+
+  const finalizeArcadeEval = useCallback(
+    (
+      roundResult: RoundResult,
+      nextEval: EvalSessionState,
+      tradeGrade: string | null,
+    ) => {
+      let adjusted = roundResult;
+
+      if (evalProfile) {
+        if (nextEval.status === "passed") {
+          adjusted = {
+            ...roundResult,
+            passed: true,
+            lostLife: false,
+            headline: "EVAL PASSED",
+            detail: `Profit target cleared with ${formatEvalMoney(nextEval.cumulativePnl)} session P&L.`,
+          };
+        } else if (nextEval.status !== "active") {
+          adjusted = {
+            ...roundResult,
+            passed: false,
+            lostLife: true,
+            headline: "EVAL FAILED",
+            detail: nextEval.failReason ?? "Drawdown limit breached.",
+          };
+        }
+      }
+
+      applyRoundResult(adjusted, tradeGrade);
+
+      if (evalProfile && nextEval.status === "passed") {
+        const remainingLives = getEvalLivesFromDrawdown(evalProfile, nextEval);
+        setLives(remainingLives);
+        void finalizeGame(
+          totalScore + adjusted.points,
+          true,
+          remainingLives,
+        ).then(() => setGamePhase("complete"));
+        return;
+      }
+
+      if (evalProfile && nextEval.status !== "active") {
+        setLives(0);
+      } else if (evalProfile) {
+        setLives(getEvalLivesFromDrawdown(evalProfile, nextEval));
+      }
+    },
+    [applyRoundResult, evalProfile, finalizeGame, totalScore],
+  );
+
+  const runTradeScenario = useCallback(() => {
+    if (entryBarIndex === null) return;
+    if (evalProfile && evalSession.status !== "active") return;
+
+    setPlaying(false);
+    const result = simulateTrade(symbol, replay.bars, {
+      entryBarIndex,
+      direction,
+      strategy,
+    });
+
+    if (!result) return;
+
+    const { outcome: scaled, nextEval } = applyPlanToTrade(result);
+    setOutcome(scaled);
+    setFrameIndex(scaled.exitBarIndex);
+
+    if (isArcadePlaying && challenge) {
+      const roundResult = evaluateRound(
+        scaled,
+        entryBarIndex,
+        challenge,
+        combo,
+      );
+      finalizeArcadeEval(roundResult, nextEval, scaled.grade);
+    }
+  }, [
+    applyPlanToTrade,
+    challenge,
+    combo,
+    direction,
+    entryBarIndex,
+    evalProfile,
+    evalSession.status,
+    finalizeArcadeEval,
+    isArcadePlaying,
+    replay.bars,
+    strategy,
+    symbol,
+  ]);
 
   const handleBossTimeout = useCallback(() => {
     if (gamePhase !== "playing" || !challenge?.isBossRound || outcome) return;
@@ -672,38 +853,14 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     setFrameIndex(0);
     setPlaying(false);
     clearTradeState();
+    if (evalProfile) resetEvalSession();
   };
 
   const handleMarkEntry = () => {
+    if (evalProfile && evalSession.status !== "active") return;
     setPlaying(false);
     setEntryBarIndex(frameIndex);
     setOutcome(null);
-  };
-
-  const handleRunTrade = () => {
-    if (entryBarIndex === null) return;
-
-    setPlaying(false);
-    const result = simulateTrade(symbol, replay.bars, {
-      entryBarIndex,
-      direction,
-      strategy,
-    });
-
-    if (!result) return;
-
-    setOutcome(result);
-    setFrameIndex(result.exitBarIndex);
-
-    if (isArcadePlaying && challenge) {
-      const roundResult = evaluateRound(
-        result,
-        entryBarIndex,
-        challenge,
-        combo,
-      );
-      applyRoundResult(roundResult, result.grade);
-    }
   };
 
   const handleCopilotAction = useCallback(
@@ -717,6 +874,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           );
           return;
         case "mark_playhead":
+          if (evalProfile && evalSession.status !== "active") return;
           setPlaying(false);
           setEntryBarIndex(frameIndex);
           setOutcome(null);
@@ -725,27 +883,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           setPlaying(false);
           return;
         case "submit":
-          if (entryBarIndex === null) return;
-          setPlaying(false);
-          {
-            const result = simulateTrade(symbol, replay.bars, {
-              entryBarIndex,
-              direction,
-              strategy,
-            });
-            if (!result) return;
-            setOutcome(result);
-            setFrameIndex(result.exitBarIndex);
-            if (isArcadePlaying && challenge) {
-              const roundResult = evaluateRound(
-                result,
-                entryBarIndex,
-                challenge,
-                combo,
-              );
-              applyRoundResult(roundResult, result.grade);
-            }
-          }
+          runTradeScenario();
           return;
         case "clear_entry":
           clearTradeState();
@@ -755,17 +893,12 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       }
     },
     [
-      applyRoundResult,
       challenge,
       clearTradeState,
-      combo,
-      direction,
-      entryBarIndex,
+      evalProfile,
+      evalSession.status,
       frameIndex,
-      isArcadePlaying,
-      replay.bars,
-      strategy,
-      symbol,
+      runTradeScenario,
     ],
   );
 
@@ -954,8 +1087,10 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
             setOutcome(null);
           }}
           onMarkEntry={handleMarkEntry}
-          onRunTrade={handleRunTrade}
+          onRunTrade={runTradeScenario}
           onClearTrade={handleClearTrade}
+          evalLocked={Boolean(evalProfile && evalSession.status !== "active")}
+          contractCount={evalProgress?.contracts ?? null}
         />
       </div>
     </aside>
@@ -990,6 +1125,19 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       </div>
 
       {guide.activeFlow ? guideDialogue : null}
+
+      <SkillsPlanSelector
+        selectedPlanId={selectedPlanId}
+        onPlanChange={handlePlanChange}
+      />
+
+      {evalProfile && evalProgress ? (
+        <SkillsEvalHud
+          profile={evalProfile}
+          state={evalSession}
+          progress={evalProgress}
+        />
+      ) : null}
 
       {!guide.activeFlow ? (
         <SkillsGameCopilot

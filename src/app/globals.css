@@ -1620,6 +1620,258 @@
   color: rgb(255 255 255 / 60%);
 }
 
+.skills-trade-panel-alert {
+  margin-top: 0.625rem;
+  border: 2px solid rgb(255 80 80 / 35%);
+  background: rgb(40 8 8 / 55%);
+  padding: 0.5rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(255 180 180 / 90%);
+}
+
+.skills-plan-selector {
+  border: 4px solid rgb(255 215 0 / 22%);
+  background: rgb(8 12 8 / 92%);
+  padding: 1rem;
+  box-shadow:
+    inset 0 0 24px rgb(255 215 0 / 6%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-plan-selector-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.skills-plan-selector-kicker {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-plan-selector-copy {
+  margin-top: 0.375rem;
+  max-width: 36rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 58%);
+}
+
+.skills-plan-selector-field {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.skills-plan-selector-label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 215 0 / 85%);
+}
+
+.skills-plan-selector-select {
+  width: 100%;
+  border: 2px solid rgb(0 185 122 / 30%);
+  background: rgb(2 8 18 / 95%);
+  padding: 0.625rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: #36ffff;
+}
+
+.skills-plan-selector-select:disabled {
+  opacity: 0.55;
+}
+
+.skills-plan-selector-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .skills-plan-selector-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.skills-plan-selector-stat-label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 255 255 / 42%);
+}
+
+.skills-plan-selector-stat-value {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(255 255 255 / 88%);
+}
+
+.skills-eval-hud {
+  border: 4px solid rgb(0 185 122 / 30%);
+  background: rgb(4 17 10 / 92%);
+  padding: 1rem;
+  box-shadow:
+    inset 0 0 24px rgb(0 185 122 / 8%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-eval-hud--passed {
+  border-color: rgb(0 185 122 / 55%);
+  box-shadow:
+    inset 0 0 28px rgb(0 185 122 / 16%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-eval-hud--failed {
+  border-color: rgb(255 80 80 / 45%);
+  background: rgb(24 8 8 / 92%);
+  box-shadow:
+    inset 0 0 28px rgb(255 80 80 / 10%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-eval-hud-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.skills-eval-hud-kicker {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-eval-hud-title {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(255 255 255 / 92%);
+}
+
+.skills-eval-hud-sub {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: rgb(255 255 255 / 52%);
+}
+
+.skills-eval-hud-status {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #36ffff;
+}
+
+.skills-eval-hud--passed .skills-eval-hud-status {
+  color: #00b97a;
+}
+
+.skills-eval-hud--failed .skills-eval-hud-status {
+  color: rgb(255 120 120);
+}
+
+.skills-eval-hud-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .skills-eval-hud-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.skills-eval-hud-stat-label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 255 255 / 42%);
+}
+
+.skills-eval-hud-stat-value {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.skills-eval-hud-bars {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.875rem;
+}
+
+.skills-eval-hud-bar-block {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.skills-eval-hud-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: rgb(255 255 255 / 52%);
+}
+
+.skills-eval-hud-bar {
+  height: 0.625rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: rgb(0 0 0 / 35%);
+  overflow: hidden;
+}
+
+.skills-eval-hud-bar-fill {
+  height: 100%;
+  transition: width 240ms ease;
+}
+
+.skills-eval-hud-bar--target .skills-eval-hud-bar-fill {
+  background: linear-gradient(90deg, rgb(0 185 122 / 70%), #00b97a);
+}
+
+.skills-eval-hud-bar--drawdown .skills-eval-hud-bar-fill {
+  background: linear-gradient(90deg, rgb(255 215 0 / 70%), #ffd700);
+}
+
+.skills-eval-hud-bar--daily .skills-eval-hud-bar-fill {
+  background: linear-gradient(90deg, rgb(255 120 80 / 70%), rgb(255 80 80));
+}
+
+.skills-eval-hud-alert {
+  margin-top: 0.75rem;
+  border: 2px solid rgb(255 80 80 / 35%);
+  background: rgb(40 8 8 / 55%);
+  padding: 0.5rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(255 180 180 / 90%);
+}
+
+.skills-eval-hud-alert--pass {
+  border-color: rgb(0 185 122 / 35%);
+  background: rgb(4 24 14 / 55%);
+  color: rgb(160 255 210 / 92%);
+}
+
 .skills-trade-panel-grid {
   display: grid;
   gap: 1rem;

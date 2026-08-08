@@ -17,7 +17,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SkillsTestPage() {
+type SkillsTestPageProps = {
+  searchParams: Promise<{ planId?: string }>;
+};
+
+export default async function SkillsTestPage({ searchParams }: SkillsTestPageProps) {
+  const { planId } = await searchParams;
   const sessionDate = getSessionDateKey();
 
   return (
@@ -35,17 +40,16 @@ export default function SkillsTestPage() {
             1M FUTURES ARCADE · NQ · MNQ · ES · MES
           </p>
           <p className="compare-arcade-lead mx-auto mt-6 max-w-2xl">
-            Train on the daily 1-minute chart in{" "}
-            <strong className="font-normal text-primary">Practice</strong>, then
-            switch to{" "}
-            <strong className="font-normal text-primary">Arcade</strong> for five
-            seeded missions, a boss round, co-pilot coaching, and the global
-            daily leaderboard.
+            Select a prop firm eval plan to simulate its profit target and
+            drawdown rules, then train on the daily 1-minute chart in{" "}
+            <strong className="font-normal text-primary">Practice</strong> or
+            chase missions in{" "}
+            <strong className="font-normal text-primary">Arcade</strong>.
           </p>
         </div>
 
         <div className="mx-auto max-w-7xl">
-          <MarketReplayScreen sessionDate={sessionDate} />
+          <MarketReplayScreen sessionDate={sessionDate} initialPlanId={planId ?? null} />
         </div>
       </Container>
     </div>

@@ -25,6 +25,8 @@ type SkillsTradePanelProps = {
   canMarkEntry: boolean;
   gameMode?: boolean;
   challenge?: GameChallenge | null;
+  evalLocked?: boolean;
+  contractCount?: number | null;
   onDirectionChange: (direction: TradeDirection) => void;
   onStrategyChange: (strategy: TradingStrategy) => void;
   onMarkEntry: () => void;
@@ -62,6 +64,8 @@ export function SkillsTradePanel({
   canMarkEntry,
   gameMode = false,
   challenge = null,
+  evalLocked = false,
+  contractCount = null,
   onDirectionChange,
   onStrategyChange,
   onMarkEntry,
@@ -69,7 +73,7 @@ export function SkillsTradePanel({
   onClearTrade,
 }: SkillsTradePanelProps) {
   const selectedStrategy = TRADING_STRATEGIES.find((item) => item.id === strategy);
-  const readyToRun = entryBarIndex !== null && !outcome;
+  const readyToRun = entryBarIndex !== null && !outcome && !evalLocked;
   const controlsLocked = gameMode;
 
   return (
@@ -81,8 +85,15 @@ export function SkillsTradePanel({
         <p className="skills-trade-panel-copy">
           {gameMode && challenge
             ? challenge.missionDetail
-            : "Mark a 1-minute entry, pick a side and strategy, then run the scenario to see your score."}
+            : contractCount
+              ? `Plan-sized simulation using ${contractCount} contract${contractCount === 1 ? "" : "s"} per trade.`
+              : "Mark a 1-minute entry, pick a side and strategy, then run the scenario to see your score."}
         </p>
+        {evalLocked ? (
+          <p className="skills-trade-panel-alert">
+            Eval finished — change plan or reset the session to keep trading.
+          </p>
+        ) : null}
       </div>
 
       <div className="skills-trade-panel-grid">
@@ -142,7 +153,7 @@ export function SkillsTradePanel({
               type="button"
               className="arcade-btn arcade-btn--p2 skills-replay-btn"
               onClick={onMarkEntry}
-              disabled={!canMarkEntry || Boolean(outcome)}
+              disabled={!canMarkEntry || Boolean(outcome) || evalLocked}
             >
               <Target className="size-3.5" aria-hidden />
               USE PLAYHEAD

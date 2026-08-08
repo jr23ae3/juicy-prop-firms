@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { PlanSummary } from "@/types/plan";
 
 import { CalculatedValue } from "@/components/compare/calculated-value";
@@ -221,6 +222,21 @@ export function ComparePlanDetails({ plan }: ComparePlanDetailsProps) {
           </div>
         ) : null}
 
+        {plan.profitTarget && plan.maxDrawdown ? (
+          <div
+            className="mt-4"
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            <Link
+              href={`/skills-test?planId=${plan.id}`}
+              className="arcade-btn arcade-btn--p1 inline-flex w-full justify-center"
+            >
+              SIMULATE IN TAPE QUEST
+            </Link>
+          </div>
+        ) : null}
+
         <p className="plan-card-arcade-footer mt-4">▼ PRESS TO CLOSE</p>
       </div>
     </div>
@@ -292,6 +308,16 @@ export function ComparePlanSummary({ plan }: ComparePlanDetailsProps) {
         <div className="plan-card-arcade-life mt-3" aria-hidden>
           <span style={{ width: "72%" }} />
         </div>
+
+        {plan.profitTarget && plan.maxDrawdown ? (
+          <Link
+            href={`/skills-test?planId=${plan.id}`}
+            className="arcade-btn arcade-btn--p2 mt-3 inline-flex w-full justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            SIMULATE
+          </Link>
+        ) : null}
       </div>
     </div>
   );
