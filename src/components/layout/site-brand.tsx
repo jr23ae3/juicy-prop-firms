@@ -40,7 +40,7 @@ export function SiteBrand({
       <span className="flex flex-col gap-0.5">
         {isArcade ? (
           <>
-            <span className="site-brand-arcade-tag">TRADE RESEARCH</span>
+            <span className="site-brand-arcade-tag">TAPE QUEST ARCADE</span>
             <span
               className={cn(
                 "site-brand-arcade-name transition-colors group-hover:text-primary",

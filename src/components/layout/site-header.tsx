@@ -8,10 +8,10 @@ import { SiteBrand } from "@/components/layout/site-brand";
 import { cn } from "@/lib/utils";
 
 const TICKER_ITEMS = [
-  "◆ INSERT COIN TO CONTINUE ◆",
+  "◆ INSERT COIN TO PLAY TAPE QUEST ◆",
   "★ JUICY TRADES ★",
-  "1UP EDITION",
-  "◆ COMPARE · ADVISE · REPLAY · ROI ◆",
+  "DAILY 1M FUTURES ARCADE",
+  "◆ PLAY · TRAIN · COMPARE · FUND ◆",
 ] as const;
 
 export function SiteHeader() {
@@ -41,12 +41,12 @@ export function SiteHeader() {
 
         <div className="site-header-arcade-actions">
           <Link
-            href="/compare"
+            href="/skills-test"
             className={cn(
               "arcade-btn arcade-btn--p1 hidden min-w-0 text-[8px] md:inline-flex lg:hidden sm:text-[9px]",
             )}
           >
-            P1 · COMPARE
+            P1 · PLAY
           </Link>
           <MobileNav />
           <AuthButtons variant="header" />

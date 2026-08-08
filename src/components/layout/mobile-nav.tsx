@@ -106,11 +106,11 @@ export function MobileNav() {
             })}
           </ul>
           <Link
-            href="/compare"
+            href="/skills-test"
             className="arcade-btn arcade-btn--p1 mt-6 w-full text-[9px]"
             onClick={() => setOpen(false)}
           >
-            P1 · COMPARE
+            P1 · PLAY TAPE QUEST
           </Link>
         </nav>
       </dialog>

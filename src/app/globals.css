@@ -1085,6 +1085,28 @@
       0 0 24px rgb(54 255 255 / 20%);
   }
 
+  .arcade-level-card--featured {
+    @apply border-[#ffd700]/55 bg-[#04110a];
+    box-shadow:
+      inset 0 0 0 2px rgb(0 0 0 / 40%),
+      0 0 28px rgb(255 215 0 / 16%);
+  }
+
+  .arcade-level-card--featured:hover {
+    @apply border-[#ffd700]/75;
+    box-shadow:
+      inset 0 0 0 2px rgb(0 0 0 / 40%),
+      0 0 32px rgb(255 215 0 / 24%);
+  }
+
+  .arcade-level-feature-tag {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-arcade), var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    color: #36ffff;
+  }
+
   .arcade-level-num {
     font-family: var(--font-arcade), var(--font-mono);
     @apply text-[9px] text-[#ffd700];

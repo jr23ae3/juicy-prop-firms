@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Calculator,
+  MonitorPlay,
   Sparkles,
   Table2,
   type LucideIcon,
@@ -14,7 +15,15 @@ const tools: {
   label: string;
   description: string;
   icon: LucideIcon;
+  featured?: boolean;
 }[] = [
+  {
+    href: "/skills-test",
+    label: "Tape Quest",
+    description: "Daily 1M futures training arcade",
+    icon: MonitorPlay,
+    featured: true,
+  },
   {
     href: "/compare",
     label: "Compare",
@@ -41,14 +50,15 @@ export function ToolsGrid() {
       <p id="tools-heading" className="section-label mb-5">
         Platform tools
       </p>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.map(({ href, label, description, icon }) => (
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {tools.map(({ href, label, description, icon, featured }) => (
           <li key={href}>
             <Link
               href={href}
               className={cn(
                 "surface group flex items-start gap-3 p-4 transition-colors",
                 "hover:border-primary/40 hover:bg-primary/5",
+                featured && "border-primary/35 bg-primary/5",
               )}
             >
               <IconTile icon={icon} />

@@ -8,6 +8,12 @@ export type NavItem = {
 
 export const mainNav: NavItem[] = [
   {
+    title: "Tape Quest",
+    shortTitle: "Play",
+    href: "/skills-test",
+    description: "Daily 1M futures arcade with missions and leaderboard",
+  },
+  {
     title: "Compare",
     href: "/compare",
     description: "Side-by-side plan comparison with live pricing",
@@ -19,12 +25,6 @@ export const mainNav: NavItem[] = [
     description: "Get personalized firm recommendations",
   },
   {
-    title: "Skills Test",
-    shortTitle: "Skills",
-    href: "/skills-test",
-    description: "Replay today's NQ, MNQ, ES, and MES session",
-  },
-  {
     title: "ROI Calculator",
     shortTitle: "ROI",
     href: "/roi-calculator",
@@ -34,9 +34,9 @@ export const mainNav: NavItem[] = [
 
 export const footerNav = {
   product: [
+    { title: "Tape Quest", href: "/skills-test" },
     { title: "Compare Plans", href: "/compare" },
     { title: "AI Advisor", href: "/advisor" },
-    { title: "Skills Test", href: "/skills-test" },
     { title: "ROI Calculator", href: "/roi-calculator" },
   ],
   company: [

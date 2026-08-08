@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { BadgeCheck, Calculator, MonitorPlay, Table2 } from "lucide-react";
+import {
+  BadgeCheck,
+  Calculator,
+  MonitorPlay,
+  Table2,
+  Trophy,
+  Users,
+} from "lucide-react";
 
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
@@ -9,28 +16,30 @@ import { ArcadeStarfield } from "@/components/marketing/arcade-starfield";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/config/site";
 import type { FeaturedFirm } from "@/server/data/plans";
+import { cn } from "@/lib/utils";
 
 const levels = [
   {
-    href: "/compare",
+    href: "/skills-test",
     num: "LVL 1",
+    title: "TAPE QUEST",
+    desc: "Daily 1M arcade · missions · boss round",
+    icon: MonitorPlay,
+    featured: true,
+  },
+  {
+    href: "/compare",
+    num: "LVL 2",
     title: "COMPARE",
     desc: "Side-by-side plan showdown",
     icon: Table2,
   },
   {
     href: "/advisor",
-    num: "LVL 2",
+    num: "LVL 3",
     title: "AI BOSS",
     desc: "Oracle OJ — firm matches",
     character: true as const,
-  },
-  {
-    href: "/skills-test",
-    num: "LVL 3",
-    title: "SKILLS TEST",
-    desc: "NQ · MNQ · ES · MES replay",
-    icon: MonitorPlay,
   },
   {
     href: "/roi-calculator",
@@ -41,7 +50,25 @@ const levels = [
   },
 ] as const;
 
-const powerUps = [
+const gamePowerUps = [
+  {
+    icon: MonitorPlay,
+    title: "1M REPLAY",
+    desc: "NQ · MNQ · ES · MES session tape with live entries.",
+  },
+  {
+    icon: Trophy,
+    title: "DAILY BOARD",
+    desc: "Same seeded missions and a global leaderboard every day.",
+  },
+  {
+    icon: Users,
+    title: "CO-PILOT",
+    desc: "Tape Scout coaches you through every arcade round.",
+  },
+] as const;
+
+const researchPowerUps = [
   {
     icon: BadgeCheck,
     title: "VERIFIED",
@@ -55,7 +82,7 @@ const powerUps = [
   {
     character: true as const,
     title: "AI MATCH",
-    desc: "Oracle OJ picks your plans.",
+    desc: "Oracle OJ picks your plans when you are ready to fund.",
   },
 ] as const;
 
@@ -88,7 +115,6 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
       <ArcadePacmanBackground />
       <ArcadeStarfield />
 
-      {/* floating coins */}
       <span className="arcade-coin left-[8%] top-[18%]" style={{ animationDelay: "0s" }} aria-hidden />
       <span className="arcade-coin right-[12%] top-[28%]" style={{ animationDelay: "1s" }} aria-hidden />
       <span className="arcade-coin left-[85%] top-[62%]" style={{ animationDelay: "0.5s" }} aria-hidden />
@@ -98,43 +124,48 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
           <div className="arcade-cabinet-shell">
             <div className="arcade-screen">
               <div className="arcade-screen-inner">
-                <p className="arcade-coin-text">◆ INSERT COIN TO CONTINUE ◆</p>
+                <p className="arcade-coin-text">◆ INSERT COIN TO PLAY ◆</p>
 
                 <h1 className="arcade-title">
                   JUICY
                   <br />
                   TRADES
                 </h1>
-                <p className="arcade-subtitle">PROP FIRM QUEST · 1UP EDITION</p>
+                <p className="arcade-subtitle">TAPE QUEST · 1M FUTURES TRAINING ARCADE</p>
 
                 <p className="arcade-press-start" aria-hidden>
                   ▶ PRESS START
                 </p>
 
+                <p className="mx-auto mt-8 max-w-lg font-mono text-[11px] leading-relaxed text-muted-foreground sm:text-xs">
+                  {siteConfig.description}
+                </p>
+
+                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Link href="/skills-test" className="arcade-btn arcade-btn--p1">
+                    P1 · PLAY TAPE QUEST
+                  </Link>
+                  <Link href="/compare" className="arcade-btn arcade-btn--p2">
+                    P2 · COMPARE PLANS
+                  </Link>
+                </div>
+
                 {hasStats ? (
-                  <ArcadeScoreHud
-                    firms={stats.firms}
-                    plans={stats.plans}
-                    lowestAllIn={lowestLabel}
-                  />
+                  <div className="mt-8 space-y-3">
+                    <p className="arcade-level-num text-center text-[9px]">
+                      ★ RESEARCH CATALOG ★
+                    </p>
+                    <ArcadeScoreHud
+                      firms={stats.firms}
+                      plans={stats.plans}
+                      lowestAllIn={lowestLabel}
+                    />
+                  </div>
                 ) : (
                   <p className="mt-8 font-mono text-xs text-muted-foreground">
                     RUN npm run db:seed TO LOAD THE CATALOG
                   </p>
                 )}
-
-                <p className="mx-auto mt-6 max-w-md font-mono text-[11px] leading-relaxed text-muted-foreground sm:text-xs">
-                  {siteConfig.description}
-                </p>
-
-                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <Link href="/compare" className="arcade-btn arcade-btn--p1">
-                    P1 · COMPARE
-                  </Link>
-                  <Link href="/advisor" className="arcade-btn arcade-btn--p2">
-                    P2 · ADVISOR
-                  </Link>
-                </div>
 
                 <div className="arcade-dot-trail mx-auto mt-8 w-fit" aria-hidden>
                   {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
@@ -155,9 +186,22 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
             ★ SELECT YOUR LEVEL ★
           </h2>
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {levels.map(({ href, num, title, desc, ...level }) => (
+            {levels.map((level) => {
+              const { href, num, title, desc } = level;
+              const featured = "featured" in level && level.featured;
+
+              return (
               <li key={href}>
-                <Link href={href} className="group arcade-level-card">
+                <Link
+                  href={href}
+                  className={cn(
+                    "group arcade-level-card",
+                    featured && "arcade-level-card--featured",
+                  )}
+                >
+                  {featured ? (
+                    <p className="arcade-level-feature-tag">NOW PLAYING</p>
+                  ) : null}
                   <p className="arcade-level-num">{num}</p>
                   <div className="mt-3 flex items-center gap-2">
                     {"icon" in level ? (
@@ -172,18 +216,40 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
                   </p>
                 </Link>
               </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section aria-labelledby="game-power-ups" className="mt-16">
+          <h2 id="game-power-ups" className="arcade-level-num mb-5 text-center">
+            ★ TAPE QUEST FEATURES ★
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {gamePowerUps.map(({ icon: Icon, title, desc }) => (
+              <li key={title} className="arcade-powerup">
+                <div className="flex size-10 shrink-0 items-center justify-center border-2 border-primary/40 bg-primary/10">
+                  <Icon className="size-5 text-primary" aria-hidden />
+                </div>
+                <div>
+                  <p className="arcade-level-title">{title}</p>
+                  <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                    {desc}
+                  </p>
+                </div>
+              </li>
             ))}
           </ul>
         </section>
 
         <ArcadeFirmMarquee firms={featuredFirms} />
 
-        <section aria-labelledby="power-ups" className="mt-16">
-          <h2 id="power-ups" className="arcade-level-num mb-5 text-center">
-            ★ POWER-UPS UNLOCKED ★
+        <section aria-labelledby="research-power-ups" className="mt-16">
+          <h2 id="research-power-ups" className="arcade-level-num mb-5 text-center">
+            ★ RESEARCH TOOLS ★
           </h2>
           <ul className="grid gap-4 sm:grid-cols-3">
-            {powerUps.map(({ title, desc, ...powerUp }) => (
+            {researchPowerUps.map(({ title, desc, ...powerUp }) => (
               <li key={title} className="arcade-powerup">
                 <div className="flex size-10 shrink-0 items-center justify-center border-2 border-primary/40 bg-primary/10">
                   {"icon" in powerUp ? (
@@ -204,7 +270,7 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
         </section>
 
         <p className="mt-12 text-center font-mono text-[10px] text-muted-foreground">
-          © HIGH SCORE RESEARCH · BUILT FOR FUTURES TRADERS
+          © HIGH SCORE TRAINING · BUILT FOR FUTURES TRADERS
         </p>
       </Container>
     </section>
