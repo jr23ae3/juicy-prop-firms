@@ -1168,9 +1168,9 @@ export function MarketReplayScreen({
         ) : null}
       </div>
 
-      <div className="skills-replay-layout">
-        <div className="skills-replay-main">
-      <div className="skills-replay-monitor relative">
+      <div className="skills-replay-main">
+        <div className="skills-replay-stage">
+          <div className="skills-replay-monitor relative">
         <div className="skills-replay-game-overlays" data-guide-target="overlay">
         {playMode === "arcade" && gamePhase === "ready" ? (
           <SkillsGameOverlay
@@ -1308,6 +1308,9 @@ export function MarketReplayScreen({
         </div>
       </div>
 
+          <div className="skills-replay-sidebar">{controllerDock}</div>
+        </div>
+
           <SkillsScoreboard
             board={dailyLeaderboard}
             dailySeed={dailySeed}
@@ -1326,11 +1329,6 @@ export function MarketReplayScreen({
             onRefresh={refreshLeaderboard}
             className="skills-scoreboard--below-chart"
           />
-        </div>
-
-        <div className="skills-replay-sidebar">
-          {controllerDock}
-        </div>
       </div>
 
       <p className="skills-replay-footnote">

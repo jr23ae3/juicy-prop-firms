@@ -1515,31 +1515,33 @@
   }
 }
 
-.tape-quest-workspace .skills-replay-layout {
+.tape-quest-workspace .skills-replay-stage {
   gap: 0.75rem;
 }
 
 @media (min-width: 1100px) {
-  .tape-quest-workspace .skills-replay-layout {
+  .tape-quest-workspace .skills-replay-stage {
     grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
   }
 }
 
 @media (min-width: 1400px) {
-  .tape-quest-workspace .skills-replay-layout {
+  .tape-quest-workspace .skills-replay-stage {
     grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
   }
 }
 
-@media (min-width: 1100px) {
-  .tape-quest-workspace .skills-replay-sidebar {
-    top: 4.75rem;
-    max-height: calc(100vh - 5.75rem);
-  }
+.tape-quest-workspace .skills-replay-canvas-wrap {
+  aspect-ratio: auto;
+  flex: 1;
+  min-height: clamp(220px, 38vh, 360px);
 }
 
-.tape-quest-workspace .skills-replay-canvas-wrap {
-  min-height: clamp(220px, 38vh, 360px);
+.tape-quest-workspace .skills-replay-stage #skills-replay-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .tape-quest-workspace .skills-replay-hud {
@@ -1601,6 +1603,17 @@
 
 .tape-quest-workspace .skills-replay-controller-dock {
   padding: 0.625rem;
+  gap: 0.625rem;
+}
+
+.tape-quest-workspace .skills-replay-controller-dock .skills-trade-panel-copy,
+.tape-quest-workspace .skills-replay-controller-dock .skills-trade-panel-hint {
+  display: none;
+}
+
+.tape-quest-workspace .skills-replay-controller-dock .skills-trade-entry-card {
+  min-height: 3.5rem;
+  padding: 0.625rem;
 }
 
 .tape-quest-workspace .skills-replay-footnote {
@@ -1613,49 +1626,53 @@
   }
 }
 
-.skills-replay-layout {
+.skills-replay-stage {
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (min-width: 1024px) {
-  .skills-replay-layout {
+  .skills-replay-stage {
     grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
   }
 }
 
 .skills-replay-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   min-width: 0;
 }
 
 .skills-replay-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
   min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .skills-replay-sidebar {
-    position: sticky;
-    top: 5.5rem;
-    max-height: calc(100vh - 6.5rem);
-    overflow: auto;
-  }
+  min-height: 100%;
 }
 
 .skills-replay-controller-dock {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 0.75rem;
+  height: 100%;
+  min-height: 100%;
   border: 4px solid rgb(54 255 255 / 25%);
   background: #020812;
   padding: 0.75rem;
   box-shadow:
     inset 0 0 24px rgb(54 255 255 / 6%),
     4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+.skills-replay-controller-dock [data-guide-target="trade-panel"] {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .skills-replay-controller-header {
@@ -1707,11 +1724,31 @@
 }
 
 .skills-replay-controller-dock .skills-trade-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
   border-width: 3px;
   padding: 0.875rem;
 }
 
 .skills-replay-controller-dock .skills-trade-panel-grid {
+  flex: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 0.625rem;
+}
+
+.skills-replay-controller-dock .skills-trade-panel-block:last-child {
+  grid-column: 1 / -1;
+}
+
+.skills-replay-controller-dock .skills-trade-panel-header {
+  margin-bottom: 0.625rem;
+}
+
+.skills-replay-controller-dock .skills-trade-result {
+  margin-top: auto;
   grid-template-columns: 1fr;
 }
 
@@ -1723,11 +1760,11 @@
   width: 100%;
 }
 
-.skills-replay-controller-dock .skills-trade-result {
-  grid-template-columns: 1fr;
-}
-
 .skills-replay-monitor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   border: 4px solid rgb(0 185 122 / 40%);
   background: #04110a;
   box-shadow:
@@ -1815,6 +1852,18 @@
   margin-top: 0.125rem;
   font-size: 10px;
   color: rgb(255 255 255 / 55%);
+}
+
+.skills-replay-stage #skills-replay-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.skills-replay-stage .skills-replay-canvas-wrap {
+  aspect-ratio: auto;
+  flex: 1;
 }
 
 .skills-replay-canvas-wrap {
