@@ -1356,6 +1356,113 @@
   width: 100%;
 }
 
+.skills-replay-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .skills-replay-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  }
+}
+
+.skills-replay-main {
+  min-width: 0;
+}
+
+.skills-replay-controller-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 4px solid rgb(54 255 255 / 25%);
+  background: #020812;
+  padding: 0.75rem;
+  box-shadow:
+    inset 0 0 24px rgb(54 255 255 / 6%),
+    4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+@media (min-width: 1024px) {
+  .skills-replay-controller-dock {
+    position: sticky;
+    top: 5.5rem;
+    max-height: calc(100vh - 6.5rem);
+    overflow: auto;
+  }
+}
+
+.skills-replay-controller-header {
+  border-bottom: 2px solid rgb(0 185 122 / 25%);
+  padding-bottom: 0.5rem;
+}
+
+.skills-replay-controller-kicker {
+  margin: 0;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: #36ffff;
+  text-align: center;
+}
+
+.skills-replay-controller-dock .skills-replay-controls {
+  flex-direction: column;
+  align-items: stretch;
+  border-top: none;
+  padding: 0;
+}
+
+.skills-replay-controller-dock .skills-replay-transport {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skills-replay-controller-dock .skills-replay-btn {
+  width: 100%;
+  min-width: 0;
+}
+
+.skills-replay-controller-dock .skills-replay-speed-wrap {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.skills-replay-controller-dock .skills-replay-speed-tabs {
+  width: 100%;
+}
+
+.skills-replay-controller-dock .skills-replay-scrubber {
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid rgb(0 185 122 / 20%);
+  padding-top: 0.75rem;
+}
+
+.skills-replay-controller-dock .skills-trade-panel {
+  border-width: 3px;
+  padding: 0.875rem;
+}
+
+.skills-replay-controller-dock .skills-trade-panel-grid {
+  grid-template-columns: 1fr;
+}
+
+.skills-replay-controller-dock .skills-trade-entry-actions {
+  flex-direction: column;
+}
+
+.skills-replay-controller-dock .skills-trade-entry-actions .skills-replay-btn {
+  width: 100%;
+}
+
+.skills-replay-controller-dock .skills-trade-result {
+  grid-template-columns: 1fr;
+}
+
 .skills-replay-monitor {
   border: 4px solid rgb(0 185 122 / 40%);
   background: #04110a;

@@ -841,9 +841,6 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     onExit: exitArcadeMode,
   };
 
-  const guideNearBottom =
-    guide.highlight === "trade-panel" || guide.highlight === "controls";
-
   const guideDialogue = guide.activeFlow ? (
     <SkillsGuideDialogue
       flow={guide.activeFlow}
@@ -857,6 +854,104 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       onClose={guide.closeGuide}
     />
   ) : null;
+
+  const controllerDock = (
+    <aside className="skills-replay-controller-dock" aria-label="Game controller">
+      <div className="skills-replay-controller-header">
+        <p className="skills-replay-controller-kicker">
+          {playMode === "arcade" ? "★ ARCADE PAD ★" : "★ REPLAY PAD ★"}
+        </p>
+      </div>
+
+      <div className="skills-replay-controls" data-guide-target="controls">
+        <div className="skills-replay-transport">
+          <button
+            type="button"
+            className="arcade-btn arcade-btn--p1 skills-replay-btn"
+            onClick={() => setPlaying((value) => !value)}
+            disabled={Boolean(outcome)}
+            aria-label={playing ? "Pause replay" : "Play replay"}
+          >
+            {playing ? (
+              <Pause className="size-3.5" aria-hidden />
+            ) : (
+              <Play className="size-3.5" aria-hidden />
+            )}
+            {playing ? "PAUSE" : "PLAY"}
+          </button>
+          <button
+            type="button"
+            className="arcade-btn arcade-btn--p2 skills-replay-btn"
+            onClick={handleReset}
+          >
+            <RotateCcw className="size-3.5" aria-hidden />
+            RESET
+          </button>
+        </div>
+
+        <div className="skills-replay-speed-wrap">
+          <p className="skills-replay-controls-label">SPEED</p>
+          <ArcadeToggleTabs
+            value={speed}
+            onChange={setSpeed}
+            options={SPEED_TAB_OPTIONS}
+            ariaLabel="Replay speed"
+            variant="compact"
+            className="skills-replay-speed-tabs"
+          />
+        </div>
+      </div>
+
+      <label className="skills-replay-scrubber">
+        <span className="skills-replay-controls-label">TIMELINE</span>
+        <span className="sr-only">Scrub 1-minute session replay</span>
+        <input
+          type="range"
+          min={0}
+          max={replay.bars.length - 1}
+          value={frameIndex}
+          disabled={Boolean(outcome)}
+          onChange={(event) => {
+            setPlaying(false);
+            setFrameIndex(Number(event.target.value));
+          }}
+          style={{
+            background: `linear-gradient(to right, #00B97A ${progress}%, rgba(0, 185, 122, 0.15) ${progress}%)`,
+          }}
+        />
+      </label>
+
+      <div data-guide-target="trade-panel">
+        <SkillsTradePanel
+          symbol={symbol}
+          entryBarIndex={entryBarIndex}
+          entryLabel={entryBar?.label ?? null}
+          entryPrice={entryBar?.close ?? null}
+          direction={direction}
+          strategy={strategy}
+          outcome={outcome}
+          canMarkEntry={
+            !playing && !outcome && (!isArcadeLocked || isArcadePlaying)
+          }
+          gameMode={isArcadePlaying}
+          challenge={challenge}
+          onDirectionChange={(next) => {
+            if (isArcadePlaying) return;
+            setDirection(next);
+            setOutcome(null);
+          }}
+          onStrategyChange={(next) => {
+            if (isArcadePlaying) return;
+            setStrategy(next);
+            setOutcome(null);
+          }}
+          onMarkEntry={handleMarkEntry}
+          onRunTrade={handleRunTrade}
+          onClearTrade={handleClearTrade}
+        />
+      </div>
+    </aside>
+  );
 
   return (
     <div
@@ -886,7 +981,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         </button>
       </div>
 
-      {!guideNearBottom ? guideDialogue : null}
+      {guide.activeFlow ? guideDialogue : null}
 
       {!guide.activeFlow ? (
         <SkillsGameCopilot
@@ -913,6 +1008,8 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         </div>
       ) : null}
 
+      <div className="skills-replay-layout">
+        <div className="skills-replay-main">
       <div className="skills-replay-monitor relative">
         <div className="skills-replay-game-overlays" data-guide-target="overlay">
         {playMode === "arcade" && gamePhase === "ready" ? (
@@ -1045,93 +1142,10 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
             <div className="skills-replay-canvas-overlay" aria-hidden />
           </div>
         </div>
-
-        <div className="skills-replay-controls" data-guide-target="controls">
-          <div className="skills-replay-transport">
-            <button
-              type="button"
-              className="arcade-btn arcade-btn--p1 skills-replay-btn"
-              onClick={() => setPlaying((value) => !value)}
-              disabled={Boolean(outcome)}
-              aria-label={playing ? "Pause replay" : "Play replay"}
-            >
-              {playing ? (
-                <Pause className="size-3.5" aria-hidden />
-              ) : (
-                <Play className="size-3.5" aria-hidden />
-              )}
-              {playing ? "PAUSE" : "PLAY"}
-            </button>
-            <button
-              type="button"
-              className="arcade-btn arcade-btn--p2 skills-replay-btn"
-              onClick={handleReset}
-            >
-              <RotateCcw className="size-3.5" aria-hidden />
-              RESET
-            </button>
-          </div>
-
-          <div className="skills-replay-speed-wrap">
-            <p className="skills-replay-controls-label">SPEED</p>
-            <ArcadeToggleTabs
-              value={speed}
-              onChange={setSpeed}
-              options={SPEED_TAB_OPTIONS}
-              ariaLabel="Replay speed"
-              variant="compact"
-              className="skills-replay-speed-tabs"
-            />
-          </div>
+      </div>
         </div>
 
-        <label className="skills-replay-scrubber">
-          <span className="sr-only">Scrub 1-minute session replay</span>
-          <input
-            type="range"
-            min={0}
-            max={replay.bars.length - 1}
-            value={frameIndex}
-            disabled={Boolean(outcome)}
-            onChange={(event) => {
-              setPlaying(false);
-              setFrameIndex(Number(event.target.value));
-            }}
-            style={{
-              background: `linear-gradient(to right, #00B97A ${progress}%, rgba(0, 185, 122, 0.15) ${progress}%)`,
-            }}
-          />
-        </label>
-      </div>
-
-      {guideNearBottom ? guideDialogue : null}
-
-      <div data-guide-target="trade-panel">
-        <SkillsTradePanel
-        symbol={symbol}
-        entryBarIndex={entryBarIndex}
-        entryLabel={entryBar?.label ?? null}
-        entryPrice={entryBar?.close ?? null}
-        direction={direction}
-        strategy={strategy}
-        outcome={outcome}
-        canMarkEntry={!playing && !outcome && (!isArcadeLocked || isArcadePlaying)}
-        gameMode={isArcadePlaying}
-        challenge={challenge}
-        onDirectionChange={(next) => {
-          if (isArcadePlaying) return;
-          setDirection(next);
-          setOutcome(null);
-        }}
-        onStrategyChange={(next) => {
-          if (isArcadePlaying) return;
-          setStrategy(next);
-          setOutcome(null);
-        }}
-        onMarkEntry={handleMarkEntry}
-        onRunTrade={handleRunTrade}
-        onClearTrade={handleClearTrade}
-      />
+        {controllerDock}
       </div>
 
       <p className="skills-replay-footnote">
