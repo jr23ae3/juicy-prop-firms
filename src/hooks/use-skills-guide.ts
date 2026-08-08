@@ -20,6 +20,7 @@ type UseSkillsGuideOptions = {
   outcome: unknown;
   isBossRound: boolean;
   round: number;
+  liveCoaching?: GuideStep | null;
 };
 
 export function useSkillsGuide({
@@ -29,6 +30,7 @@ export function useSkillsGuide({
   outcome,
   isBossRound,
   round,
+  liveCoaching = null,
 }: UseSkillsGuideOptions) {
   const [activeFlow, setActiveFlow] = useState<GuideFlow | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
@@ -124,6 +126,12 @@ export function useSkillsGuide({
   }, [round, gamePhase]);
 
   const openContextualGuide = useCallback(() => {
+    if (playMode === "arcade" && gamePhase === "playing" && liveCoaching) {
+      setRoundHint(liveCoaching);
+      setActiveFlow("round");
+      setStepIndex(0);
+      return;
+    }
     if (playMode === "arcade" && gamePhase === "playing" && roundHint) {
       setActiveFlow("round");
       setStepIndex(0);
@@ -134,7 +142,7 @@ export function useSkillsGuide({
       return;
     }
     startFlow("practice");
-  }, [gamePhase, playMode, roundHint, startFlow]);
+  }, [gamePhase, liveCoaching, playMode, roundHint, startFlow]);
 
   const activeRoundStep =
     activeFlow === "round" && roundHint ? roundHint : null;

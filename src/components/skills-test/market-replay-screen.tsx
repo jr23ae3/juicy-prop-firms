@@ -11,6 +11,7 @@ import { MonitorPlay, Pause, Play, RotateCcw } from "lucide-react";
 
 import { ArcadeToggleTabs } from "@/components/skills-test/arcade-toggle-tabs";
 import { SkillsGuideDialogue } from "@/components/skills-test/skills-guide-dialogue";
+import { SkillsGameCopilot } from "@/components/skills-test/skills-game-copilot";
 import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
 import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
@@ -65,6 +66,10 @@ import {
   type TradeOutcome,
   type TradingStrategy,
 } from "@/lib/skills-test/trade-scenarios";
+import {
+  getCopilotState,
+  type CopilotActionId,
+} from "@/lib/skills-test/game-copilot";
 import { cn } from "@/lib/utils";
 import { useSkillsGuide } from "@/hooks/use-skills-guide";
 
@@ -180,6 +185,36 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       : (frameIndex / (replay.bars.length - 1)) * 100;
   const sessionChangePositive = replay.change >= 0;
 
+  const copilot = useMemo(
+    () =>
+      getCopilotState({
+        playMode,
+        gamePhase,
+        challenge,
+        frameIndex,
+        playing,
+        entryBarIndex,
+        hasOutcome: Boolean(outcome),
+        round,
+        lives,
+        combo,
+        bossSecondsLeft,
+      }),
+    [
+      challenge,
+      combo,
+      entryBarIndex,
+      frameIndex,
+      gamePhase,
+      lives,
+      outcome,
+      playMode,
+      playing,
+      round,
+      bossSecondsLeft,
+    ],
+  );
+
   const guide = useSkillsGuide({
     playMode,
     gamePhase,
@@ -187,6 +222,17 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     outcome,
     isBossRound: challenge?.isBossRound ?? false,
     round,
+    liveCoaching: copilot.visible
+      ? {
+          id: "live-coaching",
+          character: copilot.character,
+          speaker: copilot.speaker,
+          title: copilot.title,
+          lines: [copilot.message],
+          highlight: entryBarIndex !== null ? "trade-panel" : "chart",
+          enterFrom: copilot.character === "oracle" ? "left" : "right",
+        }
+      : null,
   });
 
   const clearTradeState = useCallback(() => {
@@ -626,30 +672,6 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     setOutcome(null);
   };
 
-  const handleChartClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (outcome) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const index = getBarIndexFromChartX(
-      event.clientX,
-      rect,
-      replay.bars.length,
-      CHART_PADDING.left,
-      CHART_PADDING.right,
-      frameIndex,
-    );
-
-    if (index === null) return;
-
-    setPlaying(false);
-    setEntryBarIndex(index);
-    setFrameIndex(index);
-    setOutcome(null);
-  };
-
   const handleRunTrade = () => {
     if (entryBarIndex === null) return;
 
@@ -674,6 +696,106 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       );
       applyRoundResult(roundResult, result.grade);
     }
+  };
+
+  const handleCopilotAction = useCallback(
+    (action: CopilotActionId) => {
+      switch (action) {
+        case "jump_window":
+          if (!challenge) return;
+          setPlaying(false);
+          setFrameIndex(
+            Math.max(challenge.startBar, challenge.entryDeadlineBar - 8),
+          );
+          return;
+        case "mark_playhead":
+          setPlaying(false);
+          setEntryBarIndex(frameIndex);
+          setOutcome(null);
+          return;
+        case "pause":
+          setPlaying(false);
+          return;
+        case "submit":
+          if (entryBarIndex === null) return;
+          setPlaying(false);
+          {
+            const result = simulateTrade(symbol, replay.bars, {
+              entryBarIndex,
+              direction,
+              strategy,
+            });
+            if (!result) return;
+            setOutcome(result);
+            setFrameIndex(result.exitBarIndex);
+            if (isArcadePlaying && challenge) {
+              const roundResult = evaluateRound(
+                result,
+                entryBarIndex,
+                challenge,
+                combo,
+              );
+              applyRoundResult(roundResult, result.grade);
+            }
+          }
+          return;
+        case "clear_entry":
+          clearTradeState();
+          return;
+        default:
+          return;
+      }
+    },
+    [
+      applyRoundResult,
+      challenge,
+      clearTradeState,
+      combo,
+      direction,
+      entryBarIndex,
+      frameIndex,
+      isArcadePlaying,
+      replay.bars,
+      strategy,
+      symbol,
+    ],
+  );
+
+  const copilotActionDisabled = useMemo(
+    () => ({
+      mark_playhead:
+        outcome !== null ||
+        (challenge !== null && frameIndex > challenge.entryDeadlineBar),
+      submit: entryBarIndex === null || outcome !== null,
+      clear_entry: entryBarIndex === null,
+      jump_window: false,
+      pause: !playing,
+    }),
+    [challenge, entryBarIndex, frameIndex, outcome, playing],
+  );
+
+  const handleChartClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (outcome) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const index = getBarIndexFromChartX(
+      event.clientX,
+      rect,
+      replay.bars.length,
+      CHART_PADDING.left,
+      CHART_PADDING.right,
+      frameIndex,
+    );
+
+    if (index === null) return;
+
+    setPlaying(false);
+    setEntryBarIndex(index);
+    setFrameIndex(index);
+    setOutcome(null);
   };
 
   const handleNextRound = () => {
@@ -766,18 +888,13 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
 
       {!guideNearBottom ? guideDialogue : null}
 
-      {!guide.activeFlow && guide.roundHint && playMode === "arcade" && gamePhase === "playing" ? (
-        <div className="skills-guide-hint-banner">
-          <p className="skills-guide-hint-banner-title">{guide.roundHint?.speaker}</p>
-          <p className="skills-guide-hint-banner-text">{guide.roundHint?.lines[0]}</p>
-          <button
-            type="button"
-            className="arcade-btn arcade-btn--p1 skills-replay-btn"
-            onClick={guide.openContextualGuide}
-          >
-            TALK
-          </button>
-        </div>
+      {!guide.activeFlow ? (
+        <SkillsGameCopilot
+          state={copilot}
+          onAction={handleCopilotAction}
+          onOpenGuide={guide.openContextualGuide}
+          actionDisabled={copilotActionDisabled}
+        />
       ) : null}
 
       {playMode === "arcade" && gamePhase === "playing" ? (

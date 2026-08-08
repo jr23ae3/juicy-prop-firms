@@ -2172,6 +2172,154 @@
   color: #ffd700;
 }
 
+.skills-game-copilot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.875rem;
+  border: 3px solid rgb(0 185 122 / 35%);
+  background: linear-gradient(180deg, rgb(4 17 10 / 95%) 0%, #020812 100%);
+  padding: 0.875rem 1rem;
+  box-shadow:
+    inset 0 0 0 2px rgb(0 0 0 / 45%),
+    4px 4px 0 rgb(0 0 0 / 35%);
+}
+
+.skills-game-copilot--calm {
+  border-color: rgb(0 185 122 / 40%);
+}
+
+.skills-game-copilot--focus {
+  border-color: rgb(54 255 255 / 35%);
+}
+
+.skills-game-copilot--warn {
+  border-color: rgb(255 215 0 / 45%);
+  box-shadow:
+    inset 0 0 0 2px rgb(0 0 0 / 45%),
+    0 0 18px rgb(255 215 0 / 12%),
+    4px 4px 0 rgb(0 0 0 / 35%);
+}
+
+.skills-game-copilot--urgent {
+  border-color: rgb(255 77 109 / 55%);
+  animation: skills-game-copilot-urgent 1.1s ease-in-out infinite;
+}
+
+.skills-game-copilot-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.skills-game-copilot-character {
+  flex-shrink: 0;
+}
+
+.skills-game-copilot-copy {
+  min-width: 0;
+}
+
+.skills-game-copilot-speaker {
+  margin: 0;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  color: #36ffff;
+}
+
+.skills-game-copilot-title {
+  margin: 0.25rem 0 0.35rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+  line-height: 1.55;
+  color: #fff;
+}
+
+.skills-game-copilot-message {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 78%);
+}
+
+.skills-game-copilot-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skills-game-copilot-checklist-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-game-copilot-checklist-item--active {
+  color: #ffd700;
+}
+
+.skills-game-copilot-checklist-item--done {
+  color: #00b97a;
+}
+
+.skills-game-copilot-progress {
+  margin-top: 0.625rem;
+}
+
+.skills-game-copilot-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.625rem;
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-game-copilot-progress-track {
+  height: 0.5rem;
+  border: 2px solid rgb(0 185 122 / 25%);
+  background: rgb(2 8 18 / 85%);
+}
+
+.skills-game-copilot-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00b97a 0%, #36ffff 100%);
+  transition: width 180ms ease;
+}
+
+.skills-game-copilot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex: 0 1 auto;
+}
+
+@keyframes skills-game-copilot-urgent {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 2px rgb(0 0 0 / 45%),
+      0 0 12px rgb(255 77 109 / 18%);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgb(0 0 0 / 45%),
+      0 0 22px rgb(255 77 109 / 35%);
+  }
+}
+
 .skills-game-overlay {
   position: absolute;
   inset: 0;
@@ -2496,6 +2644,7 @@
   .skills-guide-character-enter-left,
   .skills-guide-character-enter-right,
   .skills-guide-scout-walk,
+  .skills-game-copilot--urgent,
   .skills-replay-shell[class*="skills-guide-focus-"] [data-guide-target],
   .arcade-pacman-runner,
   .arcade-pacman-ghost,
