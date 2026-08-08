@@ -10,6 +10,7 @@ import {
 import { MonitorPlay, Pause, Play, RotateCcw } from "lucide-react";
 
 import { ArcadeToggleTabs } from "@/components/skills-test/arcade-toggle-tabs";
+import { SkillsGuideDialogue } from "@/components/skills-test/skills-guide-dialogue";
 import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
 import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
@@ -65,6 +66,7 @@ import {
   type TradingStrategy,
 } from "@/lib/skills-test/trade-scenarios";
 import { cn } from "@/lib/utils";
+import { useSkillsGuide } from "@/hooks/use-skills-guide";
 
 type MarketReplayScreenProps = {
   sessionDate: string;
@@ -177,6 +179,15 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       ? 0
       : (frameIndex / (replay.bars.length - 1)) * 100;
   const sessionChangePositive = replay.change >= 0;
+
+  const guide = useSkillsGuide({
+    playMode,
+    gamePhase,
+    entryBarIndex,
+    outcome,
+    isBossRound: challenge?.isBossRound ?? false,
+    round,
+  });
 
   const clearTradeState = useCallback(() => {
     setEntryBarIndex(null);
@@ -709,19 +720,64 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   };
 
   return (
-    <div className="skills-replay-shell space-y-4">
-      <ArcadeToggleTabs
-        value={playMode}
-        onChange={handlePlayModeChange}
-        options={PLAY_MODE_OPTIONS}
-        ariaLabel="Skills test mode"
-        className="skills-play-mode-tabs"
-      />
+    <div
+      className={cn(
+        "skills-replay-shell space-y-4",
+        guide.highlight && `skills-guide-focus-${guide.highlight}`,
+      )}
+    >
+      <div className="skills-replay-topbar">
+        <div data-guide-target="mode" className="skills-replay-mode-wrap">
+          <ArcadeToggleTabs
+            value={playMode}
+            onChange={handlePlayModeChange}
+            options={PLAY_MODE_OPTIONS}
+            ariaLabel="Skills test mode"
+            className="skills-play-mode-tabs"
+            panelId="skills-mode-tabs"
+          />
+        </div>
+        <button
+          type="button"
+          className="arcade-btn arcade-btn--p2 skills-replay-btn skills-guide-trigger"
+          onClick={guide.openContextualGuide}
+        >
+          ASK GUIDE
+        </button>
+      </div>
+
+      {guide.activeFlow ? (
+        <SkillsGuideDialogue
+          flow={guide.activeFlow}
+          step={guide.displayStep}
+          stepIndex={guide.displayIndex}
+          totalSteps={guide.displayTotal}
+          onNext={guide.nextStep}
+          onBack={guide.prevStep}
+          onSkip={guide.skipGuide}
+          onClose={guide.closeGuide}
+        />
+      ) : null}
+
+      {!guide.activeFlow && guide.roundHint && playMode === "arcade" && gamePhase === "playing" ? (
+        <div className="skills-guide-hint-banner">
+          <p className="skills-guide-hint-banner-title">{guide.roundHint?.speaker}</p>
+          <p className="skills-guide-hint-banner-text">{guide.roundHint?.lines[0]}</p>
+          <button
+            type="button"
+            className="arcade-btn arcade-btn--p1 skills-replay-btn"
+            onClick={guide.openContextualGuide}
+          >
+            TALK
+          </button>
+        </div>
+      ) : null}
 
       {playMode === "arcade" && gamePhase === "playing" ? (
-        <SkillsGameHud
-          round={round}
-          totalRounds={ARCADE_TOTAL_ROUNDS}
+        <div data-guide-target="hud">
+          <SkillsGameHud
+            round={round}
+            totalRounds={ARCADE_TOTAL_ROUNDS}
           lives={lives}
           totalScore={totalScore}
           combo={combo}
@@ -730,9 +786,10 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           entryBarIndex={entryBarIndex}
           bossSecondsLeft={bossSecondsLeft}
         />
+        </div>
       ) : null}
 
-      <div className="skills-replay-monitor relative">
+      <div className="skills-replay-monitor relative" data-guide-target="overlay">
         {playMode === "arcade" && gamePhase === "ready" ? (
           <SkillsGameOverlay
             variant="intro"
@@ -851,6 +908,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
               "skills-replay-canvas-wrap",
               !outcome && "skills-replay-canvas-wrap--interactive",
             )}
+            data-guide-target="chart"
             aria-label={`${symbol} 1-minute session replay chart`}
           >
             <canvas
@@ -862,7 +920,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           </div>
         </div>
 
-        <div className="skills-replay-controls">
+        <div className="skills-replay-controls" data-guide-target="controls">
           <div className="skills-replay-transport">
             <button
               type="button"
@@ -920,6 +978,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         </label>
       </div>
 
+      <div data-guide-target="trade-panel">
       <SkillsTradePanel
         symbol={symbol}
         entryBarIndex={entryBarIndex}
@@ -945,6 +1004,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         onRunTrade={handleRunTrade}
         onClearTrade={handleClearTrade}
       />
+      </div>
 
       <p className="skills-replay-footnote">
         <MonitorPlay className="inline size-3.5 align-text-bottom opacity-70" />{" "}

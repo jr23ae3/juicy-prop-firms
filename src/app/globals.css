@@ -1721,6 +1721,245 @@
   color: rgb(255 255 255 / 55%);
 }
 
+.skills-replay-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.skills-replay-mode-wrap {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.skills-guide-trigger {
+  flex-shrink: 0;
+}
+
+.skills-guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(5 5 5 / 72%);
+  pointer-events: none;
+}
+
+.skills-guide-dialogue {
+  pointer-events: auto;
+  display: grid;
+  width: min(100%, 56rem);
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.skills-guide-dialogue-party {
+  display: flex;
+  align-items: flex-end;
+}
+
+.skills-guide-dialogue-party--right {
+  opacity: 0.85;
+}
+
+.skills-guide-party-slot {
+  filter: drop-shadow(0 8px 16px rgb(0 0 0 / 45%));
+}
+
+.skills-guide-character-shell {
+  image-rendering: pixelated;
+}
+
+.skills-guide-character-enter-left {
+  animation: skills-guide-enter-left 0.55s ease-out both;
+}
+
+.skills-guide-character-enter-right {
+  animation: skills-guide-enter-right 0.55s ease-out both;
+}
+
+.skills-guide-scout-walk {
+  animation: skills-guide-scout-bob 0.65s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.skills-guide-dialogue-box {
+  border: 3px solid rgb(0 185 122 / 55%);
+  background: linear-gradient(180deg, #04110a 0%, #020812 100%);
+  box-shadow:
+    inset 0 0 0 2px rgb(0 0 0 / 55%),
+    0 0 24px rgb(54 255 255 / 12%),
+    6px 6px 0 rgb(0 0 0 / 45%);
+  padding: 1rem 1.125rem;
+}
+
+.skills-guide-dialogue-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.skills-guide-dialogue-kicker {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-guide-dialogue-step {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-guide-dialogue-speaker {
+  margin: 0;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  color: #36ffff;
+}
+
+.skills-guide-dialogue-title {
+  margin: 0.35rem 0 0.5rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+  line-height: 1.6;
+  color: #fff;
+}
+
+.skills-guide-dialogue-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 82%);
+}
+
+.skills-guide-dialogue-progress {
+  margin: 0.5rem 0 0;
+  font-size: 0.65rem;
+  color: rgb(255 255 255 / 40%);
+}
+
+.skills-guide-dialogue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.skills-guide-hint-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  border: 2px solid rgb(0 185 122 / 35%);
+  background: rgb(4 17 10 / 85%);
+  padding: 0.625rem 0.875rem;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 35%);
+}
+
+.skills-guide-hint-banner-title {
+  margin: 0;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 0.55rem;
+  color: #36ffff;
+}
+
+.skills-guide-hint-banner-text {
+  margin: 0;
+  flex: 1 1 12rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 75%);
+}
+
+.skills-replay-shell.skills-guide-focus-mode [data-guide-target="mode"],
+.skills-replay-shell.skills-guide-focus-chart [data-guide-target="chart"],
+.skills-replay-shell.skills-guide-focus-controls [data-guide-target="controls"],
+.skills-replay-shell.skills-guide-focus-trade-panel [data-guide-target="trade-panel"],
+.skills-replay-shell.skills-guide-focus-hud [data-guide-target="hud"],
+.skills-replay-shell.skills-guide-focus-overlay [data-guide-target="overlay"] {
+  position: relative;
+  z-index: 55;
+  box-shadow:
+    0 0 0 3px #ffd700,
+    0 0 0 6px rgb(255 215 0 / 22%),
+    0 0 28px rgb(54 255 255 / 35%);
+  animation: skills-guide-target-pulse 1.35s ease-in-out infinite;
+}
+
+@keyframes skills-guide-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skills-guide-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skills-guide-scout-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes skills-guide-target-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px #ffd700,
+      0 0 0 6px rgb(255 215 0 / 22%),
+      0 0 28px rgb(54 255 255 / 35%);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 3px #36ffff,
+      0 0 0 8px rgb(54 255 255 / 18%),
+      0 0 36px rgb(0 185 122 / 45%);
+  }
+}
+
+@media (max-width: 640px) {
+  .skills-guide-dialogue {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-guide-dialogue-party--right {
+    display: none;
+  }
+}
+
 .arcade-toggle-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -2225,6 +2464,10 @@
   .arcade-advisor-antenna,
   .arcade-advisor-core,
   .arcade-advisor-bubble--pulse,
+  .skills-guide-character-enter-left,
+  .skills-guide-character-enter-right,
+  .skills-guide-scout-walk,
+  .skills-replay-shell[class*="skills-guide-focus-"] [data-guide-target],
   .arcade-pacman-runner,
   .arcade-pacman-ghost,
   .arcade-pacman-ghost-body,
