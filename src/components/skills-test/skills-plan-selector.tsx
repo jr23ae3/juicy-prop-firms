@@ -11,6 +11,8 @@ type SkillsPlanSelectorProps = {
   selectedPlanId: string | null;
   onPlanChange: (plan: PlanSummary | null) => void;
   className?: string;
+  embedded?: boolean;
+  showSummary?: boolean;
 };
 
 function formatPlanLabel(plan: PlanSummary) {
@@ -23,6 +25,8 @@ export function SkillsPlanSelector({
   selectedPlanId,
   onPlanChange,
   className,
+  embedded = false,
+  showSummary = true,
 }: SkillsPlanSelectorProps) {
   const { data: plans = [], isLoading, isError } = usePlans({
     marketType: "FUTURES",
@@ -43,24 +47,32 @@ export function SkillsPlanSelector({
   const selectedPlan =
     selectablePlans.find((plan) => plan.id === selectedPlanId) ?? null;
 
+  const Wrapper = embedded ? "div" : "section";
+
   return (
-    <section
-      className={cn("skills-plan-selector", className)}
-      aria-label="Eval plan selection"
-      data-guide-target="plan"
+    <Wrapper
+      className={cn(
+        "skills-plan-selector",
+        embedded && "skills-plan-selector--embedded",
+        className,
+      )}
+      aria-label={embedded ? undefined : "Eval plan selection"}
+      data-guide-target={embedded ? undefined : "plan"}
     >
-      <div className="skills-plan-selector-header">
-        <div>
-          <p className="skills-plan-selector-kicker">★ EVAL PLAN ★</p>
-          <p className="skills-plan-selector-copy">
-            Pick a prop firm plan — profit target and drawdown rules drive the
-            simulator.
-          </p>
+      {!embedded ? (
+        <div className="skills-plan-selector-header">
+          <div>
+            <p className="skills-plan-selector-kicker">★ EVAL PLAN ★</p>
+            <p className="skills-plan-selector-copy">
+              Pick a prop firm plan — profit target and drawdown rules drive the
+              simulator.
+            </p>
+          </div>
+          <Link href="/compare" className="arcade-btn arcade-btn--p2 skills-replay-btn">
+            BROWSE
+          </Link>
         </div>
-        <Link href="/compare" className="arcade-btn arcade-btn--p2 skills-replay-btn">
-          BROWSE
-        </Link>
-      </div>
+      ) : null}
 
       <label className="skills-plan-selector-field">
         <span className="skills-plan-selector-label">ACTIVE PLAN</span>
@@ -93,7 +105,7 @@ export function SkillsPlanSelector({
         </select>
       </label>
 
-      {selectedPlan ? (
+      {selectedPlan && showSummary ? (
         <div className="skills-plan-selector-summary">
           <div>
             <p className="skills-plan-selector-stat-label">TARGET</p>
@@ -123,6 +135,6 @@ export function SkillsPlanSelector({
           </div>
         </div>
       ) : null}
-    </section>
+    </Wrapper>
   );
 }

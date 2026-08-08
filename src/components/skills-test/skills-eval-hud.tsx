@@ -13,6 +13,7 @@ type SkillsEvalHudProps = {
   state: EvalSessionState;
   progress: EvalProgress;
   className?: string;
+  embedded?: boolean;
 };
 
 export function SkillsEvalHud({
@@ -20,6 +21,7 @@ export function SkillsEvalHud({
   state,
   progress,
   className,
+  embedded = false,
 }: SkillsEvalHudProps) {
   const statusLabel =
     state.status === "passed"
@@ -37,22 +39,38 @@ export function SkillsEvalHud({
         ? "skills-eval-hud--failed"
         : "skills-eval-hud--active";
 
+  const Wrapper = embedded ? "div" : "section";
+
   return (
-    <section
-      className={cn("skills-eval-hud", statusClass, className)}
-      aria-label="Eval progress"
+    <Wrapper
+      className={cn(
+        "skills-eval-hud",
+        !embedded && statusClass,
+        embedded && "skills-eval-hud--embedded",
+        className,
+      )}
+      aria-label={embedded ? undefined : "Eval progress"}
     >
-      <div className="skills-eval-hud-header">
-        <div>
-          <p className="skills-eval-hud-kicker">★ {profile.firmName.toUpperCase()} EVAL ★</p>
-          <p className="skills-eval-hud-title">{profile.planName}</p>
+      {!embedded ? (
+        <div className="skills-eval-hud-header">
+          <div>
+            <p className="skills-eval-hud-kicker">★ {profile.firmName.toUpperCase()} EVAL ★</p>
+            <p className="skills-eval-hud-title">{profile.planName}</p>
+            <p className="skills-eval-hud-sub">
+              {profile.drawdownLabel} rules · {progress.contracts} contract
+              {progress.contracts === 1 ? "" : "s"} / trade
+            </p>
+          </div>
+          <p className="skills-eval-hud-status">{statusLabel}</p>
+        </div>
+      ) : (
+        <div className="skills-eval-hud-embedded-meta">
           <p className="skills-eval-hud-sub">
-            {profile.drawdownLabel} rules · {progress.contracts} contract
-            {progress.contracts === 1 ? "" : "s"} / trade
+            {profile.drawdownLabel} rules · target ${profile.passTarget.toLocaleString()} · max
+            DD ${profile.maxDrawdown.toLocaleString()}
           </p>
         </div>
-        <p className="skills-eval-hud-status">{statusLabel}</p>
-      </div>
+      )}
 
       <div className="skills-eval-hud-stats">
         <div className="skills-eval-hud-stat">
@@ -141,6 +159,6 @@ export function SkillsEvalHud({
           Profit target cleared — eval passed on this session tape.
         </p>
       ) : null}
-    </section>
+    </Wrapper>
   );
 }

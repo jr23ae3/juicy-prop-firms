@@ -11,11 +11,10 @@ import { MonitorPlay, Pause, Play, RotateCcw } from "lucide-react";
 
 import { ArcadeToggleTabs } from "@/components/skills-test/arcade-toggle-tabs";
 import { SkillsGuideDialogue } from "@/components/skills-test/skills-guide-dialogue";
-import { SkillsEvalHud } from "@/components/skills-test/skills-eval-hud";
 import { SkillsGameCopilot } from "@/components/skills-test/skills-game-copilot";
 import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
 import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
-import { SkillsPlanSelector } from "@/components/skills-test/skills-plan-selector";
+import { SkillsPlanEvalPanel } from "@/components/skills-test/skills-plan-eval-panel";
 import { SkillsScoreboard } from "@/components/skills-test/skills-scoreboard";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
 import {
@@ -1097,7 +1096,6 @@ export function MarketReplayScreen({
   );
 
   const showStatusDeck =
-    Boolean(evalProfile && evalProgress) ||
     (!guide.activeFlow && copilot.visible) ||
     (playMode === "arcade" && gamePhase === "playing");
 
@@ -1133,24 +1131,18 @@ export function MarketReplayScreen({
             </button>
           </div>
 
-          <SkillsPlanSelector
+          <SkillsPlanEvalPanel
             selectedPlanId={selectedPlanId}
             onPlanChange={handlePlanChange}
-            className="skills-plan-selector--deck"
+            evalProfile={evalProfile}
+            evalSession={evalSession}
+            evalProgress={evalProgress}
+            className="skills-plan-eval-panel--deck"
           />
         </div>
 
         {showStatusDeck ? (
           <div className="skills-replay-command-row skills-replay-command-row--status">
-            {evalProfile && evalProgress ? (
-              <SkillsEvalHud
-                profile={evalProfile}
-                state={evalSession}
-                progress={evalProgress}
-                className="skills-eval-hud--deck"
-              />
-            ) : null}
-
             {!guide.activeFlow ? (
               <SkillsGameCopilot
                 state={copilot}
