@@ -12,7 +12,7 @@ export type DailyLeaderboard = {
 
 const LEADERBOARD_KEY = "juicy-trades-skills-daily-leaderboard";
 const ACHIEVEMENTS_KEY = "juicy-trades-skills-achievements";
-const MAX_LEADERBOARD_ENTRIES = 8;
+const MAX_LEADERBOARD_ENTRIES = 10;
 
 function readJson<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;

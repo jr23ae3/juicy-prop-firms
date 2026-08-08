@@ -14,6 +14,7 @@ import { SkillsGuideDialogue } from "@/components/skills-test/skills-guide-dialo
 import { SkillsGameCopilot } from "@/components/skills-test/skills-game-copilot";
 import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
 import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
+import { SkillsScoreboard } from "@/components/skills-test/skills-scoreboard";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
 import {
   FUTURES_REPLAY_SYMBOLS,
@@ -152,14 +153,21 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   const isArcadeLocked = playMode === "arcade" && gamePhase !== "ready";
   const dailySeed = getDailySeedLabel(sessionDate);
 
+  const refreshLeaderboard = useCallback(async () => {
+    try {
+      const board = await loadLeaderboardWithFallback(sessionDate);
+      setDailyLeaderboard(board);
+    } catch {
+      setDailyLeaderboard(getDailyLeaderboard(sessionDate));
+    }
+  }, [sessionDate]);
+
   useEffect(() => {
     setHighScore(getHighScore());
     setUnlockedAchievementIds(getUnlockedAchievements());
     setPlayerInitials(getPlayerInitials());
-    void loadLeaderboardWithFallback(sessionDate)
-      .then(setDailyLeaderboard)
-      .catch(() => setDailyLeaderboard(getDailyLeaderboard(sessionDate)));
-  }, [sessionDate]);
+    void refreshLeaderboard();
+  }, [refreshLeaderboard]);
 
   const replays = useMemo(
     () =>
@@ -1145,7 +1153,26 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       </div>
         </div>
 
-        {controllerDock}
+        <div className="skills-replay-sidebar">
+          <SkillsScoreboard
+            board={dailyLeaderboard}
+            dailySeed={dailySeed}
+            sessionDate={sessionDate}
+            playerInitials={playerInitials}
+            highScore={highScore}
+            currentRunScore={
+              playMode === "arcade" && gamePhase !== "ready" ? totalScore : null
+            }
+            highlightScore={
+              gamePhase === "game_over" || gamePhase === "complete"
+                ? totalScore
+                : undefined
+            }
+            onPlayerInitialsChange={handleInitialsChange}
+            onRefresh={refreshLeaderboard}
+          />
+          {controllerDock}
+        </div>
       </div>
 
       <p className="skills-replay-footnote">

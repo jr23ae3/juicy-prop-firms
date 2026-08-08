@@ -10,11 +10,13 @@ import {
 
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import { ArcadeFirmMarquee } from "@/components/marketing/arcade-firm-marquee";
+import { HomeScoreboard } from "@/components/marketing/home-scoreboard";
 import { ArcadePacmanBackground } from "@/components/marketing/arcade-pacman-background";
 import { ArcadeScoreHud } from "@/components/marketing/arcade-score-hud";
 import { ArcadeStarfield } from "@/components/marketing/arcade-starfield";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/config/site";
+import type { DailyLeaderboard } from "@/lib/skills-test/arcade-persistence";
 import type { FeaturedFirm } from "@/server/data/plans";
 import { cn } from "@/lib/utils";
 
@@ -93,6 +95,9 @@ type HeroSectionProps = {
     lowestAllIn: number | null;
   };
   featuredFirms?: FeaturedFirm[];
+  dailyLeaderboard: DailyLeaderboard;
+  sessionDate: string;
+  dailySeed: string;
 };
 
 function formatCurrency(amount: number) {
@@ -103,7 +108,13 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
-export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
+export function HeroSection({
+  stats,
+  featuredFirms = [],
+  dailyLeaderboard,
+  sessionDate,
+  dailySeed,
+}: HeroSectionProps) {
   const hasStats = stats && stats.plans > 0;
   const lowestLabel =
     hasStats && stats.lowestAllIn != null
@@ -180,6 +191,12 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
             </div>
           </div>
         </div>
+
+        <HomeScoreboard
+          initialBoard={dailyLeaderboard}
+          sessionDate={sessionDate}
+          dailySeed={dailySeed}
+        />
 
         <section aria-labelledby="level-select" className="mt-16">
           <h2 id="level-select" className="arcade-level-num mb-5 text-center">
