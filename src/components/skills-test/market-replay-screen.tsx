@@ -1076,12 +1076,10 @@ export function MarketReplayScreen({
           gameMode={isArcadePlaying}
           challenge={challenge}
           onDirectionChange={(next) => {
-            if (isArcadePlaying) return;
             setDirection(next);
             setOutcome(null);
           }}
           onStrategyChange={(next) => {
-            if (isArcadePlaying) return;
             setStrategy(next);
             setOutcome(null);
           }}

@@ -74,7 +74,6 @@ export function SkillsTradePanel({
 }: SkillsTradePanelProps) {
   const selectedStrategy = TRADING_STRATEGIES.find((item) => item.id === strategy);
   const readyToRun = entryBarIndex !== null && !outcome && !evalLocked;
-  const controlsLocked = gameMode;
 
   return (
     <section className="skills-trade-panel" aria-label="Trade setup">
@@ -84,7 +83,7 @@ export function SkillsTradePanel({
         </p>
         <p className="skills-trade-panel-copy">
           {gameMode && challenge
-            ? challenge.missionDetail
+            ? `${challenge.missionDetail} Adjust side and strategy below before you submit.`
             : contractCount
               ? `Plan-sized simulation using ${contractCount} contract${contractCount === 1 ? "" : "s"} per trade.`
               : "Mark a 1-minute entry, pick a side and strategy, then run the scenario to see your score."}
@@ -105,10 +104,8 @@ export function SkillsTradePanel({
             options={DIRECTION_OPTIONS}
             ariaLabel="Trade direction"
             variant="compact"
-            className={cn(
-              "skills-trade-toggle",
-              controlsLocked && "pointer-events-none opacity-70",
-            )}
+            className="skills-trade-toggle"
+            disabled={evalLocked || Boolean(outcome)}
           />
         </div>
 
@@ -120,10 +117,8 @@ export function SkillsTradePanel({
             options={STRATEGY_OPTIONS}
             ariaLabel="Trading strategy"
             variant="compact"
-            className={cn(
-              "skills-trade-toggle skills-trade-strategy-tabs",
-              controlsLocked && "pointer-events-none opacity-70",
-            )}
+            className="skills-trade-toggle skills-trade-strategy-tabs"
+            disabled={evalLocked || Boolean(outcome)}
           />
           {selectedStrategy ? (
             <p className="skills-trade-panel-hint">{selectedStrategy.description}</p>

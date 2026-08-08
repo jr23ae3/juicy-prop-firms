@@ -16,6 +16,7 @@ type ArcadeToggleTabsProps<T extends string | number> = {
   variant?: "default" | "compact";
   className?: string;
   panelId?: string;
+  disabled?: boolean;
 };
 
 export function ArcadeToggleTabs<T extends string | number>({
@@ -26,14 +27,17 @@ export function ArcadeToggleTabs<T extends string | number>({
   variant = "default",
   className,
   panelId,
+  disabled = false,
 }: ArcadeToggleTabsProps<T>) {
   return (
     <div
       role="tablist"
       aria-label={ariaLabel}
+      aria-disabled={disabled || undefined}
       className={cn(
         "arcade-toggle-tabs",
         variant === "compact" && "arcade-toggle-tabs--compact",
+        disabled && "arcade-toggle-tabs--disabled",
         className,
       )}
     >
@@ -49,6 +53,7 @@ export function ArcadeToggleTabs<T extends string | number>({
             aria-selected={isActive}
             aria-controls={panelId}
             tabIndex={isActive ? 0 : -1}
+            disabled={disabled}
             onClick={() => onChange(option.value)}
             className={cn(
               "arcade-toggle-tabs__tab",

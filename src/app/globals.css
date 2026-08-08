@@ -2786,6 +2786,11 @@
   box-shadow: 2px 2px 0 rgb(0 0 0 / 35%);
 }
 
+.arcade-toggle-tabs--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .arcade-toggle-tabs__label {
   font-family: var(--font-arcade), var(--font-mono);
   font-size: 9px;
