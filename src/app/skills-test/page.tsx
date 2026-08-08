@@ -26,31 +26,33 @@ export default async function SkillsTestPage({ searchParams }: SkillsTestPagePro
   const sessionDate = getSessionDateKey();
 
   return (
-    <div className="site-canvas compare-workspace">
+    <div className="site-canvas compare-workspace tape-quest-workspace">
       <ArcadeStarfield />
       <ArcadePacmanBackground />
 
-      <Container className="relative z-[1] space-y-8 py-8 md:py-12">
-        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <p className="arcade-level-num text-[#ffd700]">★ NOW PLAYING ★</p>
-          <h1 className="compare-arcade-title mt-3 text-lg sm:text-xl md:text-2xl">
-            TAPE QUEST
-          </h1>
-          <p className="arcade-subtitle mt-2">
-            1M FUTURES ARCADE · NQ · MNQ · ES · MES
-          </p>
-          <p className="compare-arcade-lead mx-auto mt-6 max-w-2xl">
-            Select a prop firm eval plan to simulate its profit target and
-            drawdown rules, then train on the daily 1-minute chart in{" "}
-            <strong className="font-normal text-primary">Practice</strong> or
-            chase missions in{" "}
-            <strong className="font-normal text-primary">Arcade</strong>.
+      <Container
+        size="full"
+        className="relative z-[1] space-y-4 px-3 py-4 sm:px-4 md:py-5 lg:px-6"
+      >
+        <div className="tape-quest-header">
+          <div className="tape-quest-header-brand">
+            <p className="arcade-level-num text-[#ffd700]">★ NOW PLAYING ★</p>
+            <div className="tape-quest-header-title-row">
+              <h1 className="compare-arcade-title text-base sm:text-lg md:text-xl">
+                TAPE QUEST
+              </h1>
+              <p className="tape-quest-header-meta">
+                1M FUTURES · NQ · MNQ · ES · MES
+              </p>
+            </div>
+          </div>
+          <p className="tape-quest-header-copy">
+            Pick an eval plan to simulate profit target and drawdown rules, then
+            train in Practice or chase missions in Arcade.
           </p>
         </div>
 
-        <div className="mx-auto max-w-7xl">
-          <MarketReplayScreen sessionDate={sessionDate} initialPlanId={planId ?? null} />
-        </div>
+        <MarketReplayScreen sessionDate={sessionDate} initialPlanId={planId ?? null} />
       </Container>
     </div>
   );

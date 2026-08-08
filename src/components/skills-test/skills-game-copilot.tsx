@@ -15,6 +15,7 @@ type SkillsGameCopilotProps = {
   onAction: (action: CopilotActionId) => void;
   onOpenGuide: () => void;
   actionDisabled?: Partial<Record<CopilotActionId, boolean>>;
+  className?: string;
 };
 
 const urgencyClass: Record<CopilotState["urgency"], string> = {
@@ -29,6 +30,7 @@ export function SkillsGameCopilot({
   onAction,
   onOpenGuide,
   actionDisabled = {},
+  className,
 }: SkillsGameCopilotProps) {
   if (!state.visible) return null;
 
@@ -57,7 +59,7 @@ export function SkillsGameCopilot({
 
   return (
     <aside
-      className={cn("skills-game-copilot", urgencyClass[state.urgency])}
+      className={cn("skills-game-copilot", urgencyClass[state.urgency], className)}
       aria-label="Live game co-pilot"
     >
       <div className="skills-game-copilot-main">

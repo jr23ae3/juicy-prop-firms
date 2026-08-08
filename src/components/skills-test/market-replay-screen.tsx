@@ -1096,73 +1096,89 @@ export function MarketReplayScreen({
     </aside>
   );
 
+  const showStatusDeck =
+    Boolean(evalProfile && evalProgress) ||
+    (!guide.activeFlow && copilot.visible) ||
+    (playMode === "arcade" && gamePhase === "playing");
+
   return (
     <div
       className={cn(
-        "skills-replay-shell space-y-4",
+        "skills-replay-shell space-y-3",
         guide.activeFlow && "skills-guide-active",
         guide.highlight && `skills-guide-focus-${guide.highlight}`,
       )}
     >
-      <div className="skills-replay-topbar">
-        <div data-guide-target="mode" className="skills-replay-mode-wrap">
-          <ArcadeToggleTabs
-            value={playMode}
-            onChange={handlePlayModeChange}
-            options={PLAY_MODE_OPTIONS}
-            ariaLabel="Skills test mode"
-            className="skills-play-mode-tabs"
-            panelId="skills-mode-tabs"
-          />
-        </div>
-        <button
-          type="button"
-          className="arcade-btn arcade-btn--p2 skills-replay-btn skills-guide-trigger"
-          onClick={guide.openContextualGuide}
-        >
-          ASK GUIDE
-        </button>
-      </div>
-
       {guide.activeFlow ? guideDialogue : null}
 
-      <SkillsPlanSelector
-        selectedPlanId={selectedPlanId}
-        onPlanChange={handlePlanChange}
-      />
+      <div className="skills-replay-command-deck">
+        <div className="skills-replay-command-row skills-replay-command-row--tools">
+          <div className="skills-replay-topbar">
+            <div data-guide-target="mode" className="skills-replay-mode-wrap">
+              <ArcadeToggleTabs
+                value={playMode}
+                onChange={handlePlayModeChange}
+                options={PLAY_MODE_OPTIONS}
+                ariaLabel="Skills test mode"
+                className="skills-play-mode-tabs"
+                panelId="skills-mode-tabs"
+              />
+            </div>
+            <button
+              type="button"
+              className="arcade-btn arcade-btn--p2 skills-replay-btn skills-guide-trigger"
+              onClick={guide.openContextualGuide}
+            >
+              ASK GUIDE
+            </button>
+          </div>
 
-      {evalProfile && evalProgress ? (
-        <SkillsEvalHud
-          profile={evalProfile}
-          state={evalSession}
-          progress={evalProgress}
-        />
-      ) : null}
-
-      {!guide.activeFlow ? (
-        <SkillsGameCopilot
-          state={copilot}
-          onAction={handleCopilotAction}
-          onOpenGuide={guide.openContextualGuide}
-          actionDisabled={copilotActionDisabled}
-        />
-      ) : null}
-
-      {playMode === "arcade" && gamePhase === "playing" ? (
-        <div data-guide-target="hud">
-          <SkillsGameHud
-            round={round}
-            totalRounds={ARCADE_TOTAL_ROUNDS}
-            lives={lives}
-            totalScore={totalScore}
-            combo={combo}
-            highScore={highScore}
-            challenge={challenge}
-            entryBarIndex={entryBarIndex}
-            bossSecondsLeft={bossSecondsLeft}
+          <SkillsPlanSelector
+            selectedPlanId={selectedPlanId}
+            onPlanChange={handlePlanChange}
+            className="skills-plan-selector--deck"
           />
         </div>
-      ) : null}
+
+        {showStatusDeck ? (
+          <div className="skills-replay-command-row skills-replay-command-row--status">
+            {evalProfile && evalProgress ? (
+              <SkillsEvalHud
+                profile={evalProfile}
+                state={evalSession}
+                progress={evalProgress}
+                className="skills-eval-hud--deck"
+              />
+            ) : null}
+
+            {!guide.activeFlow ? (
+              <SkillsGameCopilot
+                state={copilot}
+                onAction={handleCopilotAction}
+                onOpenGuide={guide.openContextualGuide}
+                actionDisabled={copilotActionDisabled}
+                className="skills-game-copilot--deck"
+              />
+            ) : null}
+
+            {playMode === "arcade" && gamePhase === "playing" ? (
+              <div data-guide-target="hud" className="skills-replay-arcade-hud-wrap">
+                <SkillsGameHud
+                  round={round}
+                  totalRounds={ARCADE_TOTAL_ROUNDS}
+                  lives={lives}
+                  totalScore={totalScore}
+                  combo={combo}
+                  highScore={highScore}
+                  challenge={challenge}
+                  entryBarIndex={entryBarIndex}
+                  bossSecondsLeft={bossSecondsLeft}
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
 
       <div className="skills-replay-layout">
         <div className="skills-replay-main">
@@ -1299,9 +1315,7 @@ export function MarketReplayScreen({
           </div>
         </div>
       </div>
-        </div>
 
-        <div className="skills-replay-sidebar">
           <SkillsScoreboard
             board={dailyLeaderboard}
             dailySeed={dailySeed}
@@ -1318,7 +1332,11 @@ export function MarketReplayScreen({
             }
             onPlayerInitialsChange={handleInitialsChange}
             onRefresh={refreshLeaderboard}
+            className="skills-scoreboard--below-chart"
           />
+        </div>
+
+        <div className="skills-replay-sidebar">
           {controllerDock}
         </div>
       </div>
