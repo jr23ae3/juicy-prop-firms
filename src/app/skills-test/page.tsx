@@ -9,11 +9,11 @@ import { getSessionDateKey } from "@/lib/skills-test/session-replay";
 export const metadata: Metadata = {
   title: "Skills Test",
   description:
-    "Replay today's futures session for NQ, MNQ, ES, and MES. Practice reading price action before you trade evals.",
+    "Interactive 1-minute futures replay for NQ, MNQ, ES, and MES. Mark entries, test strategies, and score your trade.",
   openGraph: {
-    title: "Skills Test — Futures Session Replay",
+    title: "Skills Test — 1M Futures Replay",
     description:
-      "Screen replay of the RTH session for NQ, MNQ, ES, and MES futures.",
+      "Practice on a 1-minute RTH replay with entry selection, strategy scenarios, and scored outcomes.",
   },
 };
 
@@ -32,12 +32,12 @@ export default function SkillsTestPage() {
             SKILLS TEST
           </h1>
           <p className="arcade-subtitle mt-2">
-            FUTURES REPLAY · NQ · MNQ · ES · MES
+            1M REPLAY · NQ · MNQ · ES · MES
           </p>
           <p className="compare-arcade-lead mx-auto mt-6 max-w-2xl">
-            Watch today&apos;s regular trading hours session unfold bar by bar.
-            Switch contracts, scrub the timeline, and train your eye before
-            you step into a prop eval.
+            Scrub through today&apos;s one-minute RTH session, mark an entry,
+            pick a side and strategy, then run the scenario to see ticks, P&amp;L,
+            and your score.
           </p>
         </div>
 
