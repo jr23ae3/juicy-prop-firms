@@ -25,7 +25,7 @@
     <circle cx="72" cy="92" r="6" fill="#36FFFF" opacity="0.9"/>
     <circle cx="60" cy="108" r="7" fill="#00B97A"/>
   </g>
-  <text x="280" y="175" fill="#F2F2F2" font-family="system-ui,sans-serif" font-size="28" font-weight="300">Juicy Trade Firms</text>
+  <text x="280" y="175" fill="#F2F2F2" font-family="system-ui,sans-serif" font-size="28" font-weight="300">Juicy Trades</text>
   <text x="280" y="220" fill="#7A9691" font-family="system-ui,sans-serif" font-size="22">Independent prop firm research</text>
   <path d="M120 380V300L220 340L320 260L420 310L520 230L620 280L720 240" stroke="#00B97A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="280" y="420" fill="#36FFFF" font-family="ui-monospace,monospace" font-size="18">compare · advisor · roi calculator</text>

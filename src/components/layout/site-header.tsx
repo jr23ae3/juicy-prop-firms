@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 const TICKER_ITEMS = [
   "◆ INSERT COIN TO CONTINUE ◆",
-  "★ JUICY TRADE FIRMS ★",
+  "★ JUICY TRADES ★",
   "1UP EDITION",
   "◆ COMPARE · ADVISE · REPLAY · ROI ◆",
 ] as const;

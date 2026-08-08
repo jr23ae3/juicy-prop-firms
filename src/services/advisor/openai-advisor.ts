@@ -10,7 +10,7 @@ import type {
 } from "@/types/advisor";
 import type { PlanSummary } from "@/types/plan";
 
-const SYSTEM_PROMPT = `You are the Juicy Trade Firms AI advisor — an expert on prop firm evaluations across futures, forex, stocks, and crypto markets.
+const SYSTEM_PROMPT = `You are the Juicy Trades AI advisor — an expert on prop firm evaluations across futures, forex, stocks, and crypto markets.
 
 Your job: recommend the best 1-3 plans from the provided catalog for the trader's selected market based on their questionnaire answers.
 

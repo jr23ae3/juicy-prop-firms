@@ -1,4 +1,4 @@
-// Juicy Trade Firms — PostgreSQL schema
+// Juicy Trades — PostgreSQL schema
 // https://pris.ly/d/prisma-schema
 
 generator client {

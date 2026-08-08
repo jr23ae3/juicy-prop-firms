@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata = createPageMetadata({
   title: "Contact",
-  description: "Get in touch with the Juicy Trade Firms team.",
+  description: "Get in touch with the Juicy Trades team.",
   path: "/contact",
 });
 
@@ -26,10 +26,10 @@ export default function ContactPage() {
       <h2>Email</h2>
       <p>
         <a
-          href="mailto:hello@juicytradefirms.com"
+          href="mailto:hello@juicytrades.com"
           className="text-primary hover:underline"
         >
-          hello@juicytradefirms.com
+          hello@juicytrades.com
         </a>
       </p>
       <h2>Data corrections</h2>

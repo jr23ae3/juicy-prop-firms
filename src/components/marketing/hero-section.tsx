@@ -101,9 +101,9 @@ export function HeroSection({ stats, featuredFirms = [] }: HeroSectionProps) {
                 <p className="arcade-coin-text">◆ INSERT COIN TO CONTINUE ◆</p>
 
                 <h1 className="arcade-title">
-                  JUICY TRADE
+                  JUICY
                   <br />
-                  FIRMS
+                  TRADES
                 </h1>
                 <p className="arcade-subtitle">PROP FIRM QUEST · 1UP EDITION</p>
 
