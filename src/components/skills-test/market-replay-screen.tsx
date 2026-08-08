@@ -1105,8 +1105,6 @@ export function MarketReplayScreen({
         guide.highlight && `skills-guide-focus-${guide.highlight}`,
       )}
     >
-      {guide.activeFlow ? guideDialogue : null}
-
       <div className="skills-replay-command-deck">
         <div className="skills-replay-command-row skills-replay-command-row--tools">
           <div className="skills-replay-topbar">
@@ -1286,6 +1284,10 @@ export function MarketReplayScreen({
               </p>
             </div>
           </div>
+
+          {guideDialogue ? (
+            <div className="skills-replay-guide-slot">{guideDialogue}</div>
+          ) : null}
 
           <div
             ref={containerRef}
