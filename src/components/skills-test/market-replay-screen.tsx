@@ -719,10 +719,28 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     onExit: exitArcadeMode,
   };
 
+  const guideNearBottom =
+    guide.highlight === "trade-panel" || guide.highlight === "controls";
+
+  const guideDialogue = guide.activeFlow ? (
+    <SkillsGuideDialogue
+      flow={guide.activeFlow}
+      step={guide.displayStep}
+      stepIndex={guide.displayIndex}
+      totalSteps={guide.displayTotal}
+      highlight={guide.highlight}
+      onNext={guide.nextStep}
+      onBack={guide.prevStep}
+      onSkip={guide.skipGuide}
+      onClose={guide.closeGuide}
+    />
+  ) : null;
+
   return (
     <div
       className={cn(
         "skills-replay-shell space-y-4",
+        guide.activeFlow && "skills-guide-active",
         guide.highlight && `skills-guide-focus-${guide.highlight}`,
       )}
     >
@@ -746,18 +764,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         </button>
       </div>
 
-      {guide.activeFlow ? (
-        <SkillsGuideDialogue
-          flow={guide.activeFlow}
-          step={guide.displayStep}
-          stepIndex={guide.displayIndex}
-          totalSteps={guide.displayTotal}
-          onNext={guide.nextStep}
-          onBack={guide.prevStep}
-          onSkip={guide.skipGuide}
-          onClose={guide.closeGuide}
-        />
-      ) : null}
+      {!guideNearBottom ? guideDialogue : null}
 
       {!guide.activeFlow && guide.roundHint && playMode === "arcade" && gamePhase === "playing" ? (
         <div className="skills-guide-hint-banner">
@@ -778,18 +785,19 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           <SkillsGameHud
             round={round}
             totalRounds={ARCADE_TOTAL_ROUNDS}
-          lives={lives}
-          totalScore={totalScore}
-          combo={combo}
-          highScore={highScore}
-          challenge={challenge}
-          entryBarIndex={entryBarIndex}
-          bossSecondsLeft={bossSecondsLeft}
-        />
+            lives={lives}
+            totalScore={totalScore}
+            combo={combo}
+            highScore={highScore}
+            challenge={challenge}
+            entryBarIndex={entryBarIndex}
+            bossSecondsLeft={bossSecondsLeft}
+          />
         </div>
       ) : null}
 
-      <div className="skills-replay-monitor relative" data-guide-target="overlay">
+      <div className="skills-replay-monitor relative">
+        <div className="skills-replay-game-overlays" data-guide-target="overlay">
         {playMode === "arcade" && gamePhase === "ready" ? (
           <SkillsGameOverlay
             variant="intro"
@@ -837,6 +845,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
             {...sharedOverlayProps}
           />
         ) : null}
+        </div>
 
         <div className="skills-replay-monitor-bar">
           <span className="skills-replay-monitor-dot skills-replay-monitor-dot--red" />
@@ -978,8 +987,10 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         </label>
       </div>
 
+      {guideNearBottom ? guideDialogue : null}
+
       <div data-guide-target="trade-panel">
-      <SkillsTradePanel
+        <SkillsTradePanel
         symbol={symbol}
         entryBarIndex={entryBarIndex}
         entryLabel={entryBar?.label ?? null}

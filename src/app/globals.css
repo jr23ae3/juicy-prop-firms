@@ -1364,6 +1364,17 @@
     4px 4px 0 rgb(0 0 0 / 45%);
 }
 
+.skills-replay-game-overlays {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.skills-replay-game-overlays:has(.skills-game-overlay) {
+  pointer-events: auto;
+}
+
 .skills-replay-monitor-bar {
   display: flex;
   align-items: center;
@@ -1738,22 +1749,14 @@
   flex-shrink: 0;
 }
 
-.skills-guide-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 1rem;
-  background: rgb(5 5 5 / 72%);
-  pointer-events: none;
+.skills-guide-panel {
+  position: relative;
+  width: 100%;
 }
 
 .skills-guide-dialogue {
-  pointer-events: auto;
   display: grid;
-  width: min(100%, 56rem);
+  width: 100%;
   grid-template-columns: auto 1fr auto;
   align-items: end;
   gap: 0.75rem;
@@ -1883,6 +1886,37 @@
   color: rgb(255 255 255 / 75%);
 }
 
+.skills-replay-shell.skills-guide-active [data-guide-target] {
+  transition: opacity 180ms ease;
+}
+
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-mode
+  )
+  [data-guide-target="mode"],
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-chart
+  )
+  [data-guide-target="chart"],
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-controls
+  )
+  [data-guide-target="controls"],
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-trade-panel
+  )
+  [data-guide-target="trade-panel"],
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-hud
+  )
+  [data-guide-target="hud"],
+.skills-replay-shell.skills-guide-active[class*="skills-guide-focus-"]:not(
+    .skills-guide-focus-overlay
+  )
+  [data-guide-target="overlay"] {
+  opacity: 0.72;
+}
+
 .skills-replay-shell.skills-guide-focus-mode [data-guide-target="mode"],
 .skills-replay-shell.skills-guide-focus-chart [data-guide-target="chart"],
 .skills-replay-shell.skills-guide-focus-controls [data-guide-target="controls"],
@@ -1890,11 +1924,10 @@
 .skills-replay-shell.skills-guide-focus-hud [data-guide-target="hud"],
 .skills-replay-shell.skills-guide-focus-overlay [data-guide-target="overlay"] {
   position: relative;
-  z-index: 55;
-  box-shadow:
-    0 0 0 3px #ffd700,
-    0 0 0 6px rgb(255 215 0 / 22%),
-    0 0 28px rgb(54 255 255 / 35%);
+  opacity: 1;
+  outline: 3px solid #ffd700;
+  outline-offset: 4px;
+  box-shadow: 0 0 24px rgb(54 255 255 / 28%);
   animation: skills-guide-target-pulse 1.35s ease-in-out infinite;
 }
 
@@ -1936,17 +1969,13 @@
 @keyframes skills-guide-target-pulse {
   0%,
   100% {
-    box-shadow:
-      0 0 0 3px #ffd700,
-      0 0 0 6px rgb(255 215 0 / 22%),
-      0 0 28px rgb(54 255 255 / 35%);
+    outline-color: #ffd700;
+    box-shadow: 0 0 24px rgb(54 255 255 / 28%);
   }
 
   50% {
-    box-shadow:
-      0 0 0 3px #36ffff,
-      0 0 0 8px rgb(54 255 255 / 18%),
-      0 0 36px rgb(0 185 122 / 45%);
+    outline-color: #36ffff;
+    box-shadow: 0 0 32px rgb(0 185 122 / 42%);
   }
 }
 

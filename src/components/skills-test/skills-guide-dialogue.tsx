@@ -6,6 +6,7 @@ import { ArcadeTapeScoutCharacter } from "@/components/skills-test/arcade-tape-s
 import { ArcadeAdvisorCharacter } from "@/components/marketing/arcade-advisor-character";
 import type {
   GuideFlow,
+  GuideHighlight,
   GuideStep,
 } from "@/lib/skills-test/game-guide";
 import { getGuideSteps } from "@/lib/skills-test/game-guide";
@@ -16,6 +17,7 @@ type SkillsGuideDialogueProps = {
   step: GuideStep | null;
   stepIndex: number;
   totalSteps: number;
+  highlight: GuideHighlight | null;
   onNext: () => void;
   onBack: () => void;
   onSkip: () => void;
@@ -54,6 +56,7 @@ export function SkillsGuideDialogue({
   step,
   stepIndex,
   totalSteps,
+  highlight,
   onNext,
   onBack,
   onSkip,
@@ -64,6 +67,14 @@ export function SkillsGuideDialogue({
   useEffect(() => {
     setLineIndex(0);
   }, [step?.id]);
+
+  useEffect(() => {
+    if (!highlight) return;
+    const target = document.querySelector<HTMLElement>(
+      `[data-guide-target="${highlight}"]`,
+    );
+    target?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [highlight, step?.id]);
 
   if (!flow || !step) return null;
 
@@ -93,7 +104,7 @@ export function SkillsGuideDialogue({
   };
 
   return (
-    <div className="skills-guide-overlay" role="dialog" aria-modal="true">
+    <div className="skills-guide-panel" role="region" aria-label="Tutorial guide">
       <div className="skills-guide-dialogue">
         <div className="skills-guide-dialogue-party">
           <GuideCharacter character={step.character} enterFrom={step.enterFrom} />
