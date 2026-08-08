@@ -1829,6 +1829,365 @@
   }
 }
 
+.skills-trade-result-summary {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 70%);
+}
+
+.skills-play-mode-tabs {
+  max-width: 24rem;
+}
+
+.skills-game-hud {
+  display: grid;
+  gap: 0.75rem;
+  border: 4px solid rgb(255 215 0 / 35%);
+  background: rgb(4 17 10 / 95%);
+  padding: 0.875rem 1rem;
+  box-shadow: 4px 4px 0 rgb(0 0 0 / 45%);
+}
+
+@media (min-width: 768px) {
+  .skills-game-hud {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .skills-game-mission {
+    grid-column: 1 / -1;
+  }
+}
+
+.skills-game-hud-label {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgb(255 215 0 / 85%);
+}
+
+.skills-game-hud-value {
+  margin-top: 0.25rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 1rem;
+  color: #36ffff;
+}
+
+.skills-game-hud-sub {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  color: rgb(255 255 255 / 50%);
+}
+
+.skills-game-lives {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.375rem;
+}
+
+.skills-game-mission-title {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f2f2f2;
+}
+
+.skills-game-mission-detail,
+.skills-game-mission-deadline {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 58%);
+}
+
+.skills-game-mission-deadline {
+  color: #ffd700;
+}
+
+.skills-game-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(2 8 18 / 82%);
+  padding: 1rem;
+}
+
+.skills-game-card {
+  width: min(100%, 28rem);
+  border: 4px solid rgb(0 185 122 / 40%);
+  background: #04110a;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow:
+    inset 0 0 24px rgb(0 185 122 / 10%),
+    6px 6px 0 rgb(0 0 0 / 50%);
+}
+
+.skills-game-card--wide {
+  width: min(100%, 56rem);
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+}
+
+@media (min-width: 900px) {
+  .skills-game-card--wide {
+    grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+    align-items: start;
+  }
+}
+
+.skills-game-card-main {
+  min-width: 0;
+}
+
+.skills-game-card-side {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.skills-game-initials {
+  display: grid;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
+  text-align: left;
+}
+
+.skills-game-initials-input {
+  width: 5rem;
+  border: 2px solid rgb(0 185 122 / 35%);
+  background: rgb(2 8 18 / 90%);
+  padding: 0.375rem 0.5rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: #36ffff;
+}
+
+.skills-game-boss-timer {
+  margin-top: 0.375rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-game-boss-timer--urgent {
+  color: #ff4d6d;
+  animation: skills-boss-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes skills-boss-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skills-leaderboard {
+  border: 2px solid rgb(0 185 122 / 25%);
+  background: rgb(2 8 18 / 90%);
+  padding: 0.75rem;
+}
+
+.skills-leaderboard-header {
+  margin-bottom: 0.5rem;
+}
+
+.skills-leaderboard-title {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-leaderboard-sub {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-leaderboard-empty {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 50%);
+}
+
+.skills-leaderboard-list {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.skills-leaderboard-row {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto auto;
+  gap: 0.375rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgb(255 255 255 / 70%);
+}
+
+.skills-leaderboard-row--highlight {
+  color: #36ffff;
+}
+
+.skills-leaderboard-rank {
+  font-family: var(--font-mono);
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-leaderboard-name {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 10px;
+}
+
+.skills-leaderboard-score {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.skills-leaderboard-tag {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 7px;
+  color: #00b97a;
+}
+
+.skills-achievements-title {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-achievements-new {
+  margin-top: 0.5rem;
+}
+
+.skills-achievements-unlocked {
+  font-size: 0.75rem;
+  color: #00b97a;
+}
+
+.skills-achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.skills-achievements--compact .skills-achievements-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skills-achievement-badge {
+  border: 2px solid rgb(255 255 255 / 10%);
+  background: rgb(0 0 0 / 20%);
+  padding: 0.5rem;
+  opacity: 0.45;
+}
+
+.skills-achievement-badge--unlocked {
+  border-color: rgb(0 185 122 / 35%);
+  opacity: 1;
+}
+
+.skills-achievement-badge--new {
+  box-shadow: inset 0 0 12px rgb(255 215 0 / 18%);
+}
+
+.skills-achievement-badge-label {
+  display: block;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 10px;
+  color: #36ffff;
+}
+
+.skills-achievement-badge-title {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.625rem;
+  line-height: 1.3;
+  color: rgb(255 255 255 / 55%);
+}
+
+.skills-achievements-summary {
+  font-size: 0.6875rem;
+  color: rgb(255 255 255 / 45%);
+}
+
+.skills-game-card-kicker {
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-game-card-title {
+  margin-top: 0.75rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: #36ffff;
+}
+
+.skills-game-card-copy {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 65%);
+}
+
+.skills-game-card-list {
+  margin: 1rem auto 0;
+  max-width: 18rem;
+  list-style: none;
+  text-align: left;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 55%);
+}
+
+.skills-game-card-list li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.skills-game-card-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #00b97a;
+}
+
+.skills-game-card-score {
+  margin-top: 0.875rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 1.5rem;
+  color: #00b97a;
+}
+
+.skills-game-card-highscore {
+  margin-top: 0.75rem;
+  font-family: var(--font-arcade), var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+}
+
+.skills-game-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -10,6 +10,8 @@ import {
 import { MonitorPlay, Pause, Play, RotateCcw } from "lucide-react";
 
 import { ArcadeToggleTabs } from "@/components/skills-test/arcade-toggle-tabs";
+import { SkillsGameHud } from "@/components/skills-test/skills-game-hud";
+import { SkillsGameOverlay } from "@/components/skills-test/skills-game-overlay";
 import { SkillsTradePanel } from "@/components/skills-test/skills-trade-panel";
 import {
   FUTURES_REPLAY_SYMBOLS,
@@ -23,6 +25,38 @@ import {
   generateSessionReplay,
   type SessionReplay,
 } from "@/lib/skills-test/session-replay";
+import {
+  evaluateAchievements,
+  summarizeRoundForStats,
+  type AchievementDefinition,
+} from "@/lib/skills-test/arcade-achievements";
+import {
+  ARCADE_STARTING_LIVES,
+  ARCADE_TOTAL_ROUNDS,
+  createBossTimeoutResult,
+  createChallenge,
+  evaluateRound,
+  getDailySeedLabel,
+  getHighScore,
+  saveHighScore,
+  type GameChallenge,
+  type GamePhase,
+  type PlayMode,
+  type RoundResult,
+} from "@/lib/skills-test/arcade-game";
+import {
+  getDailyLeaderboard,
+  getPlayerInitials,
+  getUnlockedAchievements,
+  savePlayerInitials,
+  saveUnlockedAchievements,
+  type DailyLeaderboard,
+} from "@/lib/skills-test/arcade-persistence";
+import {
+  isGlobalDailyLeader,
+  loadLeaderboardWithFallback,
+  submitGlobalLeaderboardScore,
+} from "@/lib/skills-test/leaderboard-api";
 import {
   getBarIndexFromChartX,
   simulateTrade,
@@ -47,6 +81,11 @@ const SPEED_TAB_OPTIONS = REPLAY_SPEEDS.map((value) => ({
   label: `${value}X`,
 }));
 
+const PLAY_MODE_OPTIONS = [
+  { value: "practice" as const, label: "PRACTICE" },
+  { value: "arcade" as const, label: "ARCADE" },
+];
+
 const CHART_PADDING = { top: 16, right: 56, bottom: 28, left: 12 };
 const VOLUME_RATIO = 0.22;
 
@@ -61,6 +100,13 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   const rafRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
   const accumulatorRef = useRef<number>(0);
+  const bossTimedOutRef = useRef(false);
+  const sessionStatsRef = useRef({
+    maxCombo: 0,
+    sGrades: 0,
+    bossRoundPassed: false,
+    bestEntryLeadBars: 0,
+  });
 
   const [symbol, setSymbol] = useState<FuturesReplaySymbol>("NQ");
   const [frameIndex, setFrameIndex] = useState(0);
@@ -70,6 +116,43 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   const [direction, setDirection] = useState<TradeDirection>("long");
   const [strategy, setStrategy] = useState<TradingStrategy>("breakout");
   const [outcome, setOutcome] = useState<TradeOutcome | null>(null);
+  const [playMode, setPlayMode] = useState<PlayMode>("practice");
+  const [gamePhase, setGamePhase] = useState<GamePhase>("ready");
+  const [round, setRound] = useState(1);
+  const [lives, setLives] = useState(ARCADE_STARTING_LIVES);
+  const [totalScore, setTotalScore] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
+  const [challenge, setChallenge] = useState<GameChallenge | null>(null);
+  const [lastRoundResult, setLastRoundResult] = useState<RoundResult | null>(
+    null,
+  );
+  const [dailyLeaderboard, setDailyLeaderboard] = useState<DailyLeaderboard>({
+    date: sessionDate,
+    entries: [],
+  });
+  const [unlockedAchievementIds, setUnlockedAchievementIds] = useState<string[]>(
+    [],
+  );
+  const [newlyUnlocked, setNewlyUnlocked] = useState<AchievementDefinition[]>(
+    [],
+  );
+  const [playerInitials, setPlayerInitials] = useState("");
+  const [bossSecondsLeft, setBossSecondsLeft] = useState<number | null>(null);
+
+  const isArcadePlaying = playMode === "arcade" && gamePhase === "playing";
+  const isArcadeLocked = playMode === "arcade" && gamePhase !== "ready";
+  const dailySeed = getDailySeedLabel(sessionDate);
+
+  useEffect(() => {
+    setHighScore(getHighScore());
+    setUnlockedAchievementIds(getUnlockedAchievements());
+    setPlayerInitials(getPlayerInitials());
+    void loadLeaderboardWithFallback(sessionDate)
+      .then(setDailyLeaderboard)
+      .catch(() => setDailyLeaderboard(getDailyLeaderboard(sessionDate)));
+  }, [sessionDate]);
 
   const replays = useMemo(
     () =>
@@ -99,6 +182,184 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
     setEntryBarIndex(null);
     setOutcome(null);
   }, []);
+
+  const finalizeGame = useCallback(
+    async (score: number, wonRun: boolean, livesRemaining: number) => {
+      const currentHigh = getHighScore();
+      if (score > currentHigh) {
+        saveHighScore(score);
+        setHighScore(score);
+        setIsNewHighScore(true);
+      } else {
+        setIsNewHighScore(false);
+      }
+
+      const stats = {
+        totalScore: score,
+        livesRemaining,
+        roundsCompleted: round,
+        maxCombo: sessionStatsRef.current.maxCombo,
+        sGrades: sessionStatsRef.current.sGrades,
+        bossRoundPassed: sessionStatsRef.current.bossRoundPassed,
+        flawless: livesRemaining === ARCADE_STARTING_LIVES && wonRun,
+        bestEntryLeadBars: sessionStatsRef.current.bestEntryLeadBars,
+        finishedRun: true,
+        wonRun,
+      };
+
+      const initials = playerInitials.trim() || getPlayerInitials() || "YOU";
+      savePlayerInitials(initials);
+
+      const board = await submitGlobalLeaderboardScore({
+        sessionDate,
+        initials,
+        score,
+        flawless: stats.flawless,
+        roundsWon: wonRun,
+      });
+      setDailyLeaderboard(board);
+
+      const previous = getUnlockedAchievements();
+      const isLeader = isGlobalDailyLeader(board, score, initials);
+      const achievementResult = evaluateAchievements(
+        stats,
+        previous,
+        isLeader,
+      );
+      saveUnlockedAchievements(achievementResult.unlockedIds);
+      setUnlockedAchievementIds(achievementResult.unlockedIds);
+      setNewlyUnlocked(achievementResult.newlyUnlocked);
+    },
+    [playerInitials, round, sessionDate],
+  );
+
+  const beginRound = useCallback(
+    (roundNum: number) => {
+      const nextChallenge = createChallenge(roundNum, sessionDate, replays);
+      setChallenge(nextChallenge);
+      setSymbol(nextChallenge.symbol);
+      setDirection(nextChallenge.direction);
+      setStrategy(nextChallenge.strategy);
+      setFrameIndex(nextChallenge.startBar);
+      setPlaying(false);
+      setEntryBarIndex(null);
+      setOutcome(null);
+      setLastRoundResult(null);
+      setGamePhase("playing");
+    },
+    [replays, sessionDate],
+  );
+
+  const startArcadeGame = useCallback(() => {
+    setPlayMode("arcade");
+    setRound(1);
+    setLives(ARCADE_STARTING_LIVES);
+    setTotalScore(0);
+    setCombo(0);
+    setNewlyUnlocked([]);
+    sessionStatsRef.current = {
+      maxCombo: 0,
+      sGrades: 0,
+      bossRoundPassed: false,
+      bestEntryLeadBars: 0,
+    };
+    beginRound(1);
+  }, [beginRound]);
+
+  const exitArcadeMode = useCallback(() => {
+    setPlayMode("practice");
+    setGamePhase("ready");
+    setChallenge(null);
+    setLastRoundResult(null);
+    setFrameIndex(0);
+    setPlaying(false);
+    clearTradeState();
+  }, [clearTradeState]);
+
+  const applyRoundResult = useCallback(
+    (roundResult: RoundResult, tradeGrade: string | null = null) => {
+      if (!challenge) return;
+
+      const summary = summarizeRoundForStats(
+        roundResult,
+        entryBarIndex,
+        challenge.entryDeadlineBar,
+        tradeGrade,
+        challenge.isBossRound,
+      );
+      sessionStatsRef.current.maxCombo = Math.max(
+        sessionStatsRef.current.maxCombo,
+        roundResult.combo,
+      );
+      sessionStatsRef.current.sGrades += summary.sGrade;
+      if (summary.bossPassed) {
+        sessionStatsRef.current.bossRoundPassed = true;
+      }
+      sessionStatsRef.current.bestEntryLeadBars = Math.max(
+        sessionStatsRef.current.bestEntryLeadBars,
+        summary.entryLeadBars,
+      );
+
+      setLastRoundResult(roundResult);
+      setTotalScore((current) => current + roundResult.points);
+      setCombo(roundResult.combo);
+      setLives((current) =>
+        roundResult.lostLife ? Math.max(0, current - 1) : current,
+      );
+      setBossSecondsLeft(null);
+      setGamePhase("round_end");
+    },
+    [challenge, entryBarIndex],
+  );
+
+  const handleBossTimeout = useCallback(() => {
+    if (gamePhase !== "playing" || !challenge?.isBossRound || outcome) return;
+    setPlaying(false);
+    applyRoundResult(createBossTimeoutResult());
+  }, [applyRoundResult, challenge, gamePhase, outcome]);
+
+  useEffect(() => {
+    if (!isArcadePlaying || !challenge?.isBossRound || outcome) {
+      setBossSecondsLeft(null);
+      return;
+    }
+
+    bossTimedOutRef.current = false;
+    setBossSecondsLeft(challenge.bossTimeLimitSeconds);
+    const timerId = window.setInterval(() => {
+      setBossSecondsLeft((current) => {
+        if (current === null) return current;
+        if (current <= 1) {
+          window.clearInterval(timerId);
+          if (!bossTimedOutRef.current) {
+            bossTimedOutRef.current = true;
+            handleBossTimeout();
+          }
+          return 0;
+        }
+        return current - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, [
+    challenge,
+    handleBossTimeout,
+    isArcadePlaying,
+    outcome,
+  ]);
+
+  const handlePlayModeChange = (mode: PlayMode) => {
+    if (mode === playMode) return;
+    if (mode === "practice") {
+      exitArcadeMode();
+      return;
+    }
+    setPlayMode("arcade");
+    setGamePhase("ready");
+    setChallenge(null);
+    clearTradeState();
+  };
 
   const drawChart = useCallback(
     (canvas: HTMLCanvasElement, width: number, height: number) => {
@@ -239,6 +500,21 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       ctx.stroke();
       ctx.setLineDash([]);
 
+      if (challenge && playMode === "arcade") {
+        const deadlineX =
+          CHART_PADDING.left +
+          challenge.entryDeadlineBar * barWidth +
+          barWidth / 2;
+        ctx.strokeStyle = "rgba(255, 215, 0, 0.75)";
+        ctx.lineWidth = 1.25;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(deadlineX, CHART_PADDING.top);
+        ctx.lineTo(deadlineX, height - 6);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
       ctx.fillStyle = "rgba(54, 255, 255, 0.85)";
       ctx.font = "9px var(--font-arcade, monospace)";
       ctx.textAlign = "left";
@@ -252,9 +528,11 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
       }
     },
     [
+      challenge,
       entryBar,
       entryBarIndex,
       outcome,
+      playMode,
       replay.bars,
       symbol,
       visibleBarIndex,
@@ -312,6 +590,7 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   }, [outcome, playing, replay.bars.length, speed]);
 
   const handleSymbolChange = (next: FuturesReplaySymbol) => {
+    if (isArcadeLocked) return;
     setSymbol(next);
     setFrameIndex(0);
     setPlaying(false);
@@ -319,6 +598,12 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
   };
 
   const handleReset = () => {
+    if (isArcadePlaying && challenge) {
+      setFrameIndex(challenge.startBar);
+      setPlaying(false);
+      clearTradeState();
+      return;
+    }
     setFrameIndex(0);
     setPlaying(false);
     clearTradeState();
@@ -368,15 +653,134 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
 
     setOutcome(result);
     setFrameIndex(result.exitBarIndex);
+
+    if (isArcadePlaying && challenge) {
+      const roundResult = evaluateRound(
+        result,
+        entryBarIndex,
+        challenge,
+        combo,
+      );
+      applyRoundResult(roundResult, result.grade);
+    }
+  };
+
+  const handleNextRound = () => {
+    const nextScore = totalScore;
+    const remainingLives = lives;
+
+    if (remainingLives <= 0) {
+      void finalizeGame(nextScore, false, remainingLives).then(() => {
+        setGamePhase("game_over");
+      });
+      return;
+    }
+
+    if (round >= ARCADE_TOTAL_ROUNDS) {
+      void finalizeGame(nextScore, true, remainingLives).then(() => {
+        setGamePhase("complete");
+      });
+      return;
+    }
+
+    const nextRound = round + 1;
+    setRound(nextRound);
+    beginRound(nextRound);
   };
 
   const handleClearTrade = () => {
     clearTradeState();
   };
 
+  const handleInitialsChange = (value: string) => {
+    setPlayerInitials(value);
+    savePlayerInitials(value);
+  };
+
+  const sharedOverlayProps = {
+    dailyLeaderboard,
+    dailySeed,
+    unlockedAchievementIds,
+    playerInitials,
+    onPlayerInitialsChange: handleInitialsChange,
+    onStart: startArcadeGame,
+    onNextRound: handleNextRound,
+    onExit: exitArcadeMode,
+  };
+
   return (
     <div className="skills-replay-shell space-y-4">
-      <div className="skills-replay-monitor">
+      <ArcadeToggleTabs
+        value={playMode}
+        onChange={handlePlayModeChange}
+        options={PLAY_MODE_OPTIONS}
+        ariaLabel="Skills test mode"
+        className="skills-play-mode-tabs"
+      />
+
+      {playMode === "arcade" && gamePhase === "playing" ? (
+        <SkillsGameHud
+          round={round}
+          totalRounds={ARCADE_TOTAL_ROUNDS}
+          lives={lives}
+          totalScore={totalScore}
+          combo={combo}
+          highScore={highScore}
+          challenge={challenge}
+          entryBarIndex={entryBarIndex}
+          bossSecondsLeft={bossSecondsLeft}
+        />
+      ) : null}
+
+      <div className="skills-replay-monitor relative">
+        {playMode === "arcade" && gamePhase === "ready" ? (
+          <SkillsGameOverlay
+            variant="intro"
+            roundResult={null}
+            totalScore={0}
+            highScore={highScore}
+            isNewHighScore={false}
+            newlyUnlocked={[]}
+            {...sharedOverlayProps}
+          />
+        ) : null}
+
+        {playMode === "arcade" && gamePhase === "round_end" && lastRoundResult ? (
+          <SkillsGameOverlay
+            variant="round_end"
+            roundResult={lastRoundResult}
+            totalScore={totalScore}
+            highScore={highScore}
+            isNewHighScore={false}
+            newlyUnlocked={[]}
+            {...sharedOverlayProps}
+          />
+        ) : null}
+
+        {playMode === "arcade" && gamePhase === "game_over" ? (
+          <SkillsGameOverlay
+            variant="game_over"
+            roundResult={lastRoundResult}
+            totalScore={totalScore}
+            highScore={highScore}
+            isNewHighScore={isNewHighScore}
+            newlyUnlocked={newlyUnlocked}
+            {...sharedOverlayProps}
+          />
+        ) : null}
+
+        {playMode === "arcade" && gamePhase === "complete" ? (
+          <SkillsGameOverlay
+            variant="victory"
+            roundResult={lastRoundResult}
+            totalScore={totalScore}
+            highScore={highScore}
+            isNewHighScore={isNewHighScore}
+            newlyUnlocked={newlyUnlocked}
+            {...sharedOverlayProps}
+          />
+        ) : null}
+
         <div className="skills-replay-monitor-bar">
           <span className="skills-replay-monitor-dot skills-replay-monitor-dot--red" />
           <span className="skills-replay-monitor-dot skills-replay-monitor-dot--yellow" />
@@ -392,7 +796,10 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
           options={SYMBOL_TAB_OPTIONS}
           ariaLabel="Futures symbol"
           panelId="skills-replay-panel"
-          className="skills-replay-symbol-tabs"
+          className={cn(
+            "skills-replay-symbol-tabs",
+            isArcadeLocked && "pointer-events-none opacity-60",
+          )}
         />
 
         <div
@@ -521,12 +928,16 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
         direction={direction}
         strategy={strategy}
         outcome={outcome}
-        canMarkEntry={!playing && !outcome}
+        canMarkEntry={!playing && !outcome && (!isArcadeLocked || isArcadePlaying)}
+        gameMode={isArcadePlaying}
+        challenge={challenge}
         onDirectionChange={(next) => {
+          if (isArcadePlaying) return;
           setDirection(next);
           setOutcome(null);
         }}
         onStrategyChange={(next) => {
+          if (isArcadePlaying) return;
           setStrategy(next);
           setOutcome(null);
         }}
@@ -537,8 +948,17 @@ export function MarketReplayScreen({ sessionDate }: MarketReplayScreenProps) {
 
       <p className="skills-replay-footnote">
         <MonitorPlay className="inline size-3.5 align-text-bottom opacity-70" />{" "}
-        390 one-minute bars for {replay.sessionLabel}. Click a candle to mark
-        entry, choose a strategy, and run the scenario for your score.
+        {playMode === "arcade" ? (
+          <>
+            Arcade Run: clear 5 missions on the 1-minute chart. Beat your high
+            score of {highScore}.
+          </>
+        ) : (
+          <>
+            390 one-minute bars for {replay.sessionLabel}. Click a candle to mark
+            entry, choose a strategy, and run the scenario for your score.
+          </>
+        )}
       </p>
     </div>
   );

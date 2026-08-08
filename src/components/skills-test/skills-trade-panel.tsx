@@ -11,6 +11,7 @@ import {
   type TradeOutcome,
   type TradingStrategy,
 } from "@/lib/skills-test/trade-scenarios";
+import type { GameChallenge } from "@/lib/skills-test/arcade-game";
 import { cn } from "@/lib/utils";
 
 type SkillsTradePanelProps = {
@@ -22,6 +23,8 @@ type SkillsTradePanelProps = {
   strategy: TradingStrategy;
   outcome: TradeOutcome | null;
   canMarkEntry: boolean;
+  gameMode?: boolean;
+  challenge?: GameChallenge | null;
   onDirectionChange: (direction: TradeDirection) => void;
   onStrategyChange: (strategy: TradingStrategy) => void;
   onMarkEntry: () => void;
@@ -57,6 +60,8 @@ export function SkillsTradePanel({
   strategy,
   outcome,
   canMarkEntry,
+  gameMode = false,
+  challenge = null,
   onDirectionChange,
   onStrategyChange,
   onMarkEntry,
@@ -65,14 +70,18 @@ export function SkillsTradePanel({
 }: SkillsTradePanelProps) {
   const selectedStrategy = TRADING_STRATEGIES.find((item) => item.id === strategy);
   const readyToRun = entryBarIndex !== null && !outcome;
+  const controlsLocked = gameMode;
 
   return (
     <section className="skills-trade-panel" aria-label="Trade setup">
       <div className="skills-trade-panel-header">
-        <p className="skills-trade-panel-kicker">★ TRADE LAB ★</p>
+        <p className="skills-trade-panel-kicker">
+          {gameMode ? "★ MISSION CONTROLS ★" : "★ TRADE LAB ★"}
+        </p>
         <p className="skills-trade-panel-copy">
-          Mark a 1-minute entry, pick a side and strategy, then run the scenario
-          to see your score.
+          {gameMode && challenge
+            ? challenge.missionDetail
+            : "Mark a 1-minute entry, pick a side and strategy, then run the scenario to see your score."}
         </p>
       </div>
 
@@ -85,7 +94,10 @@ export function SkillsTradePanel({
             options={DIRECTION_OPTIONS}
             ariaLabel="Trade direction"
             variant="compact"
-            className="skills-trade-toggle"
+            className={cn(
+              "skills-trade-toggle",
+              controlsLocked && "pointer-events-none opacity-70",
+            )}
           />
         </div>
 
@@ -97,7 +109,10 @@ export function SkillsTradePanel({
             options={STRATEGY_OPTIONS}
             ariaLabel="Trading strategy"
             variant="compact"
-            className="skills-trade-toggle skills-trade-strategy-tabs"
+            className={cn(
+              "skills-trade-toggle skills-trade-strategy-tabs",
+              controlsLocked && "pointer-events-none opacity-70",
+            )}
           />
           {selectedStrategy ? (
             <p className="skills-trade-panel-hint">{selectedStrategy.description}</p>
@@ -138,9 +153,9 @@ export function SkillsTradePanel({
               onClick={onRunTrade}
               disabled={!readyToRun}
             >
-              RUN TRADE
+              {gameMode ? "SUBMIT ROUND" : "RUN TRADE"}
             </button>
-            {outcome || entryBarIndex !== null ? (
+            {!gameMode && (outcome || entryBarIndex !== null) ? (
               <button
                 type="button"
                 className="arcade-btn arcade-btn--p2 skills-replay-btn"

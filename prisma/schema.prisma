@@ -301,3 +301,20 @@ model EmailLog {
   @@index([dealAlertId])
   @@map("email_logs")
 }
+
+// ---------------------------------------------------------------------------
+// Skills Test arcade leaderboard
+// ---------------------------------------------------------------------------
+
+model SkillsLeaderboardEntry {
+  id          String   @id @default(cuid())
+  sessionDate String   @map("session_date")
+  initials    String   @db.VarChar(3)
+  score       Int
+  flawless    Boolean  @default(false)
+  roundsWon   Boolean  @default(false) @map("rounds_won")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([sessionDate, score(sort: Desc)])
+  @@map("skills_leaderboard_entries")
+}

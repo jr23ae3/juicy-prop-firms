@@ -35,9 +35,10 @@ export default function SkillsTestPage() {
             1M REPLAY · NQ · MNQ · ES · MES
           </p>
           <p className="compare-arcade-lead mx-auto mt-6 max-w-2xl">
-            Scrub through today&apos;s one-minute RTH session, mark an entry,
-            pick a side and strategy, then run the scenario to see ticks, P&amp;L,
-            and your score.
+            Practice on the 1-minute chart or switch to{" "}
+            <strong className="font-normal text-primary">Arcade</strong> for Tape
+            Quest — 5 rounds, a timed boss fight, daily seeded missions, local
+            leaderboard, and unlockable badges.
           </p>
         </div>
 
